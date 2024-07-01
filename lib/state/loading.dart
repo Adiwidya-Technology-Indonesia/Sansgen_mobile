@@ -1,4 +1,5 @@
-import '/../core.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class LoadingState extends StatelessWidget {
   const LoadingState({

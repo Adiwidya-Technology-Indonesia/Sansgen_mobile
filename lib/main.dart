@@ -5,11 +5,17 @@ import 'package:sansgen/theme/app_theme.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  String isIdLogin = '';
+  // final prefs = await SharedPreferences.getInstance();
+  // String? isLogin = prefs.getString("idLogin") ?? '';
+  String initialRoutes = isIdLogin == '' ? Routes.LOGIN : Routes.DASHBOARD;
+  runApp(MyApp(initialRoutes));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoutes;
+  const MyApp(this.initialRoutes, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +24,7 @@ class MyApp extends StatelessWidget {
       // debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       getPages: AppPages.routes,
-      initialRoute: Routes.HOME,
+      initialRoute: initialRoutes,
     );
   }
 }
