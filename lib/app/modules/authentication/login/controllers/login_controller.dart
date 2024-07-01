@@ -29,15 +29,15 @@ class LoginController extends GetxController {
     // Reset pesan kesalahan
     String errorMessage = '';
     // Panjang kata sandi lebih dari 6
-    if (password.length < 7) {
+    if (password.length < 8) {
       errorMessage += 'Kata sandi minimal 8 karakter.\n';
     }
     // Berisi setidaknya satu huruf besar
-    if (!password.contains(RegExp(r'[AZ]'))) {
+    if (!password.contains(RegExp(r'[A-Z]'))) {
       errorMessage += '• Huruf besar tidak ada.\n';
     }
     // Berisi setidaknya satu huruf kecil
-    if (!password.contains(RegExp(r'[az]'))) {
+    if (!password.contains(RegExp(r'[a-z]'))) {
       errorMessage += '• Huruf kecil tidak ada.\n';
     }
     // Berisi setidaknya satu digit
