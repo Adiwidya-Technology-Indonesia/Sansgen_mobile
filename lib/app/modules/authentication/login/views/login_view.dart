@@ -77,6 +77,7 @@ class FormValidate extends StatelessWidget {
           },
           decoration: InputDecoration(
             labelText: title,
+            // icon: Icon(),
           ),
         ),
         Visibility(
