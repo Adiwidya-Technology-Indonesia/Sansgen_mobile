@@ -18,4 +18,6 @@ extension BuildContextExtentions on BuildContext {
       xTextTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
   TextStyle get titleSmallBold =>
       xTextTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold);
+  TextStyle get formError =>
+      xTextTheme.labelSmall!.copyWith(color: colorScheme.error);
 }

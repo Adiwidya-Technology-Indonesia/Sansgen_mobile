@@ -5,7 +5,7 @@ import 'package:sansgen/theme/app_theme.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   String isIdLogin = '';
   // final prefs = await SharedPreferences.getInstance();
   // String? isLogin = prefs.getString("idLogin") ?? '';
