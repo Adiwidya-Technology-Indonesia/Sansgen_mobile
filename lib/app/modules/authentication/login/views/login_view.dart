@@ -29,8 +29,8 @@ class LoginView extends GetView<LoginController> {
                 title: 'Email',
                 hint: 'Masukan email',
                 icon: KeysAssestIcons.email,
-                controller: controller.userNameController,
-                info: controller.isUserNameMessage.value,
+                controller: controller.emailController,
+                info: controller.isEmailMessage.value,
                 keyboardType: TextInputType.name,
               ),
               FormValidate(

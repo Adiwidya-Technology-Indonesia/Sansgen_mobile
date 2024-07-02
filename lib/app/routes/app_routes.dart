@@ -12,6 +12,7 @@ abstract class Routes {
   static const KATEGORI = _Paths.KATEGORI;
   static const RIWAYAT = _Paths.RIWAYAT;
   static const PROFIL = _Paths.PROFIL;
+  static const RESET_PASS = _Paths.RESET_PASS;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const KATEGORI = '/kategori';
   static const RIWAYAT = '/riwayat';
   static const PROFIL = '/profil';
+  static const RESET_PASS = '/reset-pass';
 }

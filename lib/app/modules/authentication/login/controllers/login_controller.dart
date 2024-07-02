@@ -8,9 +8,9 @@ import '../../../../../provider/auth.dart';
 
 class LoginController extends GetxController {
   final AuthProvider authProvider = AuthProvider();
-  final userNameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  var isUserNameMessage = ''.obs;
+  var isEmailMessage = ''.obs;
   var isPasswordMessage = ''.obs;
 
   void onTapSignUp() {
@@ -26,14 +26,6 @@ class LoginController extends GetxController {
       return true;
     }
     return false;
-  }
-
-  String _validateUserName(String userName) {
-    if (nullValidation(userNameController.text)) {
-      return isUserNameMessage.value = 'nama user harap di isi';
-    } else {
-      return isUserNameMessage.value = '';
-    }
   }
 
   // Berfungsi untuk memvalidasi password
@@ -68,12 +60,25 @@ class LoginController extends GetxController {
     }
   }
 
+  String _validateEmail(String email) {
+    if (nullValidation(email)) {
+      return isEmailMessage.value = 'Email harap di isi';
+    }
+    // Regex untuk validasi email
+    String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(email)) {
+      return isEmailMessage.value = 'Format email tidak valid';
+    }
+    return isEmailMessage.value = '';
+  }
+
   Future login() async {
     try {
-      _validateUserName(userNameController.text);
+      _validateEmail(emailController.text);
       _validatePassword(passwordController.text);
       final response = await authProvider.login(
-        userNameController.text,
+        emailController.text,
         passwordController.text,
       );
       log(response.toJson().toString());
