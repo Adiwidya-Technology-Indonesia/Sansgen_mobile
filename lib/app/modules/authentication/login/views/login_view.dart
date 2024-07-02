@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import 'package:sansgen/utils/ext_context.dart';
+import '../../../../../keys/assest_icons.dart';
+import '../../../../../keys/assest_images.dart';
+import '../../../../../widgets/form_validate.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -9,98 +14,84 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('LoginView'),
-        centerTitle: true,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Obx(
           () => Column(
             children: [
+              const Gap(60),
               Text(
                 'Masuk',
-                style: context.titleMediumBold,
+                style: context.titleLargeBold,
               ),
+              const Gap(60),
               FormValidate(
-                title: 'User',
+                title: 'Email',
+                hint: 'Masukan email',
+                icon: KeysAssestIcons.email,
                 controller: controller.userNameController,
                 info: controller.isUserNameMessage.value,
                 keyboardType: TextInputType.name,
               ),
               FormValidate(
                 title: 'Password',
+                hint: 'Masukan password',
+                icon: KeysAssestIcons.pass,
                 controller: controller.passwordController,
                 info: controller.isPasswordMessage.value,
                 keyboardType: TextInputType.visiblePassword,
               ),
-              // ElevatedButton(
-              //   onPressed: controller.login,
-              //   child: const Text('Login'),
-              // ),
+              Align(
+                heightFactor: 0.2,
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'Lupa Password?',
+                    style: context.titleMediumBold,
+                  ),
+                ),
+              ),
+              const Gap(40),
+              ElevatedButton(
+                onPressed: controller.login,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('Masuk'),
+              ),
+              const Gap(40),
+              const Text('Atau gunakan'),
+              const Gap(20),
+              InkWell(
+                onTap: () {},
+                child: SvgPicture.asset(
+                  KeysAssestImages.google,
+                  width: 40,
+                  height: 40,
+                ),
+              ),
+              const Spacer(),
+              RichText(
+                text: TextSpan(
+                  text: 'Belum memiliki akun? ',
+                  children: [
+                    TextSpan(
+                      text: 'Sing Up',
+                      style: context.titleSmallBold,
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const Gap(60),
             ],
           ),
         ),
       ),
     );
-  }
-}
-
-class FormValidate extends StatelessWidget {
-  const FormValidate({
-    Key? key,
-    required this.title,
-    required this.controller,
-    required this.info,
-    this.keyboardType,
-  }) : super(key: key);
-  final String title;
-  final TextEditingController controller;
-  final String? info;
-  final TextInputType? keyboardType;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
-          validator: (value) {
-            if (nullValidation(value)) {
-              return "Harap di isi";
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            labelText: title,
-            prefixIcon: Image.asset(
-              "assets/icons/user.png",
-              width: 20,
-              height: 20,
-            ),
-            // icon: Icon(),
-          ),
-        ),
-        Visibility(
-          visible: info != null,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              info ?? "",
-              style: context.formError,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  bool nullValidation(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return true;
-    }
-    return false;
   }
 }
