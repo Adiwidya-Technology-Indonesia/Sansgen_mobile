@@ -1,9 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:sansgen/utils/ext_context.dart';
-
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -36,10 +34,10 @@ class LoginView extends GetView<LoginController> {
                 info: controller.isPasswordMessage.value,
                 keyboardType: TextInputType.visiblePassword,
               ),
-              ElevatedButton(
-                onPressed: controller.login,
-                child: const Text('Login'),
-              ),
+              // ElevatedButton(
+              //   onPressed: controller.login,
+              //   child: const Text('Login'),
+              // ),
             ],
           ),
         ),
@@ -77,6 +75,11 @@ class FormValidate extends StatelessWidget {
           },
           decoration: InputDecoration(
             labelText: title,
+            prefixIcon: Image.asset(
+              "assets/icons/user.png",
+              width: 20,
+              height: 20,
+            ),
             // icon: Icon(),
           ),
         ),

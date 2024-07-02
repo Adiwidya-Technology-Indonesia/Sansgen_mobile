@@ -1,9 +1,12 @@
-// import 'dart:developer';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../provider/auth.dart';
+
 class LoginController extends GetxController {
+  final AuthProvider authProvider = AuthProvider();
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
   var isUserNameMessage = ''.obs;
@@ -56,8 +59,20 @@ class LoginController extends GetxController {
     }
   }
 
-  void login() {
-    _validateUserName(userNameController.text);
-    _validatePassword(passwordController.text);
+  Future login() async {
+    try {
+      _validateUserName(userNameController.text);
+      _validatePassword(passwordController.text);
+      final response = await authProvider.login(
+        userNameController.text,
+        passwordController.text,
+      );
+      log(response.toJson().toString());
+    } catch (e) {
+      Get.defaultDialog(
+        title: 'Error',
+        content: Text('Error: $e'),
+      );
+    }
   }
 }
