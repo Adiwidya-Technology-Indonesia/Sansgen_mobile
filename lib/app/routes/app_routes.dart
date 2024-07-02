@@ -9,6 +9,9 @@ abstract class Routes {
   static const REGISTER = _Paths.REGISTER;
   static const ON_BOARDING = _Paths.ON_BOARDING;
   static const LUPA_PASS = _Paths.LUPA_PASS;
+  static const KATEGORI = _Paths.KATEGORI;
+  static const RIWAYAT = _Paths.RIWAYAT;
+  static const PROFIL = _Paths.PROFIL;
 }
 
 abstract class _Paths {
@@ -19,4 +22,7 @@ abstract class _Paths {
   static const REGISTER = '/register';
   static const ON_BOARDING = '/on-boarding';
   static const LUPA_PASS = '/lupa-pass';
+  static const KATEGORI = '/kategori';
+  static const RIWAYAT = '/riwayat';
+  static const PROFIL = '/profil';
 }

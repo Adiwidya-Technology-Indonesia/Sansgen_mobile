@@ -8,8 +8,14 @@ import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/kategori/bindings/kategori_binding.dart';
+import '../modules/kategori/views/kategori_view.dart';
 import '../modules/lupa_pass/bindings/lupa_pass_binding.dart';
 import '../modules/lupa_pass/views/lupa_pass_view.dart';
+import '../modules/profil/bindings/profil_binding.dart';
+import '../modules/profil/views/profil_view.dart';
+import '../modules/riwayat/bindings/riwayat_binding.dart';
+import '../modules/riwayat/views/riwayat_view.dart';
 
 part 'app_routes.dart';
 
@@ -43,6 +49,21 @@ class AppPages {
       name: _Paths.LUPA_PASS,
       page: () => const LupaPassView(),
       binding: LupaPassBinding(),
+    ),
+    GetPage(
+      name: _Paths.KATEGORI,
+      page: () => const KategoriView(),
+      binding: KategoriBinding(),
+    ),
+    GetPage(
+      name: _Paths.RIWAYAT,
+      page: () => const RiwayatView(),
+      binding: RiwayatBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFIL,
+      page: () => const ProfilView(),
+      binding: ProfilBinding(),
     ),
   ];
 }
