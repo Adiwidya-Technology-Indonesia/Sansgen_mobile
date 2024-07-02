@@ -8,6 +8,7 @@ abstract class Routes {
   static const DASHBOARD = _Paths.DASHBOARD;
   static const REGISTER = _Paths.REGISTER;
   static const ON_BOARDING = _Paths.ON_BOARDING;
+  static const LUPA_PASS = _Paths.LUPA_PASS;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const DASHBOARD = '/dashboard';
   static const REGISTER = '/register';
   static const ON_BOARDING = '/on-boarding';
+  static const LUPA_PASS = '/lupa-pass';
 }

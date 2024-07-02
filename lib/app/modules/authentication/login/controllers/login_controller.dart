@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/app/routes/app_pages.dart';
 
 import '../../../../../provider/auth.dart';
 
@@ -11,6 +12,14 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController();
   var isUserNameMessage = ''.obs;
   var isPasswordMessage = ''.obs;
+
+  void onTapSignUp() {
+    Get.toNamed(Routes.REGISTER);
+  }
+
+  void onTapLupaPass() {
+    Get.toNamed(Routes.LUPA_PASS);
+  }
 
   bool nullValidation(String? value) {
     if (value == null || value.trim().isEmpty) {

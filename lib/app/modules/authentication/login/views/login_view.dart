@@ -45,7 +45,7 @@ class LoginView extends GetView<LoginController> {
                 heightFactor: 0.2,
                 alignment: Alignment.centerRight,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: controller.onTapLupaPass,
                   child: Text(
                     'Lupa Password?',
                     style: context.titleMediumBold,
@@ -75,17 +75,15 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
               const Spacer(),
-              RichText(
-                text: TextSpan(
-                  text: 'Belum memiliki akun? ',
-                  children: [
-                    TextSpan(
-                      text: 'Sing Up',
-                      style: context.titleSmallBold,
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Belum memiliki akun? '),
+                  InkWell(
+                    onTap: controller.onTapSignUp,
+                    child: Text('Sing Up', style: context.titleSmallBold),
+                  ),
+                ],
               ),
               const Gap(60),
             ],
