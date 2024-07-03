@@ -9,29 +9,27 @@ class GenderView extends GetView<OnBoardingController> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.listGender.length,
-        itemBuilder: (context, index) {
-          return Obx(
-            () => cardBorder(
-              title: controller.listGender[index].title,
-              context: context,
-              imageAssets: controller.listGender[index].imageAssets,
-              color: controller.selectedIndexGender.value == index &&
-                      controller.selectedGender.value != ''
-                  ? context.colorScheme.surface
-                  : context.colorScheme.outline,
-              index: index,
-              onTap: () {
-                controller.setGender(controller.listGender[index].title);
-                controller.selectedIndexGender.value = index;
-              },
-            ),
-          );
-        },
-      ),
+    return Column(
+      children: controller.listGender.asMap().entries.map((entry) {
+        int index = entry.key;
+        var e = entry.value;
+        return Obx(
+          () => cardBorder(
+            title: e.title,
+            context: context,
+            imageAssets: e.imageAssets,
+            color: controller.selectedIndexGender.value == index &&
+                    controller.selectedGender.value != ''
+                ? context.colorScheme.surface
+                : context.colorScheme.outline,
+            index: index,
+            onTap: () {
+              controller.setGender(e.title);
+              controller.selectedIndexGender.value = index;
+            },
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -47,7 +45,7 @@ class GenderView extends GetView<OnBoardingController> {
       onTap: onTap,
       child: Container(
         height: 140,
-        width: 142,
+        width: 120,
         margin: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
           border: Border.all(

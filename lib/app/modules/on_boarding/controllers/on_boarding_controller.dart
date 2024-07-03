@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../keys/assets_images.dart';
+import '../../../../model/on_boarding.dart';
 import '../../../routes/app_pages.dart';
 import '../views/age.dart';
 import '../views/gender.dart';
@@ -11,25 +14,28 @@ class OnBoardingController extends GetxController {
   final PageController pageController = PageController();
   final Rx<int> currentPage = 0.obs;
   final Rx<int> selectedIndexGender = 0.obs;
+  final Rx<int> selectedIndexAge = 0.obs;
 
   final listGender = <ModelGender>[
     ModelGender(title: 'Laki-laki', imageAssets: KeysAssetsImages.maleGender),
     ModelGender(title: 'Perempuan', imageAssets: KeysAssetsImages.femaleGender),
   ];
-  final listAge = ['18-25', '26-35', '36-45', '46-55', '56-65', '66+'];
-  final listPreferences = [
-    'Bisnis',
-    'Pengembangan diri',
-    'Marketing & Sales',
-    'Sains',
-    'Filsafat',
-    'Agama',
-    'Politik',
-    'Sejarah'
+
+  final listAge = ['18-24', '25-34', '35-44', '45-54', '55+'];
+
+  final listPreferences = <ModelPreferenci>[
+    ModelPreferenci(title: 'Bisnis', isSelected: false.obs),
+    ModelPreferenci(title: 'Pengembangan diri', isSelected: false.obs),
+    ModelPreferenci(title: 'Marketing & Sales', isSelected: false.obs),
+    ModelPreferenci(title: 'Sains', isSelected: false.obs),
+    ModelPreferenci(title: 'Filsafat', isSelected: false.obs),
+    ModelPreferenci(title: 'Agama', isSelected: false.obs),
+    ModelPreferenci(title: 'Politik', isSelected: false.obs),
+    ModelPreferenci(title: 'Sejarah', isSelected: false.obs),
   ];
+
   final Rx<String> selectedGender = ''.obs;
   final Rx<String> selectedAge = ''.obs;
-  final Rx<String> selectedPreferences = ''.obs;
 
   String setGender(String value) {
     selectedGender.value = value;
@@ -41,11 +47,6 @@ class OnBoardingController extends GetxController {
     return selectedAge.value;
   }
 
-  String setPreferences(String value) {
-    selectedPreferences.value = value;
-    return selectedPreferences.value;
-  }
-
   void nextPage() {
     if (currentPage.value == 0 && selectedGender.isNotEmpty) {
       currentPage.value++;
@@ -53,8 +54,8 @@ class OnBoardingController extends GetxController {
       Get.snackbar(
         'Info',
         'Silakan pilih jenis kelamin terlebih dahulu',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.grey,
         colorText: Colors.white,
       );
     } else if (currentPage.value == 1 && selectedAge.isNotEmpty) {
@@ -63,29 +64,40 @@ class OnBoardingController extends GetxController {
       Get.snackbar(
         'Info',
         'Silakan pilih umur terlebih dahulu',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.grey,
         colorText: Colors.white,
       );
-    } else if (currentPage.value == 2 && selectedPreferences.isNotEmpty) {
+    } else if (currentPage.value == 2 &&
+        listPreferences.any((element) => element.isSelected.value == true)) {
       simpan();
-    } else if (currentPage.value == 2 && selectedPreferences.isEmpty) {
+    } else if (currentPage.value == 2 &&
+        listPreferences.any((element) => element.isSelected.value == false)) {
       Get.snackbar(
         'Info',
         'Silakan pilih kategori buku terlebih dahulu',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.grey,
         colorText: Colors.white,
       );
     }
   }
 
   void simpan() {
-    if (selectedGender.isNotEmpty &&
-        selectedAge.isNotEmpty &&
-        selectedPreferences.isNotEmpty) {
-      Get.toNamed(Routes.DASHBOARD);
-    }
+    tampilkanSemuaNilai();
+  }
+
+  void tampilkanSemuaNilai() {
+    String gender = selectedGender.value;
+    String age = selectedAge.value;
+    List<String> preferences = listPreferences
+        .where((element) => element.isSelected.value == true)
+        .map((element) => element.title)
+        .toList();
+
+    log('Gender: $gender');
+    log('Age: $age');
+    log('Preferences: $preferences');
   }
 
   final listPage = <ModelOnBoarding>[
@@ -114,28 +126,4 @@ class OnBoardingController extends GetxController {
     currentPage.value = 0;
     super.onInit();
   }
-}
-
-class ModelOnBoarding {
-  final String title;
-  final String titleAppBar;
-  final String titleButton;
-  final Widget page;
-
-  ModelOnBoarding({
-    required this.title,
-    required this.titleAppBar,
-    required this.titleButton,
-    required this.page,
-  });
-}
-
-class ModelGender {
-  final String title;
-  final String imageAssets;
-
-  ModelGender({
-    required this.title,
-    required this.imageAssets,
-  });
 }

@@ -23,6 +23,7 @@ class OnBoardingView extends GetView<OnBoardingController> {
         padding: const EdgeInsets.all(20.0),
         child: Obx(
           () => Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 controller.listPage[controller.currentPage.value].title,
@@ -30,19 +31,23 @@ class OnBoardingView extends GetView<OnBoardingController> {
               ),
               const Gap(32),
               controller.listPage[controller.currentPage.value].page,
-              ElevatedButton(
-                onPressed: controller.nextPage,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40),
+                child: ElevatedButton(
+                  onPressed: controller.nextPage,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    controller
+                        .listPage[controller.currentPage.value].titleButton,
                   ),
                 ),
-                child: Text(
-                  controller.listPage[controller.currentPage.value].titleButton,
-                ),
               ),
-              const Gap(40),
             ],
           ),
         ),
