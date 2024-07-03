@@ -10,17 +10,13 @@ import '../modules/authentication/register/bindings/register_binding.dart';
 import '../modules/authentication/register/views/register_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
-import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
-import '../modules/kategori/bindings/kategori_binding.dart';
 import '../modules/kategori/views/kategori_view.dart';
 import '../modules/on_boarding/bindings/on_boarding_binding.dart';
 import '../modules/on_boarding/views/on_boarding.dart';
-import '../modules/profil/bindings/profil_binding.dart';
 import '../modules/profil/views/profil_view.dart';
 import '../modules/authentication/reset_pass/bindings/reset_pass_binding.dart';
 import '../modules/authentication/reset_pass/views/reset_pass_view.dart';
-import '../modules/riwayat/bindings/riwayat_binding.dart';
 import '../modules/riwayat/views/riwayat_view.dart';
 
 part 'app_routes.dart';
@@ -59,22 +55,22 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => const HomeView(),
-      binding: HomeBinding(),
+      binding: DashboardBinding(),
     ),
     GetPage(
       name: _Paths.KATEGORI,
       page: () => const KategoriView(),
-      binding: KategoriBinding(),
+      binding: DashboardBinding(),
     ),
     GetPage(
       name: _Paths.RIWAYAT,
       page: () => const RiwayatView(),
-      binding: RiwayatBinding(),
+      binding: DashboardBinding(),
     ),
     GetPage(
       name: _Paths.PROFIL,
       page: () => const ProfilView(),
-      binding: ProfilBinding(),
+      binding: DashboardBinding(),
     ),
     GetPage(
       name: _Paths.RESET_PASS,

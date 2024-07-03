@@ -12,16 +12,7 @@ class DashboardView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('DashboardView'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'DashboardView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      body: Obx(() => controller.pages[controller.selectedIndex].page),
       bottomNavigationBar: Obx(
         () => bottomBarSnake(context),
       ),
@@ -30,7 +21,7 @@ class DashboardView extends GetView<DashboardController> {
 
   SnakeNavigationBar bottomBarSnake(BuildContext context) {
     return SnakeNavigationBar.color(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       currentIndex: controller.selectedIndex,
       snakeViewColor: context.colorScheme.surface,
       backgroundColor: context.colorScheme.background,
