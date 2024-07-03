@@ -12,8 +12,8 @@ class AppTheme {
       onBackground: ColorLight.blackPrimary, // Text on background color
       primary: ColorLight.whitePrimary,
       onPrimary: ColorLight.textPrimary, // Text on primary color
-      secondary: ColorLight.greenLight,
-      onSecondary: ColorLight.textSecondary, // Text on secondary color
+      secondary: ColorLight.textSecondary,
+      onSecondary: ColorLight.blueGrey, // Text on secondary color
       surface: ColorLight.greenPrimary,
       onSurface: ColorLight.textPrimary, // Text on surface color
       tertiary: ColorLight.textPrimary,

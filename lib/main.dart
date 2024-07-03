@@ -8,7 +8,7 @@ import 'app/routes/app_pages.dart';
 Future main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  String isIdLogin = '';
+  String isIdLogin = 'hjvhv';
   // final prefs = await SharedPreferences.getInstance();
   // String? isLogin = prefs.getString("idLogin") ?? '';
   String initialRoutes =
