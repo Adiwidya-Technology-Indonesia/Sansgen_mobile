@@ -11,7 +11,8 @@ Future main() async {
   String isIdLogin = '';
   // final prefs = await SharedPreferences.getInstance();
   // String? isLogin = prefs.getString("idLogin") ?? '';
-  String initialRoutes = isIdLogin == '' ? Routes.LOGIN : Routes.DASHBOARD;
+  String initialRoutes =
+      isIdLogin == '' ? Routes.ON_BOARDING : Routes.DASHBOARD;
   runApp(MyApp(initialRoutes));
 }
 

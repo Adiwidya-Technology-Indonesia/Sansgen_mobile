@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:get/get.dart';
 
 import '../modules/authentication/login/bindings/login_binding.dart';
@@ -13,11 +15,11 @@ import '../modules/home/views/home_view.dart';
 import '../modules/kategori/bindings/kategori_binding.dart';
 import '../modules/kategori/views/kategori_view.dart';
 import '../modules/on_boarding/bindings/on_boarding_binding.dart';
-import '../modules/on_boarding/views/gender.dart';
+import '../modules/on_boarding/views/on_boarding.dart';
 import '../modules/profil/bindings/profil_binding.dart';
 import '../modules/profil/views/profil_view.dart';
-import '../modules/reset_pass/bindings/reset_pass_binding.dart';
-import '../modules/reset_pass/views/reset_pass_view.dart';
+import '../modules/authentication/reset_pass/bindings/reset_pass_binding.dart';
+import '../modules/authentication/reset_pass/views/reset_pass_view.dart';
 import '../modules/riwayat/bindings/riwayat_binding.dart';
 import '../modules/riwayat/views/riwayat_view.dart';
 
@@ -46,7 +48,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ON_BOARDING,
-      page: () => const GenderView(),
+      page: () => const OnBoardingView(),
       binding: OnBoardingBinding(),
     ),
     GetPage(

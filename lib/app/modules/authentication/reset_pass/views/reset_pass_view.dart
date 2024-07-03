@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../../keys/assets_icons.dart';
+import '../../../../../widgets/form_validate.dart';
 import '../controllers/reset_pass_controller.dart';
 
 class ResetPassView extends GetView<ResetPassController> {
@@ -9,14 +13,47 @@ class ResetPassView extends GetView<ResetPassController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ResetPassView'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'ResetPassView is working',
-          style: TextStyle(fontSize: 20),
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Obx(
+          () => Column(
+            children: [
+              const Gap(60),
+              Text(
+                'Lupa password',
+                style: context.titleLargeBold,
+              ),
+              const Gap(100),
+              FormValidate(
+                title: 'Password',
+                hint: 'Masukan password',
+                icon: KeysAssetsIcons.pass,
+                controller: controller.passwordController,
+                info: controller.isPasswordMessage.value,
+                keyboardType: TextInputType.visiblePassword,
+              ),
+              FormValidate(
+                title: 'Confirm password',
+                hint: 'Masukan kembali password',
+                icon: KeysAssetsIcons.pass,
+                controller: controller.komfirPassController,
+                info: controller.isKomfirPassMessage.value,
+                keyboardType: TextInputType.visiblePassword,
+              ),
+              const Gap(40),
+              ElevatedButton(
+                onPressed: controller.resetPass,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('Kirim'),
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
     );

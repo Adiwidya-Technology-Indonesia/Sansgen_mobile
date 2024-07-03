@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import 'package:sansgen/utils/ext_context.dart';
-import '../../../../../keys/assest_icons.dart';
-import '../../../../../keys/assest_images.dart';
+import '../../../../../keys/assets_icons.dart';
+import '../../../../../keys/assets_images.dart';
 import '../../../../../widgets/form_validate.dart';
 import '../controllers/login_controller.dart';
 
@@ -28,7 +28,7 @@ class LoginView extends GetView<LoginController> {
               FormValidate(
                 title: 'Email',
                 hint: 'Masukan email',
-                icon: KeysAssestIcons.email,
+                icon: KeysAssetsIcons.email,
                 controller: controller.emailController,
                 info: controller.isEmailMessage.value,
                 keyboardType: TextInputType.name,
@@ -36,7 +36,7 @@ class LoginView extends GetView<LoginController> {
               FormValidate(
                 title: 'Password',
                 hint: 'Masukan password',
-                icon: KeysAssestIcons.pass,
+                icon: KeysAssetsIcons.pass,
                 controller: controller.passwordController,
                 info: controller.isPasswordMessage.value,
                 keyboardType: TextInputType.visiblePassword,
@@ -69,7 +69,7 @@ class LoginView extends GetView<LoginController> {
               InkWell(
                 onTap: () {},
                 child: SvgPicture.asset(
-                  KeysAssestImages.google,
+                  KeysAssetsImages.google,
                   width: 40,
                   height: 40,
                 ),

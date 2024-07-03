@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class KeysAssestIcons {
-  const KeysAssestIcons._();
+class KeysAssetsIcons {
+  const KeysAssetsIcons._();
   static const String cameran = 'assets/icons/camera.svg';
   static const String category = 'assets/icons/category.svg';
   static const String ceklis = 'assets/icons/ceklis.svg';

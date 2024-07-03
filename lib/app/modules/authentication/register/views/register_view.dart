@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
-import '../../../../../keys/assest_icons.dart';
+import '../../../../../keys/assets_icons.dart';
 import '../../../../../widgets/form_validate.dart';
 import '../controllers/register_controller.dart';
 
@@ -27,7 +27,7 @@ class RegisterView extends GetView<RegisterController> {
               FormValidate(
                 title: 'Email',
                 hint: 'Masukan email',
-                icon: KeysAssestIcons.email,
+                icon: KeysAssetsIcons.email,
                 controller: controller.emailController,
                 info: controller.isEmailMessage.value,
                 keyboardType: TextInputType.name,
@@ -35,7 +35,7 @@ class RegisterView extends GetView<RegisterController> {
               FormValidate(
                 title: 'Password',
                 hint: 'Masukan password',
-                icon: KeysAssestIcons.pass,
+                icon: KeysAssetsIcons.pass,
                 controller: controller.passwordController,
                 info: controller.isPasswordMessage.value,
                 keyboardType: TextInputType.visiblePassword,
@@ -43,7 +43,7 @@ class RegisterView extends GetView<RegisterController> {
               FormValidate(
                 title: 'Confirm password',
                 hint: 'Masukan kembali password',
-                icon: KeysAssestIcons.pass,
+                icon: KeysAssetsIcons.pass,
                 controller: controller.komfirPassController,
                 info: controller.isKomfirPassMessage.value,
                 keyboardType: TextInputType.visiblePassword,

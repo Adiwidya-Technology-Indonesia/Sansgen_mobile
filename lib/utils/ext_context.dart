@@ -20,4 +20,11 @@ extension BuildContextExtentions on BuildContext {
       xTextTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold);
   TextStyle get formError =>
       xTextTheme.labelSmall!.copyWith(color: colorScheme.error);
+
+  TextStyle get labelLarge => xTextTheme.labelLarge!;
+  TextStyle get labelMedium => xTextTheme.labelMedium!;
+  TextStyle get labelSmall => xTextTheme.labelSmall!;
+  TextStyle get titleLarge => xTextTheme.titleLarge!;
+  TextStyle get titleMedium => xTextTheme.titleMedium!;
+  TextStyle get titleSmall => xTextTheme.titleSmall!;
 }
