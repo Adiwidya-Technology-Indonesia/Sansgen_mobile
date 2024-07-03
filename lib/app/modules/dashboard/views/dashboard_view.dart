@@ -25,8 +25,6 @@ class DashboardView extends GetView<DashboardController> {
       currentIndex: controller.selectedIndex,
       snakeViewColor: context.colorScheme.surface,
       backgroundColor: context.colorScheme.background,
-      selectedItemColor: context.colorScheme.background,
-      unselectedItemColor: context.colorScheme.onSecondary,
       showSelectedLabels: false,
       showUnselectedLabels: false,
       onTap: (value) {
@@ -36,22 +34,13 @@ class DashboardView extends GetView<DashboardController> {
         (e) {
           return BottomNavigationBarItem(
             label: e.title,
-            icon: Container(
-              height: 50,
-              width: 50,
-              margin: const EdgeInsets.all(0),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: controller.selectedIndex == e.index
-                    ? context.colorScheme.surface
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: SvgPicture.asset(
-                e.icon,
-                color: controller.selectedIndex == e.index
+            icon: SvgPicture.asset(
+              e.icon,
+              colorFilter: ColorFilter.mode(
+                controller.selectedIndex == e.index
                     ? context.colorScheme.background
                     : context.colorScheme.onSecondary,
+                BlendMode.srcIn,
               ),
             ),
           );
