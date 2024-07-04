@@ -1,0 +1,76 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:gap/gap.dart';
+import 'package:sansgen/utils/ext_context.dart';
+
+Container cardBook(Map<String, String> book, BuildContext context) {
+  return Container(
+    width: double.infinity,
+    height: 160,
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+    decoration: BoxDecoration(
+      // color: context.colorScheme.surface,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Row(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            book['image']!,
+            height: 160,
+            width: 130,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const Gap(12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(book['name']!, style: context.titleSmallBold),
+              const Gap(4),
+              Text(book['kategori']!, style: context.labelSmall),
+              const Gap(4),
+              Container(
+                height: 20,
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.onBackground,
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                child: Text(
+                  book['kategori']!,
+                  style: context.labelSmall.copyWith(
+                    color: context.colorScheme.primary,
+                    height: 1,
+                  ),
+                ),
+              ),
+              const Gap(4),
+              Text(
+                '70 bab',
+                style: context.labelSmall.copyWith(
+                  color: context.colorScheme.secondary,
+                ),
+              ),
+              const Gap(12),
+              Text('Sinopsis :', style: context.labelSmallBold),
+              Text(
+                book['sinopsis']!,
+                style: context.labelSmall.copyWith(
+                  color: context.colorScheme.secondary,
+                  inherit: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                softWrap: true,
+                maxLines: 3,
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}

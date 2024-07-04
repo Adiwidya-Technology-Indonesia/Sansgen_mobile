@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../widgets/card_book.dart';
 import '../controllers/kategori_controller.dart';
 
 class KategoriView extends GetView<KategoriController> {
@@ -34,7 +35,7 @@ class KategoriView extends GetView<KategoriController> {
               itemCount: controller.bookList.length,
               itemBuilder: (context, index) {
                 final book = controller.bookList[index];
-                return cardPopuler(book, context);
+                return cardBook(book, context);
               },
             ),
           ),
@@ -69,64 +70,6 @@ class KategoriView extends GetView<KategoriController> {
               )
               .toList(),
         ),
-      ),
-    );
-  }
-
-  Container cardPopuler(Map<String, String> book, BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 160,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      decoration: BoxDecoration(
-        // color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              book['image']!,
-              height: 160,
-              width: 130,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const Gap(12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(book['name']!, style: context.titleSmallBold),
-              const Gap(4),
-              Text(book['kategori']!, style: context.labelSmall),
-              const Gap(4),
-              Container(
-                height: 20,
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.onBackground,
-                  borderRadius: BorderRadius.circular(0),
-                ),
-                child: Text(
-                  book['kategori']!,
-                  style: context.labelSmall.copyWith(
-                    color: context.colorScheme.primary,
-                    height: 1,
-                  ),
-                ),
-              ),
-              const Gap(4),
-              Text(
-                '70 bab',
-                style: context.labelSmall.copyWith(
-                  color: context.colorScheme.secondary,
-                ),
-              ),
-              Text('Sinopsis :', style: context.labelSmallBold),
-            ],
-          ),
-        ],
       ),
     );
   }

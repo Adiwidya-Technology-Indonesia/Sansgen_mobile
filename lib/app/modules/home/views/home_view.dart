@@ -149,8 +149,8 @@ class HomeView extends GetView<HomeController> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              context.colorScheme.surface,
-              context.colorScheme.surface.withOpacity(0.7),
+              context.colorScheme.onSecondaryContainer,
+              context.colorScheme.primaryContainer,
             ],
             stops: const [0.0, 1.0],
             begin: Alignment.topLeft,
