@@ -22,15 +22,19 @@ class HomeView extends GetView<HomeController> {
             widthCom: double.infinity,
             scrollDirection: Axis.horizontal,
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: 3,
+            itemCount: controller.bookList.length,
             itemBuilder: (context, index) {
+              final book = controller.bookList[index];
               return Container(
-                width: 149,
-                height: 196,
                 margin: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    book['image']!,
+                    height: 196,
+                    width: 149,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               );
             },
@@ -43,15 +47,37 @@ class HomeView extends GetView<HomeController> {
             widthCom: double.infinity,
             scrollDirection: Axis.vertical,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 7,
+            itemCount: controller.bookList.length,
             itemBuilder: (context, index) {
+              final book = controller.bookList[index];
               return Container(
                 width: double.infinity,
                 height: 87,
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 decoration: BoxDecoration(
-                  color: context.colorScheme.surface,
+                  // color: context.colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        book['image']!,
+                        height: 87,
+                        width: 76,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const Gap(12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(book['name']!, style: context.titleSmallBold),
+                        Text(book['kategori']!, style: context.labelSmall),
+                      ],
+                    ),
+                  ],
                 ),
               );
             },
