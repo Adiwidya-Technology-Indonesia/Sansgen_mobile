@@ -17,6 +17,8 @@ class AppTheme {
       surface: ColorLight.greenPrimary,
       onSurface: ColorLight.textPrimary, // Text on surface color
       tertiary: ColorLight.textPrimary,
+      secondaryContainer: ColorLight.greenLight,
+      onSecondaryContainer: ColorLight.greenDark,
       error: ColorLight.redPrimary,
     ),
   );
