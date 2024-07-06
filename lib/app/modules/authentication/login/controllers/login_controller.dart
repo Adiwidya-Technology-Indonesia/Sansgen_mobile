@@ -1,13 +1,17 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/app/routes/app_pages.dart';
-
 import '../../../../../provider/auth.dart';
+import '../../../../../services/prefs.dart';
 
 class LoginController extends GetxController {
-  final AuthProvider authProvider = AuthProvider();
+  final AuthProvider authProvider;
+  final PrefService prefService;
+  LoginController({required this.authProvider, required this.prefService});
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var isEmailMessage = ''.obs;
@@ -77,16 +81,38 @@ class LoginController extends GetxController {
     try {
       _validateEmail(emailController.text);
       _validatePassword(passwordController.text);
-      final response = await authProvider.login(
-        emailController.text,
-        passwordController.text,
-      );
-      log(response.toJson().toString());
+      if (isEmailMessage.value.isEmpty && isPasswordMessage.value.isEmpty) {
+        EasyLoading.show(status: 'loading...');
+        final response = await authProvider.authLogin(
+          emailController.text,
+          passwordController.text,
+        );
+        if (response.success == true) {
+          EasyLoading.dismiss();
+          formClear();
+          EasyLoading.showSuccess('Login berhasil');
+          prefService.putUserToken(response.data!.token);
+          log(response.toJson().toString());
+        } else {
+          EasyLoading.showError('Login gagal');
+        }
+      }
     } catch (e) {
       Get.defaultDialog(
         title: 'Error',
         content: Text('Error: $e'),
       );
     }
+  }
+
+  void formClear() {
+    emailController.clear();
+    passwordController.clear();
+  }
+
+  @override
+  void onInit() {
+    prefService.removeUserToken();
+    super.onInit();
   }
 }
