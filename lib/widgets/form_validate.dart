@@ -11,6 +11,7 @@ class FormValidate extends StatelessWidget {
     required this.controller,
     required this.info,
     this.keyboardType,
+    this.color,
   }) : super(key: key);
   final String title;
   final String hint;
@@ -18,6 +19,7 @@ class FormValidate extends StatelessWidget {
   final TextEditingController controller;
   final String? info;
   final TextInputType? keyboardType;
+  final ColorFilter? color;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +43,16 @@ class FormValidate extends StatelessWidget {
             hintText: hint,
             prefixIcon: SvgPicture.asset(
               icon,
+              colorFilter: color,
             ),
             prefixIconConstraints: const BoxConstraints(
               minWidth: 16,
               minHeight: 16,
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: context.colorScheme.onPrimary,
+              ),
             ),
           ),
         ),

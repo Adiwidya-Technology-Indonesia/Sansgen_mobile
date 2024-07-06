@@ -29,19 +29,19 @@ class ResponseLoginModel {
 class Data {
   final String token;
   final String name;
-  final String email;
+  // final String email;
 
   Data({
     required this.token,
     required this.name,
-    required this.email,
+    // required this.email,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
       token: json['token'],
       name: json['name'],
-      email: json['email'],
+      // email: json['email'],
     );
   }
 
@@ -49,7 +49,7 @@ class Data {
     return {
       'token': token,
       'name': name,
-      'email': email,
+      // 'email': email,
     };
   }
 }

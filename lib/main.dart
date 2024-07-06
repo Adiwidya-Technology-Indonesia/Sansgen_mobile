@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/services/prefs.dart';
 import 'package:sansgen/theme/app_theme.dart';
 
 import 'app/routes/app_pages.dart';
 
 Future main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  String isIdLogin = 'hjvhv';
-  // final prefs = await SharedPreferences.getInstance();
-  // String? isLogin = prefs.getString("idLogin") ?? '';
-  String initialRoutes =
-      isIdLogin == '' ? Routes.ON_BOARDING : Routes.DASHBOARD;
+  PrefService prefService = PrefService();
+  prefService.prefInit();
+  String isToken = prefService.getUserToken ?? '';
+
+  String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.DASHBOARD;
   runApp(MyApp(initialRoutes));
 }
 
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       getPages: AppPages.routes,
       initialRoute: initialRoutes,
+      builder: EasyLoading.init(),
     );
   }
 }
