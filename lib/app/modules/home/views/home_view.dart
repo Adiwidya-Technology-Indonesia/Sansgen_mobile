@@ -144,7 +144,7 @@ class HomeView extends GetView<HomeController> {
 
   AppBar appBarCustom(BuildContext context) {
     return AppBar(
-      backgroundColor: context.colorScheme.background,
+      backgroundColor: context.colorScheme.primary,
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -209,7 +209,7 @@ class HomeView extends GetView<HomeController> {
                 height: 80,
                 margin: const EdgeInsets.symmetric(horizontal: 40),
                 decoration: BoxDecoration(
-                  color: context.colorScheme.background,
+                  color: context.colorScheme.primary,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(

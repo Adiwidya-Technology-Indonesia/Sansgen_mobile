@@ -24,7 +24,7 @@ class PreferenciView extends GetView<OnBoardingController> {
             context: context,
             color: e.isSelected.value == true
                 ? context.colorScheme.surface
-                : context.colorScheme.background,
+                : context.colorScheme.primary,
             index: index,
             onTap: () {
               e.isSelected.value = true;
@@ -64,13 +64,13 @@ class PreferenciView extends GetView<OnBoardingController> {
               blurRadius: 2.0,
             ),
             BoxShadow(
-              color: context.colorScheme.background,
+              color: context.colorScheme.primary,
               offset: const Offset(12.0, 4.0),
               spreadRadius: -0.5,
               blurRadius: 2.0,
             ),
             BoxShadow(
-              color: context.colorScheme.background,
+              color: context.colorScheme.primary,
               offset: const Offset(0.0, 0.0),
               spreadRadius: -1.0,
               blurRadius: 2.0,

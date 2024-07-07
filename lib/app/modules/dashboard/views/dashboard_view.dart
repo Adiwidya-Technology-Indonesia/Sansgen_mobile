@@ -24,7 +24,7 @@ class DashboardView extends GetView<DashboardController> {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       currentIndex: controller.selectedIndex,
       snakeViewColor: context.colorScheme.surface,
-      backgroundColor: context.colorScheme.background,
+      backgroundColor: context.colorScheme.primary,
       showSelectedLabels: false,
       showUnselectedLabels: false,
       onTap: (value) {
@@ -38,7 +38,7 @@ class DashboardView extends GetView<DashboardController> {
               e.icon,
               colorFilter: ColorFilter.mode(
                 controller.selectedIndex == e.index
-                    ? context.colorScheme.background
+                    ? context.colorScheme.primary
                     : context.colorScheme.onSecondary,
                 BlendMode.srcIn,
               ),

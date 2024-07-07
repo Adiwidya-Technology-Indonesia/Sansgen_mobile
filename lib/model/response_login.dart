@@ -1,55 +1,84 @@
+import 'dart:convert';
+
+ResponseLoginModel responseLoginModelFromJson(String str) =>
+    ResponseLoginModel.fromJson(json.decode(str));
+
+String responseLoginModelToJson(ResponseLoginModel data) =>
+    json.encode(data.toJson());
+
 class ResponseLoginModel {
   final bool success;
   final String message;
-  final Data? data;
+  final DataLogin? data;
 
   ResponseLoginModel({
     required this.success,
     required this.message,
-    this.data,
+    required this.data,
   });
 
-  factory ResponseLoginModel.fromJson(Map<String, dynamic> json) {
-    return ResponseLoginModel(
-      success: json['success'],
-      message: json['message'],
-      data: json['data'] != null ? Data.fromJson(json['data']) : null,
-    );
-  }
+  factory ResponseLoginModel.fromJson(Map<String, dynamic> json) =>
+      ResponseLoginModel(
+        success: json["success"],
+        message: json["message"],
+        data: DataLogin.fromJson(json["data"]),
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'message': message,
-      'data': data?.toJson(),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "success": success,
+        "message": message,
+        "data": data?.toJson(),
+      };
 }
 
-class Data {
-  final String token;
-  final String name;
-  // final String email;
+class DataLogin {
+  int id;
+  String email;
+  String name;
+  dynamic image;
+  dynamic dateOfBirth;
+  dynamic rangeAge;
+  dynamic gender;
+  dynamic category;
+  dynamic hobby;
+  String rememberToken;
 
-  Data({
-    required this.token,
+  DataLogin({
+    required this.id,
+    required this.email,
     required this.name,
-    // required this.email,
+    required this.image,
+    required this.dateOfBirth,
+    required this.rangeAge,
+    required this.gender,
+    required this.category,
+    required this.hobby,
+    required this.rememberToken,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
-      token: json['token'],
-      name: json['name'],
-      // email: json['email'],
-    );
-  }
+  factory DataLogin.fromJson(Map<String, dynamic> json) => DataLogin(
+        id: json["id"],
+        email: json["email"],
+        name: json["name"],
+        image: json["image"],
+        dateOfBirth: json["dateOfBirth"],
+        rangeAge: json["rangeAge"],
+        gender: json["gender"],
+        category: json["category"],
+        hobby: json["hobby"],
+        rememberToken: json["remember_token"],
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'token': token,
-      'name': name,
-      // 'email': email,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "email": email,
+        "name": name,
+        "image": image,
+        "dateOfBirth": dateOfBirth,
+        "rangeAge": rangeAge,
+        "gender": gender,
+        "category": category,
+        "hobby": hobby,
+        "remember_token": rememberToken,
+      };
 }

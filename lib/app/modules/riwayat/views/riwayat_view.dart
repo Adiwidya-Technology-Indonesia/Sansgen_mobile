@@ -15,7 +15,7 @@ class RiwayatView extends GetView<RiwayatController> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('  Riwayat Baca'),
-          backgroundColor: context.colorScheme.background,
+          backgroundColor: context.colorScheme.primary,
           bottom: TabBar(
             padding: const EdgeInsets.symmetric(horizontal: 0),
             indicatorColor: context.colorScheme.primary,

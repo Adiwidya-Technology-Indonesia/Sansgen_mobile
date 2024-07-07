@@ -17,7 +17,7 @@ class OnBoardingView extends GetView<OnBoardingController> {
               controller.listPage[controller.currentPage.value].titleAppBar),
         ),
         centerTitle: true,
-        backgroundColor: context.colorScheme.background,
+        backgroundColor: context.colorScheme.primary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
