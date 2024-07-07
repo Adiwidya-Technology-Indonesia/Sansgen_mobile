@@ -91,7 +91,7 @@ class LoginController extends GetxController {
           EasyLoading.dismiss();
           formClear();
           EasyLoading.showSuccess('Login berhasil');
-          prefService.putUserToken(response.data!.token);
+          prefService.putUserToken(response.data!.rememberToken);
           log(response.toJson().toString());
         } else {
           EasyLoading.showError('Login gagal');

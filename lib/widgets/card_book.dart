@@ -36,7 +36,7 @@ Container cardBook(Map<String, String> book, BuildContext context) {
                 height: 20,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: context.colorScheme.onBackground,
+                  color: context.colorScheme.onPrimary,
                   borderRadius: BorderRadius.circular(0),
                 ),
                 child: Text(

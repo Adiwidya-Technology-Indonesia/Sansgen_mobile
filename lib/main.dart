@@ -12,7 +12,7 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   PrefService prefService = PrefService();
   prefService.prefInit();
-  String isToken = prefService.getUserToken ?? '';
+  String isToken = prefService.getUserToken ?? 'hjb';
 
   String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.DASHBOARD;
   runApp(MyApp(initialRoutes));

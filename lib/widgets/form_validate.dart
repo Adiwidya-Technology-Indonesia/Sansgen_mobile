@@ -33,6 +33,7 @@ class FormValidate extends StatelessWidget {
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          textInputAction: TextInputAction.done,
           validator: (value) {
             if (nullValidation(value)) {
               return "Harap di isi";
@@ -40,6 +41,7 @@ class FormValidate extends StatelessWidget {
             return null;
           },
           decoration: InputDecoration(
+            alignLabelWithHint: false,
             hintText: hint,
             prefixIcon: SvgPicture.asset(
               icon,

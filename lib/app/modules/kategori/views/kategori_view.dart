@@ -16,7 +16,7 @@ class KategoriView extends GetView<KategoriController> {
     return Scaffold(
       appBar: AppBar(
         title: Text('  Kategori', style: context.titleLarge),
-        backgroundColor: context.colorScheme.background,
+        backgroundColor: context.colorScheme.primary,
         bottom: bottomAppBar(context),
       ),
       body: Column(
@@ -132,7 +132,7 @@ class KategoriView extends GetView<KategoriController> {
             decoration: InputDecoration(
               hintText: 'Cari',
               filled: true,
-              fillColor: context.colorScheme.background,
+              fillColor: context.colorScheme.primary,
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(12),

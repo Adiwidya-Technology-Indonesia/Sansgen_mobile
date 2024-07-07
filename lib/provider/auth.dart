@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/response_login.dart';
+import '../model/response_register.dart';
 
 class AuthProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
@@ -28,7 +29,7 @@ class AuthProvider extends GetConnect {
     }
   }
 
-  Future<ResponseLoginModel> authRegister(
+  Future<ResponseRegisterModel> authRegister(
     String name,
     String email,
     String password,
@@ -49,7 +50,7 @@ class AuthProvider extends GetConnect {
       return Future.error(response);
     } else {
       log(response.bodyString!, name: 'data response');
-      return ResponseLoginModel.fromJson(jsonDecode(response.bodyString!));
+      return ResponseRegisterModel.fromJson(jsonDecode(response.bodyString!));
     }
     // } catch (error) {
     //   log(error.toString(), name: "auth regis error");
