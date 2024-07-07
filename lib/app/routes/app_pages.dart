@@ -1,5 +1,3 @@
-// ignore_for_file: constant_identifier_names
-
 import 'package:get/get.dart';
 
 import '../modules/authentication/login/bindings/login_binding.dart';
@@ -8,16 +6,20 @@ import '../modules/authentication/lupa_pass/bindings/lupa_pass_binding.dart';
 import '../modules/authentication/lupa_pass/views/lupa_pass_view.dart';
 import '../modules/authentication/register/bindings/register_binding.dart';
 import '../modules/authentication/register/views/register_view.dart';
+import '../modules/authentication/reset_pass/bindings/reset_pass_binding.dart';
+import '../modules/authentication/reset_pass/views/reset_pass_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
+import '../modules/detail/bindings/detail_binding.dart';
+import '../modules/detail/views/detail_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/kategori/views/kategori_view.dart';
 import '../modules/on_boarding/bindings/on_boarding_binding.dart';
 import '../modules/on_boarding/views/on_boarding.dart';
 import '../modules/profil/views/profil_view.dart';
-import '../modules/authentication/reset_pass/bindings/reset_pass_binding.dart';
-import '../modules/authentication/reset_pass/views/reset_pass_view.dart';
 import '../modules/riwayat/views/riwayat_view.dart';
+
+// ignore_for_file: constant_identifier_names
 
 part 'app_routes.dart';
 
@@ -76,6 +78,11 @@ class AppPages {
       name: _Paths.RESET_PASS,
       page: () => const ResetPassView(),
       binding: ResetPassBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL,
+      page: () => const DetailView(),
+      binding: DetailBinding(),
     ),
   ];
 }
