@@ -12,7 +12,7 @@ class DashboardView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(() => controller.pages[controller.selectedIndex].page),
+      body: Obx(() => controller.pages[controller.getCurrentIndex].page),
       bottomNavigationBar: Obx(
         () => bottomBarSnake(context),
       ),
@@ -22,7 +22,7 @@ class DashboardView extends GetView<DashboardController> {
   SnakeNavigationBar bottomBarSnake(BuildContext context) {
     return SnakeNavigationBar.color(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      currentIndex: controller.selectedIndex,
+      currentIndex: controller.getCurrentIndex,
       snakeViewColor: context.colorScheme.surface,
       backgroundColor: context.colorScheme.primary,
       showSelectedLabels: false,
@@ -37,7 +37,7 @@ class DashboardView extends GetView<DashboardController> {
             icon: SvgPicture.asset(
               e.icon,
               colorFilter: ColorFilter.mode(
-                controller.selectedIndex == e.index
+                controller.getCurrentIndex == e.index
                     ? context.colorScheme.primary
                     : context.colorScheme.onSecondary,
                 BlendMode.srcIn,
