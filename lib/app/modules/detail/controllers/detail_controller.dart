@@ -1,47 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/utils/ext_context.dart';
 
 import '../../../../model/books.dart';
 
 class DetailController extends GetxController {
   late BookModel book;
 
-  void tapViewBottomSheetChapter(List<int> listChapter) {
+  void tapViewBottomSheetChapter(List<int> listChapter, BuildContext context) {
     Get.bottomSheet(
-      Container(
-        width: double.infinity,
-        padding: const EdgeInsets.only(
-          top: 16,
-          left: 16,
-          right: 16,
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-        ),
-        child: Column(
-          children: listChapter
-              .map(
-                (e) => Container(
-                  height: 35,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    children: [
-                      Text("Chapter $e"),
-                      const Text("Lorem ipsum dolor sit amet"),
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-      ),
+      contentBottomSheet(context, listChapter),
     );
   }
 
@@ -50,4 +19,71 @@ class DetailController extends GetxController {
     book = Get.arguments;
     super.onInit();
   }
+}
+
+Container contentBottomSheet(BuildContext context, List<int> listChapter) {
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.only(
+      top: 16,
+      left: 16,
+      right: 16,
+    ),
+    decoration: BoxDecoration(
+      color: context.colorScheme.primary,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+      ),
+    ),
+    child: ListView(
+      children: [
+        Text(
+          "Total: ${listChapter.length} Bab",
+          style: context.titleMedium,
+        ),
+        const Divider(),
+        ...listChapter
+            .map(
+              (e) => cardChapter(
+                context: context,
+                value: e,
+                onTap: () {},
+              ),
+            )
+            .toList(),
+      ],
+    ),
+  );
+}
+
+GestureDetector cardChapter({
+  required BuildContext context,
+  required int value,
+  required Function() onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      height: 35,
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 12),
+            color: context.colorScheme.onPrimary.withOpacity(0.2),
+            blurRadius: 12,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Text("Chapter $value"),
+          const Gap(12),
+          const Text("Lorem ipsum dolor sit amet"),
+        ],
+      ),
+    ),
+  );
 }

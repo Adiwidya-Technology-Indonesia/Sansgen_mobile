@@ -38,6 +38,7 @@ class DashboardController extends GetxController {
       page: const ProfilView(),
     ),
   ];
+
   @override
   void onInit() {
     setCurrentIndex(0);

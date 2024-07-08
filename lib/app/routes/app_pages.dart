@@ -19,10 +19,12 @@ import '../modules/on_boarding/views/on_boarding.dart';
 import '../modules/payment_details/bindings/payment_details_binding.dart';
 import '../modules/payment_details/views/payment_details_view.dart';
 import '../modules/profil/views/profil_view.dart';
-import '../modules/profileUpdate/bindings/profile_update_binding.dart';
-import '../modules/profileUpdate/views/profile_update_view.dart';
+import '../modules/profile_update/bindings/profile_update_binding.dart';
+import '../modules/profile_update/views/profile_update_view.dart';
 import '../modules/profile_preferenci/bindings/profile_preferenci_binding.dart';
 import '../modules/profile_preferenci/views/profile_preferenci_view.dart';
+import '../modules/reading_book/bindings/reading_book_binding.dart';
+import '../modules/reading_book/views/reading_book_view.dart';
 import '../modules/riwayat/views/riwayat_view.dart';
 
 // ignore_for_file: constant_identifier_names
@@ -104,6 +106,11 @@ class AppPages {
       name: _Paths.PROFILE_PREFERENCI,
       page: () => const ProfilePreferenciView(),
       binding: ProfilePreferenciBinding(),
+    ),
+    GetPage(
+      name: _Paths.READING_BOOK,
+      page: () => const ReadingBookView(),
+      binding: ReadingBookBinding(),
     ),
   ];
 }
