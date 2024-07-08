@@ -14,7 +14,7 @@ Future main() async {
   prefService.prefInit();
   String isToken = prefService.getUserToken ?? 'hjb';
 
-  String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.DASHBOARD;
+  String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.READING_BOOK;
   // String initialRoutes = Routes.DETAIL;
   runApp(MyApp(initialRoutes));
 }
