@@ -35,7 +35,13 @@ class KategoriView extends GetView<KategoriController> {
               itemCount: controller.bookList.length,
               itemBuilder: (context, index) {
                 final book = controller.bookList[index];
-                return cardBook(book, context);
+                return cardBook(
+                  book: book,
+                  context: context,
+                  onTap: () {
+                    controller.toDetails(book);
+                  },
+                );
               },
             ),
           ),

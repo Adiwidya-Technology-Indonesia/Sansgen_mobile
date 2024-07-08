@@ -14,8 +14,11 @@ class BelumSelesaiDiBaca extends GetView<RiwayatController> {
       itemBuilder: (context, index) {
         final book = controller.bookList[index];
         return cardBook(
-          book,
-          context,
+          book: book,
+          context: context,
+          onTap: () {
+            controller.toDetails(book);
+          },
         );
       },
     );
