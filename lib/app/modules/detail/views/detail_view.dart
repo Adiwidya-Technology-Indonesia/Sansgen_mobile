@@ -34,6 +34,7 @@ class DetailView extends GetView<DetailController> {
             image: controller.book.image,
             rating: controller.book.manyRatings,
             sinopsis: controller.book.sinopsis,
+            listChapter: controller.book.listChapter,
           ),
         ],
       ),
@@ -46,6 +47,7 @@ class DetailView extends GetView<DetailController> {
     required String image,
     required double rating,
     required String sinopsis,
+    required List<int> listChapter,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -103,7 +105,7 @@ class DetailView extends GetView<DetailController> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () => controller.tapViewBottomSheetChapter(listChapter),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 40),
               shape: RoundedRectangleBorder(

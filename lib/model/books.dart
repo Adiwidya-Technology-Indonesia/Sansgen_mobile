@@ -18,6 +18,7 @@ class BookModel {
   int manyLike;
   int manyComment;
   int manyChapter;
+  List<int> listChapter;
 
   BookModel({
     required this.title,
@@ -33,6 +34,7 @@ class BookModel {
     required this.manyLike,
     required this.manyComment,
     required this.manyChapter,
+    required this.listChapter,
   });
 
   factory BookModel.fromJson(Map<String, dynamic> json) => BookModel(
@@ -49,6 +51,7 @@ class BookModel {
         manyLike: json["manyLike"],
         manyComment: json["manyComment"],
         manyChapter: json["manyChapter"],
+        listChapter: json["listChapter"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,5 +68,6 @@ class BookModel {
         "manyLike": manyLike,
         "manyComment": manyComment,
         "manyChapter": manyChapter,
+        "listChapter": listChapter,
       };
 }

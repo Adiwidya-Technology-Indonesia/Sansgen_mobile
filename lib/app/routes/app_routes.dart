@@ -16,6 +16,9 @@ abstract class Routes {
   static const PROFIL = _Paths.PROFIL;
   static const RESET_PASS = _Paths.RESET_PASS;
   static const DETAIL = _Paths.DETAIL;
+  static const PROFILE_UPDATE = _Paths.PROFILE_UPDATE;
+  static const PAYMENT_DETAILS = _Paths.PAYMENT_DETAILS;
+  static const PROFILE_PREFERENCI = _Paths.PROFILE_PREFERENCI;
 }
 
 abstract class _Paths {
@@ -31,4 +34,7 @@ abstract class _Paths {
   static const PROFIL = '/profil';
   static const RESET_PASS = '/reset-pass';
   static const DETAIL = '/detail';
+  static const PROFILE_UPDATE = '/profile-update';
+  static const PAYMENT_DETAILS = '/payment-details';
+  static const PROFILE_PREFERENCI = '/profile-preferenci';
 }

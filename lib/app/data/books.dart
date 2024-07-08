@@ -16,4 +16,5 @@ final BookModel book = BookModel(
   manyLike: 100,
   manyComment: 12,
   manyChapter: 100,
+  listChapter: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 );

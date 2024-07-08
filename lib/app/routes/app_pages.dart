@@ -16,7 +16,13 @@ import '../modules/home/views/home_view.dart';
 import '../modules/kategori/views/kategori_view.dart';
 import '../modules/on_boarding/bindings/on_boarding_binding.dart';
 import '../modules/on_boarding/views/on_boarding.dart';
+import '../modules/payment_details/bindings/payment_details_binding.dart';
+import '../modules/payment_details/views/payment_details_view.dart';
 import '../modules/profil/views/profil_view.dart';
+import '../modules/profileUpdate/bindings/profile_update_binding.dart';
+import '../modules/profileUpdate/views/profile_update_view.dart';
+import '../modules/profile_preferenci/bindings/profile_preferenci_binding.dart';
+import '../modules/profile_preferenci/views/profile_preferenci_view.dart';
 import '../modules/riwayat/views/riwayat_view.dart';
 
 // ignore_for_file: constant_identifier_names
@@ -83,6 +89,21 @@ class AppPages {
       name: _Paths.DETAIL,
       page: () => const DetailView(),
       binding: DetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE_UPDATE,
+      page: () => const ProfileUpdateView(),
+      binding: ProfileUpdateBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_DETAILS,
+      page: () => const PaymentDetailsView(),
+      binding: PaymentDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE_PREFERENCI,
+      page: () => const ProfilePreferenciView(),
+      binding: ProfilePreferenciBinding(),
     ),
   ];
 }
