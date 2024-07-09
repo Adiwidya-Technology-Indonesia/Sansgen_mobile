@@ -4,13 +4,14 @@ import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
 import '../../../../model/books.dart';
+import '../../../routes/app_pages.dart';
 
 class DetailController extends GetxController {
   late BookModel book;
 
   void tapViewBottomSheetChapter(List<int> listChapter, BuildContext context) {
     Get.bottomSheet(
-      contentBottomSheet(context, listChapter),
+      contentBottomSheet(context, listChapter, book),
     );
   }
 
@@ -21,7 +22,8 @@ class DetailController extends GetxController {
   }
 }
 
-Container contentBottomSheet(BuildContext context, List<int> listChapter) {
+Container contentBottomSheet(
+    BuildContext context, List<int> listChapter, BookModel book) {
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.only(
@@ -48,7 +50,12 @@ Container contentBottomSheet(BuildContext context, List<int> listChapter) {
               (e) => cardChapter(
                 context: context,
                 value: e,
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(Routes.READING_BOOK, arguments: {
+                    'book': book,
+                    'chapter': e,
+                  });
+                },
               ),
             )
             .toList(),
