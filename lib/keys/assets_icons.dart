@@ -20,4 +20,5 @@ class KeysAssetsIcons {
   static const String star = 'assets/icons/star.svg';
   static const String timer = 'assets/icons/timer.svg';
   static const String user = 'assets/icons/user.svg';
+  static const String payment = 'assets/icons/payment.svg';
 }
