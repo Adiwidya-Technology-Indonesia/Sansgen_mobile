@@ -28,13 +28,15 @@ class ProfilView extends GetView<ProfilController> {
               title: 'Kategori favorit',
               context: context,
               iconCom: KeysAssetsIcons.category,
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.PROFILE_PREFERENCI);
+              },
             ),
             profilCard(
               title: 'Payment',
               context: context,
               iconCom: KeysAssetsIcons.payment,
-              onTap: () {},
+              onTap: () => controller.paymentButton(context)
             ),
             profilCard(
               title: 'Tentang Sansgen',
@@ -46,7 +48,7 @@ class ProfilView extends GetView<ProfilController> {
               title: 'Keluar',
               context: context,
               iconCom: KeysAssetsIcons.logOut,
-              onTap: () {},
+              onTap: () => controller.logOutButton(context),
             ),
           ],
         ));

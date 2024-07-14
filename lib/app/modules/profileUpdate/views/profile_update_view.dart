@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/image_hash.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/update_profil_form_validate.dart';
 
 import '../controllers/profile_update_controller.dart';
 import 'wrapper_up_profile.dart';
@@ -18,61 +19,51 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
     return Scaffold(
       backgroundColor: context.colorScheme.secondary.withOpacity(0.1),
       appBar: appBarProUpdate(context),
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Informasi Pribadi',
-              style: context.titleLargeBold
-                  .copyWith(color: context.colorScheme.onPrimary),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Obx(
+            () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Informasi Pribadi',
+                  style: context.titleLargeBold
+                      .copyWith(color: context.colorScheme.onPrimary),
+                ),
+                const Gap(20),
+                UpdateProfilFormValidate(
+                  hintText: 'Nama Lengkap',
+                  controller: controller.nameController,
+                  info: controller.isNameMessage.value,
+                ),
+                UpdateProfilFormValidate(
+                  hintText: 'Jenis Kelamin',
+                  controller: controller.jkelController,
+                  info: controller.isjkelMessage.value,
+                ),
+                UpdateProfilFormValidate(
+                  hintText: 'Tanggal Lahir',
+                  controller: controller.tglLahirController,
+                  info: controller.istglLahirMessage.value,
+                ),
+                Gap(context.height * 0.12),
+                ElevatedButton(
+                  onPressed: controller.profilUpdateButton,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  child: Text(
+                    'Simpan',
+                    style: context.titleMedium
+                        .copyWith(color: context.colorScheme.primary),
+                  ),
+                )
+              ],
             ),
-            const Gap(20),
-            textFieldProUpdate(hintText: 'Nama Lengkap', context: context),
-            textFieldProUpdate(hintText: 'Jenis Kelamin', context: context),
-            textFieldProUpdate(hintText: 'Tanggal Lahir', context: context),
-            textFieldProUpdate(hintText: 'Email', context: context),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-              ),
-              child: Text(
-                'Simpan',
-                style: context.titleMedium
-                    .copyWith(color: context.colorScheme.primary),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding textFieldProUpdate(
-      {required String hintText, required BuildContext context}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: TextFormField(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: context.colorScheme.primary,
-          label: Text(
-            hintText,
-            style: context.titleMedium
-                .copyWith(color: context.colorScheme.surface),
           ),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none),
         ),
       ),
     );

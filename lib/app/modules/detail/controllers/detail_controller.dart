@@ -28,7 +28,7 @@ class DetailController extends GetxController {
                 (e) => Container(
                   height: 35,
                   margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
                   child: Row(
