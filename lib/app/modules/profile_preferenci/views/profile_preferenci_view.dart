@@ -23,7 +23,7 @@ class ProfilePreferenciView extends GetView<ProfilePreferenciController> {
                GestureDetector(
                   onTap: Get.back,
                   child: AvatarWidget(image: state!.image ,height: 50.0,)),
-              Gap(40),
+              const Gap(40),
               const Text(
                 'Referensi Kamu',
                 style: TextStyle(fontSize: 24),

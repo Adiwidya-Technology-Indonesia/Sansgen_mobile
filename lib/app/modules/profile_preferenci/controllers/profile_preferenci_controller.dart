@@ -29,7 +29,7 @@ class ProfilePreferenciController extends GetxController with StateMixin<ModelUs
     try {
       // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
       final request = ModelRequestPatchUser(
-        category: listPreferences.toList().toString()
+        category: listPreferences.first.title
       );
       userProvider.patchUserCurrent(request).then((v) async {
         EasyLoading.dismiss();

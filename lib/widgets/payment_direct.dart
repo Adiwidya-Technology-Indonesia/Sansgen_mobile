@@ -15,7 +15,7 @@ GestureDetector paymentDirect({required String img}){
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding:EdgeInsets.only(left: 10,right:10 ),
+        padding:const EdgeInsets.only(left: 10,right:10 ),
         child: Row(
           children: [
             Image.asset(img,width: 100,),
