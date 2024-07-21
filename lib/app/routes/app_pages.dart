@@ -16,13 +16,15 @@ import '../modules/home/views/home_view.dart';
 import '../modules/kategori/views/kategori_view.dart';
 import '../modules/on_boarding/bindings/on_boarding_binding.dart';
 import '../modules/on_boarding/views/on_boarding.dart';
+import '../modules/payment_buy/bindings/payment_buy_binding.dart';
+import '../modules/payment_buy/views/payment_buy_view.dart';
 import '../modules/payment_details/bindings/payment_details_binding.dart';
 import '../modules/payment_details/views/payment_details_view.dart';
 import '../modules/profil/views/profil_view.dart';
-import '../modules/profile_update/bindings/profile_update_binding.dart';
-import '../modules/profile_update/views/profile_update_view.dart';
 import '../modules/profile_preferenci/bindings/profile_preferenci_binding.dart';
 import '../modules/profile_preferenci/views/profile_preferenci_view.dart';
+import '../modules/profile_update/bindings/profile_update_binding.dart';
+import '../modules/profile_update/views/profile_update_view.dart';
 import '../modules/reading_book/bindings/reading_book_binding.dart';
 import '../modules/reading_book/views/reading_book_view.dart';
 import '../modules/riwayat/views/riwayat_view.dart';
@@ -111,6 +113,11 @@ class AppPages {
       name: _Paths.READING_BOOK,
       page: () => const ReadingBookView(),
       binding: ReadingBookBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_BUY,
+      page: () => const PaymentBuyView(),
+      binding: PaymentBuyBinding(),
     ),
   ];
 }
