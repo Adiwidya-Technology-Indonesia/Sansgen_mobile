@@ -25,7 +25,8 @@ class ReadingBookView extends GetView<ReadingBookController> {
         enableOpacityAnimation: true, // optional, defaults to `true`.
         preferredWidgetSize: const Size.fromHeight(100),
         child: AppBar(
-          toolbarHeight: 100,
+          elevation: 40,
+          toolbarHeight: 44,
           title: const Text('ReadingBookView'),
           backgroundColor: context.colorScheme.primary,
           leadingWidth: 80,
@@ -58,40 +59,56 @@ class ReadingBookView extends GetView<ReadingBookController> {
       ),
       body: SingleChildScrollView(
         controller: controller.scrollController,
-        child: Column(
-          children: [
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-            Text(controller.book.sinopsis),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+              Text(controller.book.sinopsis),
+            ],
+          ),
         ),
       ),
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: SvgPicture.asset(KeysAssetsIcons.musicOff),
+        onPressed: controller.onMusic,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Obx(
+          () => (controller.stateMusic.isTrue)
+              ? SvgPicture.asset(KeysAssetsIcons.musicOn)
+              : Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: SvgPicture.asset(KeysAssetsIcons.musicOff),
+                ),
+        ),
       ),
       bottomNavigationBar: Hidable(
         controller: controller.scrollController,
-        enableOpacityAnimation: true, // optional, defaults to `true`.
+        deltaFactor: 0.0,
+        wOpacity: false,
+        enableOpacityAnimation: true,
+        // optional, defaults to `true`.
         child: bottomNavBarReading(
           context: context,
           chapter: controller.book.listChapter

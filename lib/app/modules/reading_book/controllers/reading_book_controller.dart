@@ -9,6 +9,7 @@ class ReadingBookController extends GetxController {
   var book = Get.arguments['book'] as BookModel;
   var chapter = Get.arguments['chapter'] as int;
   final Rx<int> currentChapter = 0.obs;
+  final Rx<bool> stateMusic = false.obs;
 
   int initDuration = 10;
 
@@ -20,6 +21,8 @@ class ReadingBookController extends GetxController {
       content: widget,
     );
   }
+
+  void onMusic()=> stateMusic.value = !stateMusic.value;
 
   void onStartTimer() => controllerTimer.start();
 
