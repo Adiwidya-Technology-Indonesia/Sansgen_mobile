@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sansgen/model/books.dart';
 
 class ReadingBookController extends GetxController {
+  final ScrollController scrollController = ScrollController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var book = Get.arguments['book'] as BookModel;
   var chapter = Get.arguments['chapter'] as int;

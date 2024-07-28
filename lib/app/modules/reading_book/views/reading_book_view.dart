@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:hidable/hidable.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
@@ -17,53 +18,89 @@ class ReadingBookView extends GetView<ReadingBookController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ReadingBookView'),
-        backgroundColor: context.colorScheme.primary,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
+      key: controller.scaffoldKey,
+      drawer: contentDrawer(context),
+      appBar: Hidable(
+        controller: controller.scrollController,
+        enableOpacityAnimation: true, // optional, defaults to `true`.
+        preferredWidgetSize: const Size.fromHeight(100),
+        child: AppBar(
+          toolbarHeight: 100,
+          title: const Text('ReadingBookView'),
+          backgroundColor: context.colorScheme.primary,
+          leadingWidth: 80,
+          leading: CircleAvatar(
             backgroundColor: context.colorScheme.secondaryContainer,
             child: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Get.back(),
             ),
           ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => controller.openTimer(
-              alertTimer(
-                context: context,
-                duration: controller.initDuration,
-                controllerTimer: controller.controllerTimer,
-                onStart: controller.onStartTimer,
-                onPause: controller.onPauseTimer,
-                onResume: controller.onResumeTimer,
-                onRestart: () =>
-                    controller.onRestartTimer(controller.initDuration),
+          actions: [
+            IconButton(
+              onPressed: () => controller.openTimer(
+                alertTimer(
+                  context: context,
+                  duration: controller.initDuration,
+                  controllerTimer: controller.controllerTimer,
+                  onStart: controller.onStartTimer,
+                  onPause: controller.onPauseTimer,
+                  onResume: controller.onResumeTimer,
+                  onRestart: () =>
+                      controller.onRestartTimer(controller.initDuration),
+                ),
               ),
+              icon: SvgPicture.asset(KeysAssetsIcons.timer),
             ),
-            icon: SvgPicture.asset(KeysAssetsIcons.timer),
-          ),
-        ],
-        // centerTitle: true,
-      ),
-      key: controller.scaffoldKey,
-      drawer: contentDrawer(context),
-      body: const Center(
-        child: Text(
-          'ReadingBookView is working',
-          style: TextStyle(fontSize: 20),
+          ],
+          // centerTitle: true,
         ),
       ),
-      bottomNavigationBar: bottomNavBarReading(
-        context: context,
-        chapter:
-            controller.book.listChapter.indexOf(controller.chapter).toString(),
-        onTapPrevious: () {},
-        onTapNext: () {},
-        onTapDrawerChapter: controller.openDrawer,
+      body: SingleChildScrollView(
+        controller: controller.scrollController,
+        child: Column(
+          children: [
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+            Text(controller.book.sinopsis),
+          ],
+        ),
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: SvgPicture.asset(KeysAssetsIcons.musicOff),
+      ),
+      bottomNavigationBar: Hidable(
+        controller: controller.scrollController,
+        enableOpacityAnimation: true, // optional, defaults to `true`.
+        child: bottomNavBarReading(
+          context: context,
+          chapter: controller.book.listChapter
+              .indexOf(controller.chapter)
+              .toString(),
+          onTapPrevious: () {},
+          onTapNext: () {},
+          onTapDrawerChapter: controller.openDrawer,
+        ),
       ),
     );
   }
@@ -248,7 +285,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
     void Function()? onTapDrawerChapter,
   }) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

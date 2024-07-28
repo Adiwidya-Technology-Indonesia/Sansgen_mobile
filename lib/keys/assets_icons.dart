@@ -14,6 +14,8 @@ class KeysAssetsIcons {
   static const String komen = 'assets/icons/komen.svg';
   static const String like = 'assets/icons/like.svg';
   static const String logOut = 'assets/icons/log-out.svg';
+  static const String musicOff = 'assets/icons/music-off.svg';
+  static const String musicOn = 'assets/icons/music-on.svg';
   static const String pass = 'assets/icons/pass.svg';
   static const String riwayat = 'assets/icons/riwayat.svg';
   static const String search = 'assets/icons/search.svg';
