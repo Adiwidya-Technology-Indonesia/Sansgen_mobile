@@ -1,23 +1,16 @@
 import 'package:get/get.dart';
 
+import '../../../../model/on_boarding.dart';
+
 class ProfilePreferenciController extends GetxController {
-  //TODO: Implement ProfilePreferenciController
-
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
+  final listPreferences = <ModelPreferenci>[
+    ModelPreferenci(title: 'Bisnis', isSelected: false.obs),
+    ModelPreferenci(title: 'Pengembangan diri', isSelected: false.obs),
+    ModelPreferenci(title: 'Marketing & Sales', isSelected: false.obs),
+    ModelPreferenci(title: 'Sains', isSelected: false.obs),
+    ModelPreferenci(title: 'Filsafat', isSelected: false.obs),
+    ModelPreferenci(title: 'Agama', isSelected: false.obs),
+    ModelPreferenci(title: 'Politik', isSelected: false.obs),
+    ModelPreferenci(title: 'Sejarah', isSelected: false.obs),
+  ];
 }
