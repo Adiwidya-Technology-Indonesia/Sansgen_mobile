@@ -10,77 +10,85 @@ import '../controllers/profil_controller.dart';
 
 class ProfilView extends GetView<ProfilController> {
   const ProfilView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBarCustom(context),
-        body: ListView(
-          children: [
-            profilCard(
-              title: 'Informasi Pribadi',
-              context: context,
-              iconCom: KeysAssetsIcons.user,
-              onTap: () {
-                Get.toNamed(Routes.PROFILE_UPDATE);
-              },
-            ),
-            profilCard(
-              title: 'Kategori favorit',
-              context: context,
-              iconCom: KeysAssetsIcons.category,
-              onTap: () {
-                Get.toNamed(Routes.PROFILE_PREFERENCI);
-              },
-            ),
-            profilCard(
+      appBar: appBarCustom(context),
+      body: ListView(
+        children: [
+          profilCard(
+            title: 'Informasi Pribadi',
+            context: context,
+            iconCom: KeysAssetsIcons.user,
+            onTap: () {
+              Get.toNamed(Routes.PROFILE_UPDATE);
+            },
+          ),
+          profilCard(
+            title: 'Kategori favorit',
+            context: context,
+            iconCom: KeysAssetsIcons.category,
+            onTap: () {
+              Get.toNamed(Routes.PROFILE_PREFERENCI);
+            },
+          ),
+          profilCard(
               title: 'Payment',
               context: context,
               iconCom: KeysAssetsIcons.payment,
-              onTap: () => controller.paymentButton(context)
-            ),
-            profilCard(
-              title: 'Tentang Sansgen',
-              context: context,
-              iconCom: KeysAssetsIcons.info,
-              onTap: () {},
-            ),
-            profilCard(
-              title: 'Keluar',
-              context: context,
-              iconCom: KeysAssetsIcons.logOut,
-              onTap: () => controller.logOutButton(context),
-            ),
-          ],
-        ));
+              onTap: () => controller.paymentButton(context)),
+          profilCard(
+            title: 'Tentang Sansgen',
+            context: context,
+            iconCom: KeysAssetsIcons.info,
+            onTap: () {},
+          ),
+          profilCard(
+            title: 'Keluar',
+            context: context,
+            iconCom: KeysAssetsIcons.logOut,
+            onTap: () => controller.logOutButton(context),
+          ),
+        ],
+      ),
+    );
   }
 
   AppBar appBarCustom(BuildContext context) {
     return AppBar(
       toolbarHeight: 300,
       backgroundColor: context.colorScheme.primary,
+      centerTitle: true,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                context.colorScheme.onSecondaryContainer,
-                context.colorScheme.primaryContainer
-              ],
-              stops: const [0.0, 1.0],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius:
-                const BorderRadius.vertical(bottom: Radius.circular(20))),
+          gradient: LinearGradient(
+            colors: [
+              context.colorScheme.onSecondaryContainer,
+              context.colorScheme.primaryContainer
+            ],
+            stops: const [0.0, 1.0],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: const BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
       ),
       title: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
             onTap: () {
-              Get.dialog(GestureDetector(
+              Get.dialog(
+                GestureDetector(
                   onTap: () {
                     Get.back();
                   },
-                  child: Image.asset('assets/images/male_gender.png')));
+                  child: Image.asset('assets/images/male_gender.png'),
+                ),
+              );
             },
             child: SizedBox(
               height: 150,
@@ -93,9 +101,12 @@ class ProfilView extends GetView<ProfilController> {
           const SizedBox(
             height: 20,
           ),
-          Text("Muh Wais",
-              style: context.titleLargeBold
-                  .copyWith(color: context.colorScheme.primary))
+          Text(
+            "Muh Wais",
+            style: context.titleLargeBold.copyWith(
+              color: context.colorScheme.primary,
+            ),
+          )
         ],
       ),
     );

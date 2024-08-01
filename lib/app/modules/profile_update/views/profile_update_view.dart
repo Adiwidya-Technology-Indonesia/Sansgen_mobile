@@ -47,7 +47,7 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                   controller: controller.tglLahirController,
                   info: controller.istglLahirMessage.value,
                 ),
-                Gap(context.height * 0.12),
+                Gap(context.height * 0.06),
                 ElevatedButton(
                   onPressed: controller.profilUpdateButton,
                   style: ElevatedButton.styleFrom(
