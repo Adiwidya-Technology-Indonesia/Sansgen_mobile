@@ -1,3 +1,10 @@
+import 'dart:developer';
+
+import 'dart:developer';
+
+import 'dart:developer';
+
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -10,6 +17,7 @@ import '../controllers/reading_book_controller.dart';
 
 class ReadingBookView extends GetView<ReadingBookController> {
   const ReadingBookView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +36,18 @@ class ReadingBookView extends GetView<ReadingBookController> {
         ),
         actions: [
           IconButton(
-            onPressed: controller.openDrawer,
+            onPressed: () => controller.openTimer(
+              alertTimer(
+                context: context,
+                duration: controller.initDuration,
+                controllerTimer: controller.controllerTimer,
+                onStart: controller.onStartTimer,
+                onPause: controller.onPauseTimer,
+                onResume: controller.onResumeTimer,
+                onRestart: () =>
+                    controller.onRestartTimer(controller.initDuration),
+              ),
+            ),
             icon: SvgPicture.asset(KeysAssetsIcons.timer),
           ),
         ],
@@ -49,6 +68,96 @@ class ReadingBookView extends GetView<ReadingBookController> {
         onTapPrevious: () {},
         onTapNext: () {},
         onTapDrawerChapter: controller.openDrawer,
+      ),
+    );
+  }
+
+  SizedBox alertTimer({
+    required BuildContext context,
+    required int duration,
+    required CountDownController controllerTimer,
+    required void Function()? onStart,
+    required void Function()? onPause,
+    required void Function()? onResume,
+    required void Function()? onRestart,
+  }) {
+    return SizedBox(
+      height: 320,
+      width: 300,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircularCountDownTimer(
+            duration: duration,
+            initialDuration: 0,
+            controller: controllerTimer,
+            width: 200,
+            height: 200,
+            ringColor: context.colorScheme.primary,
+            ringGradient: null,
+            fillColor: context.colorScheme.surface,
+            fillGradient: null,
+            backgroundColor: context.colorScheme.primaryContainer,
+            backgroundGradient: null,
+            strokeWidth: 20.0,
+            strokeCap: StrokeCap.round,
+            textStyle: const TextStyle(
+                fontSize: 33.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+            textFormat: CountdownTextFormat.S,
+            isReverse: false,
+            isReverseAnimation: false,
+            isTimerTextShown: true,
+            autoStart: false,
+            onStart: () {
+              // Here, do whatever you want
+              log('Countdown Started');
+            },
+
+            // This Callback will execute when the Countdown Ends.
+            onComplete: () {
+              // Here, do whatever you want
+              log('Countdown Ended');
+            },
+
+            // This Callback will execute when the Countdown Changes.
+            onChange: (String timeStamp) {
+              // Here, do whatever you want
+              log('Countdown Changed $timeStamp');
+            },
+            timeFormatterFunction: (defaultFormatterFunction, duration) {
+              if (duration.inSeconds == 0) {
+                return "0 : 0";
+              } else {
+                return Function.apply(defaultFormatterFunction, [duration]);
+              }
+            },
+          ),
+          const Gap(40),
+          Card(
+            color: context.colorScheme.onPrimary,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  onPressed: onStart,
+                  icon: Icon(
+                    Icons.pause_circle_outline,
+                    color: context.colorScheme.surface,
+                  ),
+                ),
+                IconButton(
+                  onPressed: onPause,
+                  icon: Icon(
+                    Icons.timer,
+                    color: context.colorScheme.surface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/books.dart';
@@ -7,6 +8,26 @@ class ReadingBookController extends GetxController {
   var book = Get.arguments['book'] as BookModel;
   var chapter = Get.arguments['chapter'] as int;
   final Rx<int> currentChapter = 0.obs;
+
+  int initDuration = 10;
+
+  final CountDownController controllerTimer = CountDownController();
+
+  void openTimer(Widget widget) {
+    Get.defaultDialog(
+      title: "",
+      content: widget,
+    );
+  }
+
+  void onStartTimer() => controllerTimer.start();
+
+  void onPauseTimer() => controllerTimer.pause();
+
+  void onResumeTimer() => controllerTimer.resume();
+
+  void onRestartTimer(int duration) =>
+      controllerTimer.restart(duration: duration);
 
   void openDrawer() {
     scaffoldKey.currentState?.openDrawer();
