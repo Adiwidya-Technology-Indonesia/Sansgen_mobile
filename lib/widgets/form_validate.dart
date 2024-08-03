@@ -9,7 +9,7 @@ class FormValidate extends StatelessWidget {
     required this.hint,
     required this.icon,
     required this.controller,
-    required this.info,
+    required this.validator,
     this.keyboardType,
     this.color,
   }) : super(key: key);
@@ -17,9 +17,10 @@ class FormValidate extends StatelessWidget {
   final String hint;
   final String icon;
   final TextEditingController controller;
-  final String? info;
+  // final String? info;
   final TextInputType? keyboardType;
   final ColorFilter? color;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +35,7 @@ class FormValidate extends StatelessWidget {
           controller: controller,
           keyboardType: keyboardType,
           textInputAction: TextInputAction.done,
-          validator: (value) {
-            if (nullValidation(value)) {
-              return "Harap di isi";
-            }
-            return null;
-          },
+          validator: validator,
           decoration: InputDecoration(
             alignLabelWithHint: false,
             hintText: hint,
@@ -58,16 +54,16 @@ class FormValidate extends StatelessWidget {
             ),
           ),
         ),
-        Visibility(
-          visible: info != null,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              info ?? "",
-              style: context.formError,
-            ),
-          ),
-        ),
+        // Visibility(
+        //   visible: info != null,
+        //   child: Padding(
+        //     padding: const EdgeInsets.only(top: 4),
+        //     child: Text(
+        //       info ?? "",
+        //       style: context.formError,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

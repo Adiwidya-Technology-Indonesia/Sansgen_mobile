@@ -105,10 +105,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
       ),
       bottomNavigationBar: Hidable(
         controller: controller.scrollController,
-        deltaFactor: 0.0,
-        wOpacity: false,
-        enableOpacityAnimation: true,
-        // optional, defaults to `true`.
+        enableOpacityAnimation: true, // optional, defaults to `true`.
         child: bottomNavBarReading(
           context: context,
           chapter: controller.book.listChapter

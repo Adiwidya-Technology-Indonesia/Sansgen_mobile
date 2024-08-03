@@ -10,14 +10,16 @@ import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
   const RegisterView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
-          child: Obx(
-            () => Column(
+          child: Form(
+            key: controller.formKey,
+            child: Column(
               children: [
                 const Gap(40),
                 Text(
@@ -30,7 +32,7 @@ class RegisterView extends GetView<RegisterController> {
                   hint: 'Masukan nama',
                   icon: KeysAssetsIcons.user,
                   controller: controller.nameController,
-                  info: controller.isNameMessage.value,
+                  validator: (v) => controller.validateName(v),
                   keyboardType: TextInputType.name,
                   color: ColorFilter.mode(
                     context.colorScheme.onPrimary.withOpacity(0.7),
@@ -42,7 +44,7 @@ class RegisterView extends GetView<RegisterController> {
                   hint: 'Masukan email',
                   icon: KeysAssetsIcons.email,
                   controller: controller.emailController,
-                  info: controller.isEmailMessage.value,
+                  validator: (v) => controller.validateEmail(v),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 FormValidate(
@@ -50,7 +52,7 @@ class RegisterView extends GetView<RegisterController> {
                   hint: 'Masukan password',
                   icon: KeysAssetsIcons.pass,
                   controller: controller.passwordController,
-                  info: controller.isPasswordMessage.value,
+                  validator: (v) => controller.validatePassword(v),
                   keyboardType: TextInputType.visiblePassword,
                 ),
                 FormValidate(
@@ -58,7 +60,7 @@ class RegisterView extends GetView<RegisterController> {
                   hint: 'Masukan kembali password',
                   icon: KeysAssetsIcons.pass,
                   controller: controller.komfirPassController,
-                  info: controller.isKomfirPassMessage.value,
+                  validator: (v) => controller.validateConfirmPassword(v),
                   keyboardType: TextInputType.visiblePassword,
                 ),
                 const Gap(20),

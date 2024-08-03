@@ -12,15 +12,16 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   PrefService prefService = PrefService();
   prefService.prefInit();
-  String isToken = prefService.getUserToken ?? 'sdjsb';
+  String isToken = prefService.getUserToken ?? '';
 
   String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.DASHBOARD;
-  // String initialRoutes = Routes.DETAIL;
+// String initialRoutes = Routes.DETAIL;
   runApp(MyApp(initialRoutes));
 }
 
 class MyApp extends StatelessWidget {
   final String initialRoutes;
+
   const MyApp(this.initialRoutes, {super.key});
 
   @override
