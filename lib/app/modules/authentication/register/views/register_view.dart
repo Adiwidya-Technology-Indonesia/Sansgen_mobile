@@ -39,6 +39,7 @@ class RegisterView extends GetView<RegisterController> {
                     BlendMode.srcIn,
                   ),
                 ),
+                const Gap(20),
                 FormValidate(
                   title: 'Email',
                   hint: 'Masukan email',
@@ -47,6 +48,7 @@ class RegisterView extends GetView<RegisterController> {
                   validator: (v) => controller.validateEmail(v),
                   keyboardType: TextInputType.emailAddress,
                 ),
+                const Gap(20),
                 FormValidate(
                   title: 'Password',
                   hint: 'Masukan password',
@@ -55,6 +57,7 @@ class RegisterView extends GetView<RegisterController> {
                   validator: (v) => controller.validatePassword(v),
                   keyboardType: TextInputType.visiblePassword,
                 ),
+                const Gap(20),
                 FormValidate(
                   title: 'Confirm password',
                   hint: 'Masukan kembali password',

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sansgen/model/books.dart';
+import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
 GestureDetector cardBook({
-  required BookModel book,
+  required DataBook book,
   required BuildContext context,
   required Function() onTap,
 }) {
@@ -56,7 +56,7 @@ GestureDetector cardBook({
                 ),
                 const Gap(4),
                 Text(
-                  '${book.manyChapter} bab',
+                  '${book.manyChapters} bab',
                   style: context.labelSmall.copyWith(
                     color: context.colorScheme.secondary,
                   ),
@@ -64,7 +64,7 @@ GestureDetector cardBook({
                 const Gap(12),
                 Text('Sinopsis :', style: context.labelSmallBold),
                 Text(
-                  book.sinopsis,
+                  book.synopsis,
                   style: context.labelSmall.copyWith(
                     color: context.colorScheme.secondary,
                     inherit: true,

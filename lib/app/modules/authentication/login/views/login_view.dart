@@ -34,6 +34,7 @@ class LoginView extends GetView<LoginController> {
                   validator: (v) => controller.validateEmail(v),
                   keyboardType: TextInputType.name,
                 ),
+                const Gap(20),
                 FormValidate(
                   title: 'Password',
                   hint: 'Masukan password',

@@ -1,12 +1,12 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/model/books.dart';
+import 'package:sansgen/model/book/book.dart';
 
 class ReadingBookController extends GetxController {
   final ScrollController scrollController = ScrollController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  var book = Get.arguments['book'] as BookModel;
+  var book = Get.arguments['book'] as DataBook;
   var chapter = Get.arguments['chapter'] as int;
   final Rx<int> currentChapter = 0.obs;
   final Rx<bool> stateMusic = false.obs;
@@ -55,9 +55,9 @@ class ReadingBookController extends GetxController {
   }
 
   void nextChapter() {
-    if (chapter == book.listChapter.length) {
+    if (chapter == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].length) {
       Get.snackbar(
-          'info', 'Chapter ${book.listChapter.length} is the last chapter');
+          'info', 'Chapter ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].length} is the last chapter');
     } else {
       chapter++;
     }

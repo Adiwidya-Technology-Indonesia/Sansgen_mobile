@@ -3,11 +3,11 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
-import '../../../../model/books.dart';
+import '../../../../model/book/book.dart';
 import '../../../routes/app_pages.dart';
 
 class DetailController extends GetxController {
-  late BookModel book;
+  late DataBook book;
 
   void tapViewBottomSheetChapter(List<int> listChapter, BuildContext context) {
     Get.bottomSheet(
@@ -23,7 +23,7 @@ class DetailController extends GetxController {
 }
 
 Container contentBottomSheet(
-    BuildContext context, List<int> listChapter, BookModel book) {
+    BuildContext context, List<int> listChapter, DataBook book) {
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.only(

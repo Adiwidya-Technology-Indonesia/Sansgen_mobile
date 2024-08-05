@@ -36,6 +36,7 @@ class FormValidate extends StatelessWidget {
           keyboardType: keyboardType,
           textInputAction: TextInputAction.done,
           validator: validator,
+          // onChanged: ,
           decoration: InputDecoration(
             alignLabelWithHint: false,
             hintText: hint,

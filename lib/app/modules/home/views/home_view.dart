@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:sansgen/model/books.dart';
+import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
 import '../controllers/home_controller.dart';
@@ -60,7 +60,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   GestureDetector cardPopuler({
-    required BookModel book,
+    required DataBook book,
     required BuildContext context,
     required Function() onTap,
   }) {
@@ -100,7 +100,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   GestureDetector cardTerbaikUntukmu({
-    required BookModel book,
+    required DataBook book,
     required Function() onTap,
   }) {
     return GestureDetector(

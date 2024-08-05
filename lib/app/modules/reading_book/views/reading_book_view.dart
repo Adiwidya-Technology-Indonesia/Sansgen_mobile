@@ -63,27 +63,27 @@ class ReadingBookView extends GetView<ReadingBookController> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
-              Text(controller.book.sinopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
+              Text(controller.book.synopsis),
             ],
           ),
         ),
@@ -108,7 +108,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
         enableOpacityAnimation: true, // optional, defaults to `true`.
         child: bottomNavBarReading(
           context: context,
-          chapter: controller.book.listChapter
+          chapter: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
               .indexOf(controller.chapter)
               .toString(),
           onTapPrevious: () {},
@@ -224,7 +224,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
             color: context.colorScheme.onPrimary,
             height: 1,
           ),
-          ...controller.book.listChapter.map(
+          ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
             (e) => cardDrawer(e, context),
           ),
         ],
@@ -251,7 +251,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              'Total: ${controller.book.listChapter.length} Bab',
+              'Total: ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].length} Bab',
               style: context.titleSmall,
             ),
           ),
