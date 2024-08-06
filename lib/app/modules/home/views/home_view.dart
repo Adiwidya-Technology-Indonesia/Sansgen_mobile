@@ -5,56 +5,65 @@ import 'package:get/get.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../state/empty.dart';
+import '../../../../state/error.dart';
+import '../../../../state/loading.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarCustom(context),
-      body: ListView(
-        children: [
-          const Gap(40),
-          componentCard(
-            title: 'Pilihan terbaik untukmu',
-            context: context,
-            heightCom: 220,
-            widthCom: double.infinity,
-            scrollDirection: Axis.horizontal,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: controller.bookList.length,
-            itemBuilder: (context, index) {
-              final book = controller.bookList[index];
-              return cardTerbaikUntukmu(
-                book: book,
-                onTap: () {
-                  controller.toDetails(book);
-                },
-              );
-            },
-          ),
-          const Gap(12),
-          componentCard(
-            title: 'Populer',
-            context: context,
-            heightCom: context.height,
-            widthCom: double.infinity,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.bookList.length,
-            itemBuilder: (context, index) {
-              final book = controller.bookList[index];
-              return cardPopuler(
-                book: book,
-                context: context,
-                onTap: () {
-                  controller.toDetails(book);
-                },
-              );
-            },
-          ),
-        ],
+      body: controller.obx(
+        (state) => ListView(
+          children: [
+            const Gap(40),
+            componentCard(
+              title: 'Pilihan terbaik untukmu',
+              context: context,
+              heightCom: 220,
+              widthCom: double.infinity,
+              scrollDirection: Axis.horizontal,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: controller.bookList.length,
+              itemBuilder: (context, index) {
+                final book = controller.bookList[index];
+                return cardTerbaikUntukmu(
+                  book: book,
+                  onTap: () {
+                    controller.toDetails(book);
+                  },
+                );
+              },
+            ),
+            const Gap(12),
+            componentCard(
+              title: 'Populer',
+              context: context,
+              heightCom: context.height,
+              widthCom: double.infinity,
+              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.bookList.length,
+              itemBuilder: (context, index) {
+                final book = controller.bookList[index];
+                return cardPopuler(
+                  book: book,
+                  context: context,
+                  onTap: () {
+                    controller.toDetails(book);
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+        onLoading: const LoadingState(),
+        onError: (error) => ErrorState(error: error.toString()),
+        onEmpty: const EmptyState(),
       ),
     );
   }

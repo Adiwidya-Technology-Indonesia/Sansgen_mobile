@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ErrorState extends StatelessWidget {
   const ErrorState({
-    Key? key,
+    super.key,
     required this.error,
-  }) : super(key: key);
+  });
 
   final String error;
 

@@ -6,11 +6,15 @@ import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../state/empty.dart';
+import '../../../../state/error.dart';
+import '../../../../state/loading.dart';
 import '../../../../widgets/card_book.dart';
 import '../controllers/kategori_controller.dart';
 
 class KategoriView extends GetView<KategoriController> {
   const KategoriView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,33 +23,38 @@ class KategoriView extends GetView<KategoriController> {
         backgroundColor: context.colorScheme.primary,
         bottom: bottomAppBar(context),
       ),
-      body: Column(
-        children: [
-          const Gap(12),
-          filterCategory(context),
-          const Gap(16),
-          Expanded(
-            child: componentCard(
-              title: 'Hasil',
-              context: context,
-              heightCom: context.height,
-              widthCom: double.infinity,
-              scrollDirection: Axis.vertical,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: controller.bookList.length,
-              itemBuilder: (context, index) {
-                final book = controller.bookList[index];
-                return cardBook(
-                  book: book,
-                  context: context,
-                  onTap: () {
-                    controller.toDetails(book);
-                  },
-                );
-              },
+      body: controller.obx(
+        (state) => Column(
+          children: [
+            const Gap(12),
+            filterCategory(context),
+            const Gap(16),
+            Expanded(
+              child: componentCard(
+                title: 'Hasil',
+                context: context,
+                heightCom: context.height,
+                widthCom: double.infinity,
+                scrollDirection: Axis.vertical,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: controller.bookList.length,
+                itemBuilder: (context, index) {
+                  final book = controller.bookList[index];
+                  return cardBook(
+                    book: book,
+                    context: context,
+                    onTap: () {
+                      controller.toDetails(book);
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        onLoading: const LoadingState(),
+        onError: (error) => ErrorState(error: error.toString()),
+        onEmpty: const EmptyState(),
       ),
     );
   }

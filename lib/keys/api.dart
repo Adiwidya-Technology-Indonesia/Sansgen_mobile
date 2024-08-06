@@ -11,6 +11,7 @@ class KeysApi {
   static const String likes = '/likes';
   static const String chapters = '/chapters';
   static const String bestForYou = '/bestforyou';
+  static const String populer = '/populer';
   static const String current = '/current';
   static const String users = '/users';
   static const String history = '/history';
