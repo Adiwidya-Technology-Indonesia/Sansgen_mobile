@@ -27,12 +27,28 @@ class HomeController extends GetxController with StateMixin<List<DataBook>> {
 
   @override
   void onInit() {
-    findBooks();
+    findBooksPopuler();
+    findBooksBestForYou();
     super.onInit();
   }
 
-  Future findBooks() async {
-    bookProvider.fetchBooks().then((result) {
+  Future findBooksPopuler() async {
+    bookProvider.fetchBooksPopuler().then((result) {
+      if (result.status == true) {
+        log(result.toString(), name: 'data model');
+        bookList = result.data;
+        change(bookList, status: RxStatus.success());
+      } else {
+        change([], status: RxStatus.empty());
+        log('kosong', name: 'data kosong');
+      }
+    }, onError: (err) {
+      change(null, status: RxStatus.error(err.toString()));
+    });
+  }
+
+  Future findBooksBestForYou() async {
+    bestForYouProvider.fetchBooksBestForYou().then((result) {
       if (result.status == true) {
         log(result.toString(), name: 'data model');
         bookList = result.data;
