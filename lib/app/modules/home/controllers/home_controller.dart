@@ -9,7 +9,7 @@ import '../../../../model/book/book.dart';
 import '../../../../provider/best_for_you.dart';
 import '../../../routes/app_pages.dart';
 
-class HomeController extends GetxController with StateMixin<List<DataBook>> {
+class HomeController extends GetxController with StateMixin<ModelDataHome> {
   final BookProvider bookProvider;
   final BestForYouProvider bestForYouProvider;
 
@@ -27,38 +27,48 @@ class HomeController extends GetxController with StateMixin<List<DataBook>> {
 
   @override
   void onInit() {
-    findBooksPopuler();
-    findBooksBestForYou();
     super.onInit();
   }
 
-  Future findBooksPopuler() async {
-    bookProvider.fetchBooksPopuler().then((result) {
-      if (result.status == true) {
-        log(result.toString(), name: 'data model');
-        bookList = result.data;
-        change(bookList, status: RxStatus.success());
-      } else {
-        change([], status: RxStatus.empty());
-        log('kosong', name: 'data kosong');
-      }
-    }, onError: (err) {
-      change(null, status: RxStatus.error(err.toString()));
-    });
-  }
+  Future<void> fetchDataHome() async {
+    change(null, status: RxStatus.loading()); // Menampilkan status loading
+    try {
+      final resultPopuler = await bookProvider.fetchBooksPopuler();
+      final resultBestForYou = await bestForYouProvider.fetchBooksBestForYou();
 
-  Future findBooksBestForYou() async {
-    bestForYouProvider.fetchBooksBestForYou().then((result) {
-      if (result.status == true) {
-        log(result.toString(), name: 'data model');
-        bookList = result.data;
-        change(bookList, status: RxStatus.success());
+      if (resultPopuler.status == true && resultBestForYou.status == true) {
+        final populerList = resultPopuler.data;
+        final bestForYouList = resultBestForYou.data;
+
+        change(
+          ModelDataHome(
+            populer: populerList,
+            bestForYou: bestForYouList,
+            profil: {}, // Ganti dengan data profil yang sesuai
+            focul: {}, // Ganti dengandata focul yang sesuai
+          ),
+          status: RxStatus.success(),
+        );
       } else {
-        change([], status: RxStatus.empty());
-        log('kosong', name: 'data kosong');
+        change(null, status: RxStatus.empty());
+        log('Salah satu atau kedua permintaan gagal', name: 'data kosong');
       }
-    }, onError: (err) {
+    } catch (err) {
       change(null, status: RxStatus.error(err.toString()));
-    });
+    }
   }
+}
+
+class ModelDataHome {
+  final List<DataBook> populer;
+  final List<DataBook> bestForYou;
+  final Object profil;
+  final Object focul;
+
+  ModelDataHome({
+    required this.populer,
+    required this.bestForYou,
+    required this.profil,
+    required this.focul,
+  });
 }
