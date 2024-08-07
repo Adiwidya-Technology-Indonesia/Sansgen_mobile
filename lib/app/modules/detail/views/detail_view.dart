@@ -14,6 +14,7 @@ import '../controllers/detail_controller.dart';
 
 class DetailView extends GetView<DetailController> {
   const DetailView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +34,8 @@ class DetailView extends GetView<DetailController> {
             title: controller.dataBook.title,
             image: controller.dataBook.image,
             rating: controller.dataBook.manyRatings,
+            like: controller.dataBook.manyLikes,
+            comment: controller.dataBook.manyComments,
             sinopsis: controller.dataBook.synopsis,
             listChapter: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           ),
@@ -46,6 +49,8 @@ class DetailView extends GetView<DetailController> {
     required String title,
     required String image,
     required double rating,
+    required int like,
+    required int comment,
     required String sinopsis,
     required List<int> listChapter,
   }) {
@@ -79,17 +84,36 @@ class DetailView extends GetView<DetailController> {
               ),
               Text(rating.toString()),
               const Spacer(),
-              SvgPicture.asset(
-                KeysAssetsIcons.komen,
-                width: 24,
-                height: 24,
+              GestureDetector(
+                onTap: () => controller.tapViewBottomSheetComment(
+                  controller.comments,
+                  context,
+                ),
+                child: SvgPicture.asset(
+                  KeysAssetsIcons.komen,
+                  width: 24,
+                  height: 24,
+                ),
               ),
+              Text(comment.toString()),
               const Gap(10),
-              SvgPicture.asset(
-                KeysAssetsIcons.like,
-                width: 24,
-                height: 24,
+              Obx(
+                () => GestureDetector(
+                  onTap: controller.likeState,
+                  child: SvgPicture.asset(
+                    KeysAssetsIcons.like,
+                    width: 20,
+                    height: 20,
+                    colorFilter: controller.isLike.isFalse
+                        ? null
+                        : ColorFilter.mode(
+                            context.colorScheme.surface,
+                            BlendMode.srcATop,
+                          ),
+                  ),
+                ),
               ),
+              Text(like.toString()),
             ],
           ),
         ),

@@ -144,6 +144,7 @@ class KategoriView extends GetView<KategoriController> {
         child: Card(
           elevation: 4,
           child: TextFormField(
+            cursorColor: context.colorScheme.onPrimary,
             decoration: InputDecoration(
               hintText: 'Cari',
               filled: true,

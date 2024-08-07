@@ -21,6 +21,7 @@ class KeysAssetsIcons {
   static const String riwayat = 'assets/icons/riwayat.svg';
   static const String search = 'assets/icons/search.svg';
   static const String star = 'assets/icons/star.svg';
+  static const String send = 'assets/icons/send.svg';
   static const String timer = 'assets/icons/timer.svg';
   static const String user = 'assets/icons/user.svg';
   static const String payment = 'assets/icons/payment.svg';
