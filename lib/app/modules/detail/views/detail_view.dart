@@ -26,14 +26,14 @@ class DetailView extends GetView<DetailController> {
         children: [
           contentHeader(
             context: context,
-            image: controller.book.image,
+            image: controller.dataBook.image,
           ),
           contentDetail(
             context: context,
-            title: controller.book.title,
-            image: controller.book.image,
-            rating: controller.book.manyRatings,
-            sinopsis: controller.book.synopsis,
+            title: controller.dataBook.title,
+            image: controller.dataBook.image,
+            rating: controller.dataBook.manyRatings,
+            sinopsis: controller.dataBook.synopsis,
             listChapter: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           ),
         ],

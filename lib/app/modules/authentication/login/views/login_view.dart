@@ -18,6 +18,7 @@ class LoginView extends GetView<LoginController> {
           padding: const EdgeInsets.all(32.0),
           child: Form(
             key: controller.formKey,
+            // autovalidateMode: AutovalidateMode.always,
             child: Column(
               children: [
                 const Gap(40),

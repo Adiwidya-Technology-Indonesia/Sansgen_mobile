@@ -2,28 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/app/data/books.dart';
 
 import '../../../../model/book/book.dart';
 import '../../../routes/app_pages.dart';
 
 class DetailController extends GetxController {
-  late DataBook book;
+  late DataBook dataBook;
 
   void tapViewBottomSheetChapter(List<int> listChapter, BuildContext context) {
     Get.bottomSheet(
-      contentBottomSheet(context, listChapter, book),
+      contentBottomSheet(context, listChapter, dataBook),
     );
   }
 
   @override
   void onInit() {
-    book = Get.arguments;
+    if (Get.arguments) {
+      dataBook = Get.arguments;
+    } else {
+      dataBook = book;
+    }
     super.onInit();
   }
 }
 
 Container contentBottomSheet(
-    BuildContext context, List<int> listChapter, DataBook book) {
+    BuildContext context, List<int> listChapter, DataBook dataBook) {
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.only(
@@ -52,7 +57,7 @@ Container contentBottomSheet(
                 value: e,
                 onTap: () {
                   Get.toNamed(Routes.READING_BOOK, arguments: {
-                    'book': book,
+                    'book': dataBook,
                     'chapter': e,
                   });
                 },

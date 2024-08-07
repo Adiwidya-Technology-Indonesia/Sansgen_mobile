@@ -17,6 +17,7 @@ class FormValidate extends StatelessWidget {
   final String hint;
   final String icon;
   final TextEditingController controller;
+
   // final String? info;
   final TextInputType? keyboardType;
   final ColorFilter? color;
@@ -36,6 +37,7 @@ class FormValidate extends StatelessWidget {
           keyboardType: keyboardType,
           textInputAction: TextInputAction.done,
           validator: validator,
+          cursorColor: context.colorScheme.surface,
           // onChanged: ,
           decoration: InputDecoration(
             alignLabelWithHint: false,
@@ -55,24 +57,7 @@ class FormValidate extends StatelessWidget {
             ),
           ),
         ),
-        // Visibility(
-        //   visible: info != null,
-        //   child: Padding(
-        //     padding: const EdgeInsets.only(top: 4),
-        //     child: Text(
-        //       info ?? "",
-        //       style: context.formError,
-        //     ),
-        //   ),
-        // ),
       ],
     );
-  }
-
-  bool nullValidation(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return true;
-    }
-    return false;
   }
 }
