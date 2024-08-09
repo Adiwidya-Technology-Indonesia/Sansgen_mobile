@@ -36,7 +36,7 @@ class ProfilView extends GetView<ProfilController> {
               title: 'Payment',
               context: context,
               iconCom: KeysAssetsIcons.payment,
-              onTap: () => controller.paymentButton(context)
+              onTap: () => Get.toNamed(Routes.PAYMENT_BUY)
             ),
             profilCard(
               title: 'Tentang Sansgen',
