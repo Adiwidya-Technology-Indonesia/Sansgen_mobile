@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/app/routes/app_pages.dart';
+import 'package:sansgen/model/error.dart';
+import 'package:sansgen/model/login/request_login.dart';
 import '../../../../../provider/auth.dart';
 import '../../../../../services/prefs.dart';
 
@@ -16,6 +19,24 @@ class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final isObscure = true.obs;
+
+  @override
+  void onInit() async {
+    await prefService.prefInit();
+    await prefService.removeUserToken();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
+
+  void stateObscure() => isObscure.value = !isObscure.value;
 
   void onTapSignUp() {
     Get.toNamed(Routes.REGISTER);
@@ -79,27 +100,39 @@ class LoginController extends GetxController {
 
   Future login() async {
     try {
-      final formError = formKey.currentState!.validateGranularly().toList();
-      if (formError.isNotEmpty) {
+      if (validateEmail(emailController.text) != '' &&
+          validatePassword(passwordController.text) != '') {
         return Get.snackbar(
           "Ups!",
           "Sepertinya ada beberapa field yang terlewat. Yuk, lengkapi dulu!",
         );
       }
+      log('mulai');
       EasyLoading.show(status: 'loading...');
-      final response = await authProvider.authLogin(
-        emailController.text,
-        passwordController.text,
+      final request = ModelReqestLogin(
+        email: emailController.text,
+        password: passwordController.text,
       );
-      if (response.success == true) {
+      await authProvider.authLogin(request).then((v) async {
         EasyLoading.dismiss();
         formClear();
         EasyLoading.showSuccess('Login berhasil');
-        prefService.putUserToken(response.data!.rememberToken);
-        log(response.toJson().toString());
-      } else {
-        EasyLoading.showError('Login gagal');
-      }
+        await prefService.putUserToken(v.data.token);
+        Timer.periodic(const Duration(seconds: 3), (t) {
+          log(prefService.getUserToken ?? 'kosong', name: 'setToken');
+          t.cancel();
+        });
+        log(v.toJson().toString());
+        Get.offAllNamed(Routes.ON_BOARDING);
+        return;
+      }).onError((e, st) {
+        EasyLoading.dismiss();
+        final errors = Errors(message: ['$e', '$st']);
+        final dataError = ModelResponseError(errors: errors);
+        log(dataError.toJson().toString());
+        EasyLoading.showError('Login Gagal');
+        return;
+      });
     } catch (e) {
       Get.defaultDialog(
         title: 'Error',
@@ -111,11 +144,5 @@ class LoginController extends GetxController {
   void formClear() {
     emailController.clear();
     passwordController.clear();
-  }
-
-  @override
-  void onInit() {
-    prefService.removeUserToken();
-    super.onInit();
   }
 }

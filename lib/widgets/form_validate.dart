@@ -10,18 +10,20 @@ class FormValidate extends StatelessWidget {
     required this.icon,
     required this.controller,
     required this.validator,
+    required this.obscureText,
     this.keyboardType,
     this.color,
+    this.suffixIcon,
   }) : super(key: key);
   final String title;
   final String hint;
   final String icon;
   final TextEditingController controller;
-
-  // final String? info;
   final TextInputType? keyboardType;
   final ColorFilter? color;
   final String? Function(String?)? validator;
+  final bool obscureText;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,10 @@ class FormValidate extends StatelessWidget {
           style: context.labelLargeBold,
         ),
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: controller,
           keyboardType: keyboardType,
+          obscureText: obscureText,
           textInputAction: TextInputAction.done,
           validator: validator,
           cursorColor: context.colorScheme.surface,
@@ -42,6 +46,7 @@ class FormValidate extends StatelessWidget {
           decoration: InputDecoration(
             alignLabelWithHint: false,
             hintText: hint,
+            suffixIcon: suffixIcon,
             prefixIcon: SvgPicture.asset(
               icon,
               colorFilter: color,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../services/date_time.dart';
 import '../controllers/detail_controller.dart';
 import 'input_comment.dart';
 
@@ -10,42 +11,6 @@ Container contentBottomSheetComment(
   List<ModelComment> listComment,
   ScrollController scrollController,
 ) {
-  String getDateTime(DateTime dateTime) {
-    final dateTimeNow = DateTime.now();
-    final listNameMonth = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Des"
-    ];
-
-    if (dateTime.year < dateTimeNow.year) {
-      final namaMonth = listNameMonth[dateTime.month - 1];
-      // Aug 2, 2022
-      return "$namaMonth ${dateTime.day},${dateTime.year}";
-    } else if (dateTime.month < dateTimeNow.month) {
-      // 2 months ago
-      return "${dateTimeNow.month - dateTime.month} bulan lalu";
-    } else if (dateTime.day < dateTimeNow.day) {
-      // 2 days lalu
-      return "${dateTimeNow.day - dateTime.day} hari lalu";
-    } else if (dateTime.hour < dateTimeNow.hour) {
-      // 2 hours lalu
-      return "${dateTimeNow.hour - dateTime.hour} jam lalu";
-    } else if (dateTime.minute < dateTimeNow.minute) {
-      return "${dateTimeNow.minute - dateTime.minute} menit lalu";
-    }
-    return "sekarang";
-  }
-
   return Container(
     width: double.infinity,
     height: Get.height * 0.8,
@@ -84,7 +49,7 @@ Container contentBottomSheetComment(
                           ],
                         ),
                       ),
-                      subtitle: Text(getDateTime(e.time)),
+                      subtitle: Text(DateTimeServices.getDateTime(e.time)),
                     ))
                 .toList(),
           ),

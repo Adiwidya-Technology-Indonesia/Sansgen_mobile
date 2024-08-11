@@ -19,6 +19,7 @@ class RegisterView extends GetView<RegisterController> {
           padding: const EdgeInsets.all(32.0),
           child: Form(
             key: controller.formKey,
+            // autovalidateMode: AutovalidateMode.always,
             child: Column(
               children: [
                 const Gap(40),
@@ -38,6 +39,7 @@ class RegisterView extends GetView<RegisterController> {
                     context.colorScheme.onPrimary.withOpacity(0.7),
                     BlendMode.srcIn,
                   ),
+                  obscureText: false,
                 ),
                 const Gap(20),
                 FormValidate(
@@ -47,24 +49,51 @@ class RegisterView extends GetView<RegisterController> {
                   controller: controller.emailController,
                   validator: (v) => controller.validateEmail(v),
                   keyboardType: TextInputType.emailAddress,
+                  obscureText: false,
                 ),
                 const Gap(20),
-                FormValidate(
-                  title: 'Password',
-                  hint: 'Masukan password',
-                  icon: KeysAssetsIcons.pass,
-                  controller: controller.passwordController,
-                  validator: (v) => controller.validatePassword(v),
-                  keyboardType: TextInputType.visiblePassword,
+                Obx(
+                  () => FormValidate(
+                    title: 'Password',
+                    hint: 'Masukan password',
+                    icon: KeysAssetsIcons.pass,
+                    controller: controller.passwordController,
+                    validator: (v) => controller.validatePassword(v),
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: controller.isObscure.value,
+                    suffixIcon: GestureDetector(
+                      onTap: controller.stateObscure,
+                      child: Icon(
+                        !controller.isObscure.value
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 26,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
                 ),
                 const Gap(20),
-                FormValidate(
-                  title: 'Confirm password',
-                  hint: 'Masukan kembali password',
-                  icon: KeysAssetsIcons.pass,
-                  controller: controller.komfirPassController,
-                  validator: (v) => controller.validateConfirmPassword(v),
-                  keyboardType: TextInputType.visiblePassword,
+                Obx(
+                  () => FormValidate(
+                    title: 'Confirm password',
+                    hint: 'Masukan kembali password',
+                    icon: KeysAssetsIcons.pass,
+                    controller: controller.komfirPassController,
+                    validator: (v) => controller.validateConfirmPassword(v),
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: controller.isObscure.value,
+                    suffixIcon: GestureDetector(
+                      onTap: controller.stateObscure,
+                      child: Icon(
+                        !controller.isObscure.value
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 26,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
                 ),
                 const Gap(20),
                 ElevatedButton(

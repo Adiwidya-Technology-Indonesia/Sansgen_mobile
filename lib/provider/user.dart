@@ -9,12 +9,12 @@ import '../keys/env.dart';
 import '../model/book/books_all.dart';
 import '../services/prefs.dart';
 
-class BestForYouProvider extends GetConnect {
+class UserProvider extends GetConnect {
   // baseUrl
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelBooks> fetchBooksBestForYou() async {
+  Future<ModelBooks> fetchUserId() async {
     try {
       const String urlProduct = KeysApi.bestForYou;
       log(urlProduct, name: "data url Product");

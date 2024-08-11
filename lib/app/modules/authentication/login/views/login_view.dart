@@ -33,16 +33,30 @@ class LoginView extends GetView<LoginController> {
                   icon: KeysAssetsIcons.email,
                   controller: controller.emailController,
                   validator: (v) => controller.validateEmail(v),
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.emailAddress,
+                  obscureText: false,
                 ),
                 const Gap(20),
-                FormValidate(
-                  title: 'Password',
-                  hint: 'Masukan password',
-                  icon: KeysAssetsIcons.pass,
-                  controller: controller.passwordController,
-                  validator: (v) => controller.validatePassword(v),
-                  keyboardType: TextInputType.visiblePassword,
+                Obx(
+                  () => FormValidate(
+                    title: 'Password',
+                    hint: 'Masukan password',
+                    icon: KeysAssetsIcons.pass,
+                    controller: controller.passwordController,
+                    validator: (v) => controller.validatePassword(v),
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: controller.isObscure.value,
+                    suffixIcon: GestureDetector(
+                      onTap: controller.stateObscure,
+                      child: Icon(
+                        !controller.isObscure.value
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 26,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
                 ),
                 // Align(
                 //   heightFactor: 0.2,

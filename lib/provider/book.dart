@@ -7,12 +7,10 @@ import 'package:sansgen/model/book/book_by_id.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/book/books_all.dart';
-import '../services/prefs.dart';
 
 class BookProvider extends GetConnect {
   // baseUrl
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
-  final PrefService _prefService = PrefService();
 
   Future<ModelBookById> fetchIdBooks(String id) async {
     try {
@@ -70,12 +68,7 @@ class BookProvider extends GetConnect {
 
   @override
   void onInit() {
-    _prefService.prefInit();
-    httpClient.addRequestModifier<dynamic>((request) {
-      final token = _prefService.getUserToken;
-      request.headers['Authorization'] = "Bearer $token";
-      return request;
-    });
+
     httpClient.baseUrl = baseURL;
     super.onInit();
   }

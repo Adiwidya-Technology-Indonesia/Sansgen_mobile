@@ -33,6 +33,7 @@ class LupaPassView extends GetView<LupaPassController> {
                 return null;
               },
               keyboardType: TextInputType.name,
+              obscureText: false,
             ),
             const Gap(40),
             ElevatedButton(

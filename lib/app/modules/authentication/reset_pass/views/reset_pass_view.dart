@@ -33,6 +33,7 @@ class ResetPassView extends GetView<ResetPassController> {
                 return null;
               },
               keyboardType: TextInputType.visiblePassword,
+              obscureText: false,
             ),
             FormValidate(
               title: 'Confirm password',
@@ -43,6 +44,7 @@ class ResetPassView extends GetView<ResetPassController> {
                 return null;
               },
               keyboardType: TextInputType.visiblePassword,
+              obscureText: false,
             ),
             const Gap(40),
             ElevatedButton(

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../keys/assets_images.dart';
-import '../../../../model/on_boarding.dart';
+import '../../../../model/on_boarding/gender.dart';
+import '../../../../model/on_boarding/on_boarding.dart';
+import '../../../../model/on_boarding/referency.dart';
 import '../views/age.dart';
 import '../views/gender.dart';
 import '../views/preferences.dart';

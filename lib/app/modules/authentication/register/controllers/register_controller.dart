@@ -3,21 +3,35 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/model/register/model_request_register.dart';
 
+import '../../../../../model/error.dart';
 import '../../../../../provider/auth.dart';
-import '../../../../../services/prefs.dart';
+import '../../../../routes/app_pages.dart';
 
 class RegisterController extends GetxController {
   final AuthProvider authProvider;
-  final PrefService prefService;
 
-  RegisterController({required this.authProvider, required this.prefService});
+  RegisterController({required this.authProvider});
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final komfirPassController = TextEditingController();
+
+  final isObscure = true.obs;
+
+  @override
+  void onClose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    komfirPassController.dispose();
+    super.onClose();
+  }
+
+  void stateObscure() => isObscure.value = !isObscure.value;
 
   void backToLogin() {
     Get.back();
@@ -95,38 +109,48 @@ class RegisterController extends GetxController {
 
   Future register() async {
     try {
+      log(
+        '${nameController.text} ${emailController.text} ${passwordController.text} ${komfirPassController.text}',
+        name: 'form value',
+      );
       // Cek apakah ada pesan kesalahan
-      final formError = formKey.currentState!.validateGranularly().toList();
-      if (formError.isNotEmpty) {
+      if (validateName(nameController.text) != '' &&
+          validateEmail(emailController.text) != '' &&
+          validatePassword(passwordController.text) != '' &&
+          validateConfirmPassword(komfirPassController.text) != '') {
         return Get.snackbar(
           "Ups!",
           "Sepertinya ada beberapa field yang terlewat. Yuk, lengkapi dulu!",
         );
       }
-      log(
-        '${nameController.text} ${emailController.text} ${passwordController.text} ${komfirPassController.text}',
-        name: 'form value',
-      );
       EasyLoading.show(status: 'loading...');
-      final response = await authProvider.authRegister(
-        nameController.text,
-        emailController.text,
-        passwordController.text,
+      final request = ModelReqestRegister(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
       );
-      if (response.success == true) {
+      await authProvider.authRegister(request).then((v) {
         EasyLoading.dismiss();
         formCLear();
         EasyLoading.showSuccess('Register berhasil');
-        log(response.toJson().toString(), name: 'register');
-      } else {
-        EasyLoading.showError('Register gagal');
-      }
+        Get.toNamed(Routes.LOGIN);
+        log(v.toJson().toString(), name: 'register');
+        return;
+      }).onError((e, st) {
+        EasyLoading.dismiss();
+        final errors = Errors(message: ['$e', '$st']);
+        final dataError = ModelResponseError(errors: errors);
+        log(dataError.toJson().toString(), name: 'register');
+        EasyLoading.showError('Register Gagal');
+        return;
+      });
     } catch (e) {
       log(e.toString(), name: 'register error');
       Get.defaultDialog(
         title: 'Error',
         content: Text('Error: $e'),
       );
+      return;
     }
   }
 
@@ -135,11 +159,5 @@ class RegisterController extends GetxController {
     emailController.clear();
     passwordController.clear();
     komfirPassController.clear();
-  }
-
-  @override
-  void onInit() {
-    prefService.removeUserToken();
-    super.onInit();
   }
 }
