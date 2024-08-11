@@ -1,11 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:sansgen/keys/assets_images.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/book_empty.dart';
@@ -21,10 +17,14 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarCustom(context),
-      body: controller.obx(
-        (state) => ListView(
+    return controller.obx(
+      (state) => Scaffold(
+        appBar: appBarCustom(
+          context: context,
+          name: state!.profil.name!,
+          image: state.profil.image,
+        ),
+        body: ListView(
           children: [
             const Gap(40),
             componentCard(
@@ -69,10 +69,10 @@ class HomeView extends GetView<HomeController> {
             ),
           ],
         ),
-        onLoading: const LoadingState(),
-        onError: (error) => ErrorState(error: error.toString()),
-        onEmpty: const EmptyState(),
       ),
+      onLoading: const LoadingState(),
+      onError: (error) => ErrorState(error: error.toString()),
+      onEmpty: const EmptyState(),
     );
   }
 
@@ -180,7 +180,11 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  AppBar appBarCustom(BuildContext context) {
+  AppBar appBarCustom({
+    required BuildContext context,
+    required String name,
+    required String image,
+  }) {
     return AppBar(
       backgroundColor: context.colorScheme.primary,
       flexibleSpace: Container(
@@ -208,7 +212,7 @@ class HomeView extends GetView<HomeController> {
                 .copyWith(color: context.colorScheme.primary),
           ),
           Text(
-            'Rahmat Hidayat',
+            name,
             style: context.titleMediumBold
                 .copyWith(color: context.colorScheme.primary),
           ),
@@ -217,11 +221,23 @@ class HomeView extends GetView<HomeController> {
       actions: [
         GestureDetector(
           onTap: () {},
-          child: const SizedBox(
+          child: SizedBox(
             width: 50,
             height: 50,
             child: CircleAvatar(
-              child: Icon(Icons.person_outline_rounded),
+              child: image.isURL
+                  ? ClipRRect(
+                      // Tambahkan ClipRRect di sini
+                      borderRadius:
+                          BorderRadius.circular(25), // Atur radius di sini
+                      child: Image.network(
+                        image,
+                        height: 50,
+                        width: 50,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : const Icon(Icons.person_outline_rounded),
             ),
           ),
         ),

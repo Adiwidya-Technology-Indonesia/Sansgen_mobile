@@ -10,14 +10,15 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = '19db9e85-c90b-4770-b207-a27a6ea3b748'
+token = '81bc451c-dcaf-476c-8e0b-079521e6e604'
 
 [body]
 type = 'JSON'
 raw = '''
 {
-  "gender": "Laki-laki",
-  "rangeAge": "18-24",
-  "category": "Pengembangan diri"
+//  "gender": "Laki-laki",
+//  "rangeAge": "18-24",
+//  "category": "Pengembangan diri"
+  "image" : "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
 }'''
 ```
