@@ -2,11 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/model/book/book_by_id.dart';
+import 'package:sansgen/model/user/response_user.dart';
 
 import '../keys/api.dart';
 import '../keys/env.dart';
-import '../model/book/books_all.dart';
+import '../model/error.dart';
+import '../model/user/request_patch_user.dart';
 import '../services/prefs.dart';
 
 class UserProvider extends GetConnect {
@@ -14,17 +15,40 @@ class UserProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelBooks> fetchUserId() async {
+  Future fetchUserId() async {
     try {
-      const String urlProduct = KeysApi.bestForYou;
-      log(urlProduct, name: "data url Product");
-      final response = await get(urlProduct);
+      const String urlUserId = KeysApi.users + KeysApi.current;
+      log(urlUserId, name: "data url Product");
+      final response = await get(urlUserId);
       if (response.status.hasError) {
         log(response.toString(), name: 'data error');
-        return Future.error(response);
+        // return Future.error(response);
+        return modelResponseErrorFromJson(response.bodyString!);
       } else {
         // log(response.bodyString!, name: 'data response');
-        return booksModelFromJson(response.bodyString!);
+        return modelResponseUserFromJson(response.bodyString!);
+      }
+    } catch (error) {
+      log(error.toString(), name: "data error");
+      rethrow;
+    }
+  }
+
+  Future patchUserCurrent(ModelRequestPatchUser request) async {
+    try {
+      const String patchUserCurrent = KeysApi.users + KeysApi.current;
+      log(patchUserCurrent, name: "data url Product");
+      final response = await patch(
+        patchUserCurrent,
+        request.toJson(),
+      );
+      if (response.status.hasError) {
+        log(response.toString(), name: 'data error');
+        // return Future.error(response);
+        return modelResponseErrorFromJson(response.bodyString!);
+      } else {
+        // log(response.bodyString!, name: 'data response');
+        return modelRequestPatchUserFromJson(response.bodyString!);
       }
     } catch (error) {
       log(error.toString(), name: "data error");

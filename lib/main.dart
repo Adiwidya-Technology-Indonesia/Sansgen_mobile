@@ -16,7 +16,7 @@ Future main() async {
   await prefService.prefInit();
   String isToken = prefService.getUserToken ?? '';
   log(prefService.getUserToken ?? 'kosong', name: 'token login');
-  String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.ON_BOARDING;
+  String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.DASHBOARD;
 // String initialRoutes = Routes.DETAIL;
   runApp(MyApp(initialRoutes));
 }
