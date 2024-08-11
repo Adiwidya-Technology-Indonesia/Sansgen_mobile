@@ -12,7 +12,7 @@ class DataBook {
   final String writer;
   final String publisher;
   final int manyLikes;
-  final double manyRatings;
+  final int manyRatings;
   final int manyChapters;
   final int manyComments;
 
@@ -47,7 +47,7 @@ class DataBook {
     String? writer,
     String? publisher,
     int? manyLikes,
-    double? manyRatings,
+    int? manyRatings,
     int? manyChapters,
     int? manyComments,
   }) =>

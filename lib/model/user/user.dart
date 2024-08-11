@@ -1,17 +1,22 @@
+import 'dart:convert';
+
+ModelUser modelUserFromJson(String str) => ModelUser.fromJson(json.decode(str));
+
+String modelUserToJson(ModelUser data) => json.encode(data.toJson());
 
 class ModelUser {
-  final int id;
-  final String uuid;
-  final String email;
-  final String name;
+  final int? id;
+  final String? uuid;
+  final String? email;
+  final String? name;
   final dynamic image;
   final dynamic dateOfBirth;
-  final dynamic rangeAge;
-  final dynamic gender;
-  final dynamic category;
+  final String? rangeAge;
+  final String? gender;
+  final String? category;
   final dynamic hobby;
-  final String token;
-  final List<dynamic> history;
+  final String? token;
+  // final List<dynamic>? history;
 
   ModelUser({
     required this.id,
@@ -25,7 +30,7 @@ class ModelUser {
     required this.category,
     required this.hobby,
     required this.token,
-    required this.history,
+    // required this.history,
   });
 
   ModelUser copyWith({
@@ -35,12 +40,12 @@ class ModelUser {
     String? name,
     dynamic image,
     dynamic dateOfBirth,
-    dynamic rangeAge,
-    dynamic gender,
-    dynamic category,
+    String? rangeAge,
+    String? gender,
+    String? category,
     dynamic hobby,
     String? token,
-    List<dynamic>? history,
+    // List<dynamic>? history,
   }) =>
       ModelUser(
         id: id ?? this.id,
@@ -54,36 +59,38 @@ class ModelUser {
         category: category ?? this.category,
         hobby: hobby ?? this.hobby,
         token: token ?? this.token,
-        history: history ?? this.history,
+        // history: history ?? this.history,
       );
 
   factory ModelUser.fromJson(Map<String, dynamic> json) => ModelUser(
-    id: json["id"],
-    uuid: json["uuid"],
-    email: json["email"],
-    name: json["name"],
-    image: json["image"],
-    dateOfBirth: json["dateOfBirth"],
-    rangeAge: json["rangeAge"],
-    gender: json["gender"],
-    category: json["category"],
-    hobby: json["hobby"],
-    token: json["token"],
-    history: List<dynamic>.from(json["history"].map((x) => x)),
-  );
+        id: json["id"] ?? 0,
+        uuid: json["uuid"] ?? "",
+        email: json["email"] ?? "",
+        name: json["name"] ?? "",
+        image: json["image"] ?? "",
+        dateOfBirth: json["dateOfBirth"] ?? "",
+        rangeAge: json["rangeAge"] ?? "",
+        gender: json["gender"] ?? "",
+        category: json["category"] ?? "",
+        hobby: json["hobby"] ?? "",
+        token: json["token"] ?? "",
+        // history: json["history"] == []
+        //     ? []
+        //     : List<dynamic>.from(json["history"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "email": email,
-    "name": name,
-    "image": image,
-    "dateOfBirth": dateOfBirth,
-    "rangeAge": rangeAge,
-    "gender": gender,
-    "category": category,
-    "hobby": hobby,
-    "token": token,
-    "history": List<dynamic>.from(history.map((x) => x)),
-  };
+        "id": id,
+        "uuid": uuid,
+        "email": email,
+        "name": name,
+        "image": image,
+        "dateOfBirth": dateOfBirth,
+        "rangeAge": rangeAge,
+        "gender": gender,
+        "category": category,
+        "hobby": hobby,
+        "token": token,
+        // "history": history!.isEmpty ? [] : List<dynamic>.from(history!.map((x) => x)),
+      };
 }

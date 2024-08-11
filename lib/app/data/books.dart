@@ -14,7 +14,7 @@ final DataBook book = DataBook(
   rangeAge: '18 - 24',
   writer: 'John Doe',
   publisher: 'Gramedia',
-  manyRatings: 4.5,
+  manyRatings: 4,
   manyLikes: 100,
   manyComments: 12,
   manyChapters: 100,

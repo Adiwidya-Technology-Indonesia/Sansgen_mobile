@@ -3,6 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import 'image_book.dart';
+
 GestureDetector cardBook({
   required DataBook book,
   required BuildContext context,
@@ -20,14 +22,10 @@ GestureDetector cardBook({
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              book.image,
-              height: 160,
-              width: 130,
-              fit: BoxFit.cover,
-            ),
+          imageBook(
+            image: book.image,
+            height: 160,
+            width: 130,
           ),
           const Gap(12),
           Expanded(

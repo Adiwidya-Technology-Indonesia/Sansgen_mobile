@@ -33,7 +33,7 @@ class DetailView extends GetView<DetailController> {
             context: context,
             title: controller.dataBook.title,
             image: controller.dataBook.image,
-            rating: controller.dataBook.manyRatings,
+            rating: controller.dataBook.manyRatings.toDouble(),
             like: controller.dataBook.manyLikes,
             comment: controller.dataBook.manyComments,
             sinopsis: controller.dataBook.synopsis,

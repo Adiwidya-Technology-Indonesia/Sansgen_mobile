@@ -1,13 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:sansgen/keys/assets_images.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/book_empty.dart';
 
 import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
 import '../../../../state/loading.dart';
+import '../../../../widgets/image_book.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -23,14 +29,15 @@ class HomeView extends GetView<HomeController> {
             const Gap(40),
             componentCard(
               title: 'Pilihan terbaik untukmu',
+              emptyInfo: 'Pilihan terbaik untukmu Masih Kosong',
               context: context,
               heightCom: 220,
               widthCom: double.infinity,
               scrollDirection: Axis.horizontal,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: controller.bookList.length,
+              itemCount: state!.bestForYou.length,
               itemBuilder: (context, index) {
-                final book = controller.bookList[index];
+                final book = state.bestForYou[index];
                 return cardTerbaikUntukmu(
                   book: book,
                   onTap: () {
@@ -42,14 +49,15 @@ class HomeView extends GetView<HomeController> {
             const Gap(12),
             componentCard(
               title: 'Populer',
+              emptyInfo: 'Populer Masih Kosong',
               context: context,
               heightCom: context.height,
               widthCom: double.infinity,
               scrollDirection: Axis.vertical,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.bookList.length,
+              itemCount: state.populer.length,
               itemBuilder: (context, index) {
-                final book = controller.bookList[index];
+                final book = state.populer[index];
                 return cardPopuler(
                   book: book,
                   context: context,
@@ -85,14 +93,10 @@ class HomeView extends GetView<HomeController> {
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                book.image,
-                height: 87,
-                width: 76,
-                fit: BoxFit.cover,
-              ),
+            imageBook(
+              image: book.image,
+              height: 87,
+              width: 76,
             ),
             const Gap(12),
             Column(
@@ -116,14 +120,10 @@ class HomeView extends GetView<HomeController> {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(left: 16),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            book.image,
-            height: 196,
-            width: 149,
-            fit: BoxFit.cover,
-          ),
+        child: imageBook(
+          image: book.image,
+          height: 196,
+          width: 149,
         ),
       ),
     );
@@ -138,6 +138,7 @@ class HomeView extends GetView<HomeController> {
     required ScrollPhysics physics,
     required int itemCount,
     required Widget? Function(BuildContext, int) itemBuilder,
+    required String emptyInfo,
   }) {
     return SizedBox(
       height: heightCom,
@@ -162,15 +163,18 @@ class HomeView extends GetView<HomeController> {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: itemCount,
-              shrinkWrap: true,
-              scrollDirection: scrollDirection,
-              physics: physics,
-              itemBuilder: itemBuilder,
+          if (itemCount == 0)
+            bookEmpty(emptyInfo, height: 170)
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: itemCount,
+                shrinkWrap: true,
+                scrollDirection: scrollDirection,
+                physics: physics,
+                itemBuilder: itemBuilder,
+              ),
             ),
-          ),
         ],
       ),
     );

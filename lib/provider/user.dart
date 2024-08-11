@@ -15,15 +15,15 @@ class UserProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future fetchUserId() async {
+  Future<ModelResponseUser> fetchUserId() async {
     try {
       const String urlUserId = KeysApi.users + KeysApi.current;
       log(urlUserId, name: "data url Product");
       final response = await get(urlUserId);
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error');
-        // return Future.error(response);
-        return modelResponseErrorFromJson(response.bodyString!);
+        log(response.toString(), name: 'response error');
+        return Future.error(response);
+        // return modelResponseErrorFromJson(response.bodyString!);
       } else {
         // log(response.bodyString!, name: 'data response');
         return modelResponseUserFromJson(response.bodyString!);

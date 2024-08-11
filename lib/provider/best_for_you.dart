@@ -16,11 +16,11 @@ class BestForYouProvider extends GetConnect {
 
   Future<ModelBooks> fetchBooksBestForYou() async {
     try {
-      const String urlProduct = KeysApi.bestForYou;
-      log(urlProduct, name: "data url Product");
-      final response = await get(urlProduct);
+      const String urlBestForYou = KeysApi.bestForYou;
+      log(urlBestForYou, name: "data url bestForYou");
+      final response = await get(urlBestForYou);
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error');
+        log(response.toString(), name: 'response error');
         return Future.error(response);
       } else {
         // log(response.bodyString!, name: 'data response');

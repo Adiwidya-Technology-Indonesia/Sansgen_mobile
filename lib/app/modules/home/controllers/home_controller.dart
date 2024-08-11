@@ -1,20 +1,24 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:sansgen/model/user/response_user.dart';
 
-// import 'package:sansgen/app/data/books.dart';
 import 'package:sansgen/provider/book.dart';
 
 import '../../../../model/book/book.dart';
+import '../../../../model/user/user.dart';
 import '../../../../provider/best_for_you.dart';
+import '../../../../provider/user.dart';
 import '../../../routes/app_pages.dart';
 
 class HomeController extends GetxController with StateMixin<ModelDataHome> {
   final BookProvider bookProvider;
+  final UserProvider userProvider;
   final BestForYouProvider bestForYouProvider;
 
   HomeController({
     required this.bookProvider,
+    required this.userProvider,
     required this.bestForYouProvider,
   });
 
@@ -26,26 +30,37 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
+    await fetchDataHome();
     super.onInit();
   }
 
   Future<void> fetchDataHome() async {
-    change(null, status: RxStatus.loading()); // Menampilkan status loading
+    // change(null, status: RxStatus.loading()); // Menampilkan status loading
     try {
       final resultPopuler = await bookProvider.fetchBooksPopuler();
+      final resultInfoUser = await userProvider.fetchUserId();
       final resultBestForYou = await bestForYouProvider.fetchBooksBestForYou();
+      // log(resultPopuler.toJson().toString(), name: 'resultPopuler.status');
+      // log(resultInfoUser.toJson().toString(), name: 'resultInfoUser.status');
+      // log(resultBestForYou.toJson().toString(), name: 'resultBestForYou.status');
 
-      if (resultPopuler.status == true && resultBestForYou.status == true) {
+      if (resultPopuler.status == true &&
+          resultBestForYou.status == true &&
+          resultInfoUser.data != ModelUser.fromJson({})) {
         final populerList = resultPopuler.data;
+        final infoUser = resultInfoUser as ModelResponseUser;
         final bestForYouList = resultBestForYou.data;
 
+        // log(populerList.toString(), name: 'populerList');
+        // log(infoUser.toString(), name: 'infoUser');
+        // log(bestForYouList.toString(), name: 'bestForYouList');
         change(
           ModelDataHome(
             populer: populerList,
             bestForYou: bestForYouList,
-            profil: {}, // Ganti dengan data profil yang sesuai
-            focul: {}, // Ganti dengandata focul yang sesuai
+            profil: infoUser.data, // Ganti dengan data profil yang sesuai
+            focus: {}, // Ganti dengandata focus yang sesuai
           ),
           status: RxStatus.success(),
         );
@@ -62,13 +77,13 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
 class ModelDataHome {
   final List<DataBook> populer;
   final List<DataBook> bestForYou;
-  final Object profil;
-  final Object focul;
+  final ModelUser profil;
+  final Object focus;
 
   ModelDataHome({
     required this.populer,
     required this.bestForYou,
     required this.profil,
-    required this.focul,
+    required this.focus,
   });
 }

@@ -14,11 +14,11 @@ class BookProvider extends GetConnect {
 
   Future<ModelBookById> fetchIdBooks(String id) async {
     try {
-      final String urlProduct = '${KeysApi.books}/$id';
-      log(urlProduct, name: "data url Product");
-      final response = await get(urlProduct);
+      final String urlIdBooks = '${KeysApi.books}/$id';
+      log(urlIdBooks, name: "data url IdBooks");
+      final response = await get(urlIdBooks);
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error');
+        log(response.toString(), name: 'response error');
         return Future.error(response);
       } else {
         // log(response.bodyString!, name: 'data response');
@@ -32,11 +32,11 @@ class BookProvider extends GetConnect {
 
   Future<ModelBooks> fetchBooks() async {
     try {
-      const String urlProduct = KeysApi.books;
-      log(urlProduct, name: "data url Product");
-      final response = await get(urlProduct);
+      const String urlBooks = KeysApi.books;
+      log(urlBooks, name: "data url Books");
+      final response = await get(urlBooks);
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error');
+        log(response.toString(), name: 'response error');
         return Future.error(response);
       } else {
         // log(response.bodyString!, name: 'data response');
@@ -50,11 +50,11 @@ class BookProvider extends GetConnect {
 
   Future<ModelBooks> fetchBooksPopuler() async {
     try {
-      const String urlProduct = KeysApi.books + KeysApi.populer;
-      log(urlProduct, name: "data url Product");
-      final response = await get(urlProduct);
+      const String urlBooksPopuler = KeysApi.books + KeysApi.populer;
+      log(urlBooksPopuler, name: "data url book populer");
+      final response = await get(urlBooksPopuler);
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error');
+        log(response.toString(), name: 'response error');
         return Future.error(response);
       } else {
         // log(response.bodyString!, name: 'data response');
