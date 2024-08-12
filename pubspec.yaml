@@ -26,6 +26,7 @@ dependencies:
   image_picker: ^1.1.2
   circular_countdown_timer: ^0.2.3
   hidable: ^1.0.6
+  flutter_popup_menu_button: ^0.0.1+5
 #  json: ^0.20.2
 
 dev_dependencies:

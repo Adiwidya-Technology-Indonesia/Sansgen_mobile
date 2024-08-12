@@ -29,13 +29,13 @@ class HomeView extends GetView<HomeController> {
             const Gap(40),
             componentCard(
               title: 'Pilihan terbaik untukmu',
-              emptyInfo: 'Pilihan terbaik untukmu Masih Kosong',
+              emptyInfo: '',
               context: context,
               heightCom: 220,
               widthCom: double.infinity,
               scrollDirection: Axis.horizontal,
               physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: state!.bestForYou.length,
+              itemCount: state.bestForYou.length,
               itemBuilder: (context, index) {
                 final book = state.bestForYou[index];
                 return cardTerbaikUntukmu(
@@ -49,7 +49,7 @@ class HomeView extends GetView<HomeController> {
             const Gap(12),
             componentCard(
               title: 'Populer',
-              emptyInfo: 'Populer Masih Kosong',
+              emptyInfo: '',
               context: context,
               heightCom: context.height,
               widthCom: double.infinity,
@@ -100,10 +100,32 @@ class HomeView extends GetView<HomeController> {
             ),
             const Gap(12),
             Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(book.title, style: context.titleSmallBold),
-                Text(book.category, style: context.labelSmall),
+                Text(
+                  book.category,
+                  style: context.labelSmall.copyWith(
+                    color: context.colorScheme.secondary,
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 16,
+                    ),
+                    Text(
+                      book.manyRatings.toString(),
+                      style: context.labelSmall.copyWith(
+                        color: context.colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

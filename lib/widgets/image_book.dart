@@ -17,8 +17,8 @@ Widget imageBook({
             errorBuilder: (context, error, stackTrace) {
               // Tampilkan placeholder jika terjadi kesalahan saat memuat gambar
               return Container(
-                height: 160,
-                width: 130,
+                height: height,
+                width: width,
                 color: Colors.grey,
                 child: const Center(
                   child: Icon(Icons.error),
@@ -28,8 +28,8 @@ Widget imageBook({
           )
         : Container(
             // Tampilkan placeholder jika image bukan URL yang valid
-            height: 160,
-            width: 130,
+            height: height,
+            width: width,
             color: Colors.grey,
             child: const Center(
               child: Icon(Icons.image_not_supported),

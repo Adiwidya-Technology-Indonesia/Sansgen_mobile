@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../../model/book/book.dart';
 import '../../../../provider/book.dart';
-import '../../../data/books.dart';
 import '../../../routes/app_pages.dart';
 
 class KategoriController extends GetxController
@@ -25,12 +24,20 @@ class KategoriController extends GetxController
     'Biografi',
     'Komik',
   ];
-  // final List<DataBook> bookList = List.generate(7, (index) => book);
+
+  final genreList = <String>[
+    'Laki-laki',
+    'Perempuan',
+  ];
+
+  final genreCurrent = ''.obs;
   List<DataBook> bookList = <DataBook>[];
   final searchC = TextEditingController();
   var filterListKategori = <ModelFilter>[].obs;
 
   final isSearch = false.obs;
+
+  void setGenre(String v) => genreCurrent.value = v;
 
   void toDetails(DataBook book) {
     Get.toNamed(Routes.DETAIL, arguments: book);
@@ -39,17 +46,19 @@ class KategoriController extends GetxController
   @override
   void onInit() {
     findBooks();
+    setGenre(genreList[0]);
+    filterListKategori.value = kategoriList
+        .map(
+          (e) => ModelFilter(title: e, isSelected: false.obs),
+        )
+        .toList();
+    filterListKategori[0].isSelected.value = true;
     super.onInit();
   }
 
   Future findBooks() async {
     bookProvider.fetchBooks().then((result) {
       if (result.status == true) {
-        filterListKategori.value = kategoriList
-            .map(
-              (e) => ModelFilter(title: e, isSelected: false.obs),
-        )
-            .toList();
         log(result.toString(), name: 'data model');
         bookList = result.data;
         change(bookList, status: RxStatus.success());
@@ -62,11 +71,9 @@ class KategoriController extends GetxController
     });
   }
 
-  Future onChangeFilter({required String filter}) async {
-    if (filter == 'All') {
-      await findBooks();
-    }
-    final onFilter = bookList.where((e) => e.category == filter).toList();
+  void onChangeFilterGenre(String v) {
+    final onFilter = bookList.where((e) => e.gender == v).toList();
+    setGenre(v);
     change(onFilter, status: RxStatus.success());
   }
 
@@ -74,12 +81,43 @@ class KategoriController extends GetxController
     final onSearch = value.isEmpty
         ? bookList
         : bookList
-        .where((element) => element.title.toLowerCase().contains(
-      value.toLowerCase(),
-    ))
-        .toList();
+            .where((element) => element.title.toLowerCase().contains(
+                  value.toLowerCase(),
+                ))
+            .toList();
     change(onSearch, status: RxStatus.success());
   }
+
+  void onChangeFilterCategory(int index) {
+    // Toggle nilai isSelected untuk filter yang dipilih
+    filterListKategori[index].isSelected.value = !filterListKategori[index].isSelected.value;
+
+    // Jika 'All' dipilih, hapus pilihan pada filter lainnya
+    if (index == 0 && filterListKategori[index].isSelected.value) {
+      for (var i = 1; i < filterListKategori.length; i++) {
+        filterListKategori[i].isSelected.value = false;
+      }
+    } else if (filterListKategori[index].isSelected.value) {
+      // Jika filter selain 'All' dipilih, hapus pilihan pada 'All'
+      filterListKategori[0].isSelected.value = false;
+    }
+
+    // Terapkan filter berdasarkan pilihan yangbaru
+    final selectedFilters = filterListKategori
+        .where((e) => e.isSelected.value)
+        .map((e) => e.title)
+        .toList();
+
+    if (selectedFilters.contains('All')) {
+      findBooks(); // Tampilkan semua buku jika 'All' dipilih
+    } else {
+      final filteredBooks = bookList
+          .where((book) => selectedFilters.contains(book.category) && book.gender == genreCurrent.value)
+          .toList();
+      change(filteredBooks, status: RxStatus.success());
+    }
+  }
+
 }
 
 class ModelFilter {

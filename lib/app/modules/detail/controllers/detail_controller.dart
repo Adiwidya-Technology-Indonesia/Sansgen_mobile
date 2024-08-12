@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:sansgen/app/data/books.dart';
 
 import '../../../../model/book/book.dart';
-import '../component/contentChapter.dart';
-import '../component/contentComment.dart';
+import '../component/content_chapter.dart';
+import '../component/content_comment.dart';
 
 class DetailController extends GetxController {
   late DataBook dataBook;

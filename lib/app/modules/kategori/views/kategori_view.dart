@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_popup_menu_button/custom_popup_menu_button.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
@@ -37,9 +38,9 @@ class KategoriView extends GetView<KategoriController> {
                 widthCom: double.infinity,
                 scrollDirection: Axis.vertical,
                 physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: controller.bookList.length,
+                itemCount: state!.length,
                 itemBuilder: (context, index) {
-                  final book = controller.bookList[index];
+                  final book = state[index];
                   return cardBook(
                     book: book,
                     context: context,
@@ -65,25 +66,30 @@ class KategoriView extends GetView<KategoriController> {
       child: Padding(
         padding: const EdgeInsets.only(left: 16),
         child: Row(
-          children: controller.kategoriList
-              .map(
-                (e) => Container(
+          children: controller.filterListKategori.asMap().entries.map((entry) {
+            final index = entry.key;
+            final e = entry.value;
+            return GestureDetector(
+              onTap: () => controller.onChangeFilterCategory(index),
+              child: Obx(
+                () => Container(
                   height: 36,
                   padding: const EdgeInsets.all(10.0),
                   margin: const EdgeInsets.only(right: 6),
                   decoration: BoxDecoration(
-                    color: context.colorScheme.surface.withOpacity(0.1),
+                    color: e.isSelected.isTrue ? context.colorScheme.surface : context.colorScheme.surface.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    e,
+                    e.title,
                     style: context.labelMedium.copyWith(
-                      color: context.colorScheme.surface,
+                      color: e.isSelected.isTrue ? context.colorScheme.primary : context.colorScheme.surface,
                     ),
                   ),
                 ),
-              )
-              .toList(),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -110,14 +116,38 @@ class KategoriView extends GetView<KategoriController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(title, style: context.titleMedium),
-                Text(
-                  'Lainnya',
-                  style: context.labelLarge.copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationThickness: 2,
-                    decorationStyle: TextDecorationStyle.solid,
-                    decorationColor: context.colorScheme.secondary,
+                FlutterPopupMenuButton(
+                  direction: MenuDirection.values.first,
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
+                  popupMenuSize: const Size(120, 120),
+                  child: FlutterPopupMenuIcon(
+                    key: GlobalKey(),
+                    child: Obx(
+                      () => Text(
+                        controller.genreCurrent.value,
+                        style: context.labelLarge.copyWith(
+                          decoration: TextDecoration.underline,
+                          decorationThickness: 2,
+                          decorationStyle: TextDecorationStyle.solid,
+                          decorationColor: context.colorScheme.secondary,
+                        ),
+                      ),
+                    ),
                   ),
+                  children: controller.genreList
+                      .map(
+                        (v) => FlutterPopupMenuItem(
+                          onTap: () => controller.onChangeFilterGenre(v),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 20, bottom: 16),
+                            child: Text(v),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ],
             ),

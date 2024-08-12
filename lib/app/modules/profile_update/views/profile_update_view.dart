@@ -47,22 +47,26 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                   controller: controller.tglLahirController,
                   info: controller.istglLahirMessage.value,
                 ),
-                Gap(context.height * 0.06),
-                ElevatedButton(
-                  onPressed: controller.profilUpdateButton,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: Text(
-                    'Simpan',
-                    style: context.titleMedium
-                        .copyWith(color: context.colorScheme.primary),
-                  ),
-                )
               ],
             ),
+          ),
+        ),
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: ElevatedButton(
+          onPressed: controller.profilUpdateButton,
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
+            minimumSize: const Size(double.infinity, 50),
+          ),
+          child: Text(
+            'Simpan',
+            style: context.titleMedium
+                .copyWith(color: context.colorScheme.primary),
           ),
         ),
       ),

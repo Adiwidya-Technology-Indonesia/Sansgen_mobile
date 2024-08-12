@@ -2,31 +2,32 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/model/user/response_user.dart';
+import 'package:sansgen/model/comment/request_post.dart';
+import 'package:sansgen/model/comment/response_get.dart';
+import 'package:sansgen/model/comment/response_post.dart';
 
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/error.dart';
-import '../model/user/request_patch_user.dart';
 import '../services/prefs.dart';
 
-class UserProvider extends GetConnect {
+class CommentProvider extends GetConnect {
   // baseUrl
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelResponseUser> fetchUserId() async {
+  Future<ModelResponseGetComment> fetchCommentByBookId(String id) async {
     try {
-      const String urlUserId = KeysApi.users + KeysApi.current;
-      log(urlUserId, name: "data url Product");
-      final response = await get(urlUserId);
+      final String urlCommentByBookId = '${KeysApi.books}/$id/comments';
+      log(urlCommentByBookId, name: "data url Product");
+      final response = await get(urlCommentByBookId);
       if (response.status.hasError) {
         log(response.toString(), name: 'response error');
         return Future.error(response);
         // return modelResponseErrorFromJson(response.bodyString!);
       } else {
         // log(response.bodyString!, name: 'data response');
-        return modelResponseUserFromJson(response.bodyString!);
+        return modelResponseGetCommentFromJson(response.bodyString!);
       }
     } catch (error) {
       log(error.toString(), name: "data error");
@@ -34,12 +35,15 @@ class UserProvider extends GetConnect {
     }
   }
 
-  Future patchUserCurrent(ModelRequestPatchUser request) async {
+  Future postCommentBook({
+    required String id,
+    required ModelRequestPostComment request,
+  }) async {
     try {
-      const String patchUserCurrent = KeysApi.users + KeysApi.current;
-      log(patchUserCurrent, name: "data url Product");
+      final String urlPostCommentBook = '${KeysApi.books}/$id/comments';
+      log(urlPostCommentBook, name: "data url Product");
       final response = await patch(
-        patchUserCurrent,
+        urlPostCommentBook,
         request.toJson(),
       );
       if (response.status.hasError) {
@@ -48,7 +52,7 @@ class UserProvider extends GetConnect {
         return modelResponseErrorFromJson(response.bodyString!);
       } else {
         // log(response.bodyString!, name: 'data response');
-        return modelResponseUserFromJson(response.bodyString!);
+        return modelResponsePostCommentFromJson(response.bodyString!);
       }
     } catch (error) {
       log(error.toString(), name: "data error");

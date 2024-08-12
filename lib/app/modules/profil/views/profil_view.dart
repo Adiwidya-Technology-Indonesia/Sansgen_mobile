@@ -17,6 +17,7 @@ class ProfilView extends GetView<ProfilController> {
       appBar: appBarCustom(context),
       body: ListView(
         children: [
+          const Gap(40),
           profilCard(
             title: 'Informasi Pribadi',
             context: context,
@@ -120,24 +121,24 @@ class ProfilView extends GetView<ProfilController> {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        height: 60,
+        height: 50,
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.only(left: 50.0, top: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Row(
             children: [
               SvgPicture.asset(
                 iconCom,
-                width: 34,
+                width: 24,
                 colorFilter: ColorFilter.mode(
                   context.colorScheme.surface,
                   BlendMode.srcIn,
                 ),
               ),
-              const Gap(24),
+              const Gap(20),
               Text(
                 title,
-                style: context.titleLarge,
+                style: context.titleMedium,
               )
             ],
           ),
