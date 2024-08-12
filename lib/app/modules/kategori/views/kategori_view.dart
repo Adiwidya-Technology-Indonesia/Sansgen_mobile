@@ -175,6 +175,7 @@ class KategoriView extends GetView<KategoriController> {
           elevation: 4,
           child: TextFormField(
             cursorColor: context.colorScheme.onPrimary,
+            onChanged: (v)=> controller.onChangeSearch(value: v, isSearch: controller.isSearch,),
             decoration: InputDecoration(
               hintText: 'Cari',
               filled: true,

@@ -78,6 +78,12 @@ class KategoriController extends GetxController
   }
 
   void onChangeSearch({required String value, required RxBool isSearch}) {
+    if (value.isNotEmpty) {
+      isSearch.value = true;
+    } else {
+      isSearch.value = false;
+      findBooks();
+    }
     final onSearch = value.isEmpty
         ? bookList
         : bookList
@@ -90,7 +96,8 @@ class KategoriController extends GetxController
 
   void onChangeFilterCategory(int index) {
     // Toggle nilai isSelected untuk filter yang dipilih
-    filterListKategori[index].isSelected.value = !filterListKategori[index].isSelected.value;
+    filterListKategori[index].isSelected.value =
+        !filterListKategori[index].isSelected.value;
 
     // Jika 'All' dipilih, hapus pilihan pada filter lainnya
     if (index == 0 && filterListKategori[index].isSelected.value) {
@@ -112,12 +119,13 @@ class KategoriController extends GetxController
       findBooks(); // Tampilkan semua buku jika 'All' dipilih
     } else {
       final filteredBooks = bookList
-          .where((book) => selectedFilters.contains(book.category) && book.gender == genreCurrent.value)
+          .where((book) =>
+              selectedFilters.contains(book.category) &&
+              book.gender == genreCurrent.value)
           .toList();
       change(filteredBooks, status: RxStatus.success());
     }
   }
-
 }
 
 class ModelFilter {
