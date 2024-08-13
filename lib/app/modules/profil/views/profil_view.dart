@@ -38,22 +38,23 @@ class ProfilView extends GetView<ProfilController> {
               title: 'Payment',
               context: context,
               iconCom: KeysAssetsIcons.payment,
-              onTap: () => controller.paymentButton(context)),
-          profilCard(
-            title: 'Tentang Sansgen',
-            context: context,
-            iconCom: KeysAssetsIcons.info,
-            onTap: () {},
-          ),
-          profilCard(
-            title: 'Keluar',
-            context: context,
-            iconCom: KeysAssetsIcons.logOut,
-            onTap: () => controller.logOutButton(context),
-          ),
-        ],
-      ),
-    );
+              onTap: () => Get.toNamed(Routes.PAYMENT_BUY)
+            ),
+            profilCard(
+              title: 'Tentang Sansgen',
+              context: context,
+              iconCom: KeysAssetsIcons.info,
+              onTap: () {},
+            ),
+            profilCard(
+              title: 'Keluar',
+              context: context,
+              iconCom: KeysAssetsIcons.logOut,
+              onTap: () => controller.logOutButton(context),
+            ),
+          ],
+        ));
+
   }
 
   AppBar appBarCustom(BuildContext context) {

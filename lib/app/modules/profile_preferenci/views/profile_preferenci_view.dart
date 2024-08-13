@@ -67,8 +67,22 @@ class ProfilePreferenciView extends GetView<ProfilePreferenciController> {
                   }).toList(),
                 ),
               ),
-            ],
-          ),
-        ));
+           
+            Gap(450),
+             ElevatedButton(
+                  onPressed:(){},
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    minimumSize: const Size(350, 50),
+                  ),
+                  child: Text(
+                    'Simpan',
+                    style: context.titleMedium
+                        .copyWith(color: context.colorScheme.primary),
+                  ),
+                )
+          ],
+        ),),),);
   }
 }

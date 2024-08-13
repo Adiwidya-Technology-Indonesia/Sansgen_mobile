@@ -20,20 +20,4 @@ class ProfilController extends GetxController {
             onPressed: () => Get.back(), child:Text('Cancel', style: context.titleMedium
                   .copyWith(color: context.colorScheme.surface),)));
   }
-
-  void paymentButton(BuildContext context){
-    Get.defaultDialog(
-      title: 'PREMIUM',
-      middleText: 'Nikmati membaca buku tampa batas dan nikmati semua fitur yang ada dalam aplikasi dengan meng-upgrade akun anda menjadi premium hanya dengan membayar \$11.00',
-       confirm: TextButton(
-            onPressed: () {},
-            child: Text(
-              'Ya',
-              style: context.titleMedium
-                  .copyWith(color: context.colorScheme.surface),
-            )),
-        cancel: TextButton(
-            onPressed: () => Get.back(), child:Text('Tidak', style: context.titleMedium
-                  .copyWith(color: context.colorScheme.surface),)));
-  }
 }
