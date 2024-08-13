@@ -25,7 +25,7 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
               children: [
                 Text(
                   'Informasi Pribadi',
-                  style: context.titleLargeBold
+                  style: context.titleMediumBold
                       .copyWith(color: context.colorScheme.onPrimary),
                 ),
                 const Gap(20),
