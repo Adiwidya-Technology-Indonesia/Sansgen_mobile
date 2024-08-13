@@ -5,9 +5,10 @@ Widget imageBook({
   required String image,
   required double height,
   required double width,
+  required double radius,
 }) {
   return ClipRRect(
-    borderRadius: BorderRadius.circular(8),
+    borderRadius: BorderRadius.circular(radius),
     child: image.isUrl
         ? Image.network(
             image,

@@ -26,6 +26,7 @@ GestureDetector cardBook({
             image: book.image,
             height: 160,
             width: 130,
+            radius: 8,
           ),
           const Gap(12),
           Expanded(

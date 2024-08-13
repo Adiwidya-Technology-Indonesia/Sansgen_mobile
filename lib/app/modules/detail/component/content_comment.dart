@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/avatar_widget.dart';
 
-import '../../../../services/date_time.dart';
-import '../controllers/detail_controller.dart';
+import '../../../../model/comment/user_comment.dart';
 import 'input_comment.dart';
 
-Container contentBottomSheetComment(
-  BuildContext context,
-  List<ModelComment> listComment,
-  ScrollController scrollController,
-) {
-  return Container(
+Container contentBottomSheetComment({
+  required BuildContext context,
+  required List<UserComment> listComment,
+  required ScrollController scrollController,
+  required TextEditingController controller,
+  required void Function() onTapSend,
+}) {
+  return  Container(
     width: double.infinity,
     height: Get.height * 0.8,
     padding: const EdgeInsets.only(
@@ -38,18 +40,21 @@ Container contentBottomSheetComment(
             reverse: true,
             children: listComment.reversed
                 .map((e) => ListTile(
+                      leading: const AvatarWidget(
+                        image: '',
+                      ),
                       title: RichText(
                         text: TextSpan(
                           children: <TextSpan>[
                             TextSpan(
-                                text: e.user, style: context.titleMediumBold),
+                                text: e.user.name, style: context.titleMediumBold),
                             TextSpan(
                                 text: '  ${e.comment}',
                                 style: context.labelLarge),
                           ],
                         ),
                       ),
-                      subtitle: Text(DateTimeServices.getDateTime(e.time)),
+                      subtitle: const Text("DateTimeServices.getDateTime(e.time)"),
                     ))
                 .toList(),
           ),
@@ -57,6 +62,8 @@ Container contentBottomSheetComment(
         inputComment(
           hint: 'Tulis komentar anda',
           context: context,
+          controller: controller,
+          onTapSend: onTapSend,
         ),
       ],
     ),

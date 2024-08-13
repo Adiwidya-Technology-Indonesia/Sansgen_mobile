@@ -97,6 +97,7 @@ class HomeView extends GetView<HomeController> {
               image: book.image,
               height: 87,
               width: 76,
+              radius: 8,
             ),
             const Gap(12),
             Column(
@@ -146,6 +147,7 @@ class HomeView extends GetView<HomeController> {
           image: book.image,
           height: 196,
           width: 149,
+          radius: 8,
         ),
       ),
     );
@@ -244,8 +246,8 @@ class HomeView extends GetView<HomeController> {
         GestureDetector(
           onTap: () {},
           child: SizedBox(
-            width: 50,
-            height: 50,
+            width: 40,
+            height: 40,
             child: CircleAvatar(
               child: image.isURL
                   ? ClipRRect(
@@ -254,8 +256,8 @@ class HomeView extends GetView<HomeController> {
                           BorderRadius.circular(25), // Atur radius di sini
                       child: Image.network(
                         image,
-                        height: 50,
-                        width: 50,
+                        height: 40,
+                        width: 40,
                         fit: BoxFit.cover,
                       ),
                     )

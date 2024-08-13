@@ -36,11 +36,11 @@ class CommentProvider extends GetConnect {
   }
 
   Future postCommentBook({
-    required String id,
+    required String uuidBook,
     required ModelRequestPostComment request,
   }) async {
     try {
-      final String urlPostCommentBook = '${KeysApi.books}/$id/comments';
+      final String urlPostCommentBook = '${KeysApi.books}/$uuidBook/comments';
       log(urlPostCommentBook, name: "data url Product");
       final response = await patch(
         urlPostCommentBook,

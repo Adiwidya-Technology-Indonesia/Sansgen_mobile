@@ -1,6 +1,6 @@
 ```toml
 name = 'add focus'
-method = 'GET'
+method = 'POST'
 url = 'https://testimoni.contohdomain.com/api/focus'
 sortWeight = 2000000
 id = 'f52e5358-20ee-4045-bf0e-fd4fe3e146f3'
@@ -19,6 +19,5 @@ raw = '''
   "readings" : "2023-12-07T10:30:00Z",
   "manyBooks" : "10",
   "focus" : "2023-12-14T15:00:00Z",
-  "idUser" : "35cf3813-2186-4f40-a0f2-d6f9200e1651"
 }'''
 ```

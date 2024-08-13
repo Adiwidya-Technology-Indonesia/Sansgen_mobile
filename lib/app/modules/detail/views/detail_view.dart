@@ -9,7 +9,12 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/book_empty.dart';
 
+import '../../../../state/error.dart';
+import '../../../../state/loading.dart';
+import '../../../../widgets/image_book.dart';
+import '../component/content_comment.dart';
 import '../controllers/detail_controller.dart';
 
 class DetailView extends GetView<DetailController> {
@@ -58,7 +63,12 @@ class DetailView extends GetView<DetailController> {
       mainAxisSize: MainAxisSize.max,
       children: [
         const Gap(80),
-        Image.network(image, width: 180, height: 240),
+        imageBook(
+          image: image,
+          width: 180,
+          height: 240,
+          radius: 8,
+        ),
         const Gap(20),
         Text(title, style: context.titleLargeBold),
         const Gap(8),
@@ -66,28 +76,43 @@ class DetailView extends GetView<DetailController> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
-              RatingBar.builder(
-                initialRating: rating,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemSize: 28,
-                itemCount: 5,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 1),
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
+              GestureDetector(
+                onTap: controller.tapViewRating,
+                child: RatingBar.builder(
+                  initialRating: rating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  ignoreGestures: true,
+                  itemSize: 28,
+                  itemCount: 5,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 1),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    log(rating.toString(), name: 'rating');
+                  },
                 ),
-                onRatingUpdate: (rating) {
-                  log(rating.toString(), name: 'rating');
-                },
               ),
               Text(rating.toString()),
               const Spacer(),
               GestureDetector(
                 onTap: () => controller.tapViewBottomSheetComment(
                   controller.comments,
-                  context,
+                  controller.obx(
+                    (s) => contentBottomSheetComment(
+                      context: context,
+                      listComment: s!,
+                      scrollController: controller.scrollController,
+                      controller: controller.commentFormC,
+                      onTapSend: controller.addComment
+                    ),
+                    onLoading: const LoadingState(),
+                    onError: (error) => ErrorState(error: error.toString()),
+                    onEmpty: bookEmpty('Komentar masih kosong'),
+                  ),
                 ),
                 child: SvgPicture.asset(
                   KeysAssetsIcons.komen,
@@ -145,24 +170,17 @@ class DetailView extends GetView<DetailController> {
     );
   }
 
-  Container contentHeader({
+  BackdropFilter contentHeader({
     required BuildContext context,
     required String image,
   }) {
-    return Container(
-      height: context.height * 0.3,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: Image.network(image).image,
-        ),
-      ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-        child: Container(
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
-        ),
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+      child: imageBook(
+        image: image,
+        width: double.infinity,
+        height: 240,
+        radius: 0,
       ),
     );
   }

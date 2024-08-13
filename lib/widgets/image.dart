@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sansgen/keys/assets_icons.dart';
-import 'package:sansgen/model/image_hash.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/avatar_widget.dart';
 
@@ -31,7 +30,7 @@ mixin ImageState {
   //   );
   // }
 
-  Widget imageUpdateProfilEmpty(ImageHash? imageHash, dynamic getImage, BuildContext context) {
+  Widget imageUpdateProfilEmpty(String? image, dynamic getImage, BuildContext context) {
     return Stack(
       alignment: AlignmentDirectional.bottomEnd,
       children: [
@@ -39,7 +38,7 @@ mixin ImageState {
           height: 180,
           width: 180,
           child: AvatarWidget(
-            imageHash: imageHash,
+            image: image,
             height: 180,
             width: 180,
             radius: 100,
