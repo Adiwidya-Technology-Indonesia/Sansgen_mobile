@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/book_empty.dart';
 
 import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
@@ -109,6 +110,15 @@ class KategoriView extends GetView<KategoriController> {
     required int itemCount,
     required Widget? Function(BuildContext, int) itemBuilder,
   }) {
+    late String categoryActive;
+    if (controller.searchC.text != '' &&  controller.isSearch.isTrue) {
+      categoryActive = controller.searchC.text;
+    } else {
+      categoryActive = controller.filterListKategori
+          .where((e) => e.isSelected.value)
+          .map((v) => v.title)
+          .join(', ');
+    }
     return SizedBox(
       height: heightCom,
       width: widthCom,
@@ -126,28 +136,26 @@ class KategoriView extends GetView<KategoriController> {
                     FlutterPopupMenuButton(
                       direction: MenuDirection.values.first,
                       decoration: const BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(20)),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                           color: Colors.white),
                       popupMenuSize: const Size(120, 120),
                       child: FlutterPopupMenuIcon(
                         key: GlobalKey(),
                         child: Obx(
-                              () => Text(controller.genreCurrent.value),
+                          () => Text(controller.genreCurrent.value),
                         ),
                       ),
                       children: controller.genreList
                           .map(
                             (v) => FlutterPopupMenuItem(
-                          onTap: () =>
-                              controller.onChangeFilterGenre(v),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, bottom: 16),
-                            child: Text(v),
-                          ),
-                        ),
-                      )
+                              onTap: () => controller.onChangeFilterGenre(v),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, bottom: 16),
+                                child: Text(v),
+                              ),
+                            ),
+                          )
                           .toList(),
                     ),
                     const Icon(Icons.keyboard_arrow_down_sharp),
@@ -156,15 +164,22 @@ class KategoriView extends GetView<KategoriController> {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: itemCount,
-              shrinkWrap: true,
-              scrollDirection: scrollDirection,
-              physics: physics,
-              itemBuilder: itemBuilder,
+          if (itemCount == 0)
+            Expanded(
+              child: Center(
+                child: bookEmpty('Buku $categoryActive masih kosong'),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: itemCount,
+                shrinkWrap: true,
+                scrollDirection: scrollDirection,
+                physics: physics,
+                itemBuilder: itemBuilder,
+              ),
             ),
-          ),
         ],
       ),
     );

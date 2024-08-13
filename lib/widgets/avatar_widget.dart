@@ -29,6 +29,7 @@ class AvatarWidget extends StatelessWidget {
                 image!,
                 height: height,
                 width: width,
+                fit: BoxFit.cover,
               )
             : Icon(
                 Icons.person_pin,
