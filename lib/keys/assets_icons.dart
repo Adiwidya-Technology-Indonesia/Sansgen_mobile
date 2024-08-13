@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 @immutable
 class KeysAssetsIcons {
   const KeysAssetsIcons._();
+
   static const String camera = 'assets/icons/camera.svg';
   static const String category = 'assets/icons/category.svg';
   static const String ceklis = 'assets/icons/ceklis.svg';
@@ -14,10 +15,13 @@ class KeysAssetsIcons {
   static const String komen = 'assets/icons/komen.svg';
   static const String like = 'assets/icons/like.svg';
   static const String logOut = 'assets/icons/log-out.svg';
+  static const String musicOff = 'assets/icons/music-off.svg';
+  static const String musicOn = 'assets/icons/music-on.svg';
   static const String pass = 'assets/icons/pass.svg';
   static const String riwayat = 'assets/icons/riwayat.svg';
   static const String search = 'assets/icons/search.svg';
   static const String star = 'assets/icons/star.svg';
+  static const String send = 'assets/icons/send.svg';
   static const String timer = 'assets/icons/timer.svg';
   static const String user = 'assets/icons/user.svg';
   static const String payment = 'assets/icons/payment.svg';

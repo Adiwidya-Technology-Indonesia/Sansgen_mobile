@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../../../model/on_boarding.dart';
+import '../../../../model/on_boarding/referency.dart';
 
 class ProfilePreferenciController extends GetxController {
   final listPreferences = <ModelPreferenci>[

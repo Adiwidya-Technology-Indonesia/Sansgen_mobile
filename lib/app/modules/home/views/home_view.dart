@@ -2,65 +2,82 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:sansgen/model/books.dart';
+import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/book_empty.dart';
 
+import '../../../../state/empty.dart';
+import '../../../../state/error.dart';
+import '../../../../state/loading.dart';
+import '../../../../widgets/image_book.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarCustom(context),
-      body: ListView(
-        children: [
-          const Gap(40),
-          componentCard(
-            title: 'Pilihan terbaik untukmu',
-            context: context,
-            heightCom: 220,
-            widthCom: double.infinity,
-            scrollDirection: Axis.horizontal,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: controller.bookList.length,
-            itemBuilder: (context, index) {
-              final book = controller.bookList[index];
-              return cardTerbaikUntukmu(
-                book: book,
-                onTap: () {
-                  controller.toDetails(book);
-                },
-              );
-            },
-          ),
-          const Gap(12),
-          componentCard(
-            title: 'Populer',
-            context: context,
-            heightCom: context.height,
-            widthCom: double.infinity,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.bookList.length,
-            itemBuilder: (context, index) {
-              final book = controller.bookList[index];
-              return cardPopuler(
-                book: book,
-                context: context,
-                onTap: () {
-                  controller.toDetails(book);
-                },
-              );
-            },
-          ),
-        ],
+    return controller.obx(
+      (state) => Scaffold(
+        appBar: appBarCustom(
+          context: context,
+          name: state!.profil.name!,
+          image: state.profil.image,
+        ),
+        body: ListView(
+          children: [
+            const Gap(40),
+            componentCard(
+              title: 'Pilihan terbaik untukmu',
+              emptyInfo: '',
+              context: context,
+              heightCom: 220,
+              widthCom: double.infinity,
+              scrollDirection: Axis.horizontal,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: state.bestForYou.length,
+              itemBuilder: (context, index) {
+                final book = state.bestForYou[index];
+                return cardTerbaikUntukmu(
+                  book: book,
+                  onTap: () {
+                    controller.toDetails(book);
+                  },
+                );
+              },
+            ),
+            const Gap(12),
+            componentCard(
+              title: 'Populer',
+              emptyInfo: '',
+              context: context,
+              heightCom: context.height,
+              widthCom: double.infinity,
+              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: state.populer.length,
+              itemBuilder: (context, index) {
+                final book = state.populer[index];
+                return cardPopuler(
+                  book: book,
+                  context: context,
+                  onTap: () {
+                    controller.toDetails(book);
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
+      onLoading: const LoadingState(),
+      onError: (error) => ErrorState(error: error.toString()),
+      onEmpty: const EmptyState(),
     );
   }
 
   GestureDetector cardPopuler({
-    required BookModel book,
+    required DataBook book,
     required BuildContext context,
     required Function() onTap,
   }) {
@@ -76,21 +93,40 @@ class HomeView extends GetView<HomeController> {
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                book.image,
-                height: 87,
-                width: 76,
-                fit: BoxFit.cover,
-              ),
+            imageBook(
+              image: book.image,
+              height: 87,
+              width: 76,
+              radius: 8,
             ),
             const Gap(12),
             Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(book.title, style: context.titleSmallBold),
-                Text(book.category, style: context.labelSmall),
+                Text(
+                  book.category,
+                  style: context.labelSmall.copyWith(
+                    color: context.colorScheme.secondary,
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 16,
+                    ),
+                    Text(
+                      book.manyRatings.toString(),
+                      style: context.labelSmall.copyWith(
+                        color: context.colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
@@ -100,21 +136,18 @@ class HomeView extends GetView<HomeController> {
   }
 
   GestureDetector cardTerbaikUntukmu({
-    required BookModel book,
+    required DataBook book,
     required Function() onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(left: 16),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            book.image,
-            height: 196,
-            width: 149,
-            fit: BoxFit.cover,
-          ),
+        child: imageBook(
+          image: book.image,
+          height: 196,
+          width: 149,
+          radius: 8,
         ),
       ),
     );
@@ -129,6 +162,7 @@ class HomeView extends GetView<HomeController> {
     required ScrollPhysics physics,
     required int itemCount,
     required Widget? Function(BuildContext, int) itemBuilder,
+    required String emptyInfo,
   }) {
     return SizedBox(
       height: heightCom,
@@ -153,21 +187,28 @@ class HomeView extends GetView<HomeController> {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: itemCount,
-              shrinkWrap: true,
-              scrollDirection: scrollDirection,
-              physics: physics,
-              itemBuilder: itemBuilder,
+          if (itemCount == 0)
+            bookEmpty(emptyInfo, height: 170)
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: itemCount,
+                shrinkWrap: true,
+                scrollDirection: scrollDirection,
+                physics: physics,
+                itemBuilder: itemBuilder,
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 
-  AppBar appBarCustom(BuildContext context) {
+  AppBar appBarCustom({
+    required BuildContext context,
+    required String name,
+    required String image,
+  }) {
     return AppBar(
       backgroundColor: context.colorScheme.primary,
       flexibleSpace: Container(
@@ -195,7 +236,7 @@ class HomeView extends GetView<HomeController> {
                 .copyWith(color: context.colorScheme.primary),
           ),
           Text(
-            'Rahmat Hidayat',
+            name,
             style: context.titleMediumBold
                 .copyWith(color: context.colorScheme.primary),
           ),
@@ -204,11 +245,23 @@ class HomeView extends GetView<HomeController> {
       actions: [
         GestureDetector(
           onTap: () {},
-          child: const SizedBox(
-            width: 50,
-            height: 50,
+          child: SizedBox(
+            width: 40,
+            height: 40,
             child: CircleAvatar(
-              child: Icon(Icons.person_outline_rounded),
+              child: image.isURL
+                  ? ClipRRect(
+                      // Tambahkan ClipRRect di sini
+                      borderRadius:
+                          BorderRadius.circular(25), // Atur radius di sini
+                      child: Image.network(
+                        image,
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : const Icon(Icons.person_outline_rounded),
             ),
           ),
         ),

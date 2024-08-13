@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/book_empty.dart';
+
 class EmptyState extends StatelessWidget {
-  const EmptyState({
-    Key? key,
-  }) : super(key: key);
+  const EmptyState({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "Kosong ...",
-      ),
+    return Center(
+      child: bookEmpty('Data kosong ...', height: 170),
     );
   }
 }

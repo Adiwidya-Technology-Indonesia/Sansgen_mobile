@@ -26,9 +26,7 @@ class PreferenciView extends GetView<OnBoardingController> {
                 ? context.colorScheme.surface
                 : context.colorScheme.primary,
             index: index,
-            onTap: () {
-              e.isSelected.value = true;
-            },
+            onTap: () => e.isSelected.value = !e.isSelected.value,
           ),
         );
       }).toList(),

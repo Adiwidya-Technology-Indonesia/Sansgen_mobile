@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../model/image_hash.dart';
 import '../../../../widgets/image.dart';
 import '../controllers/image_profil_controller.dart';
 
@@ -12,7 +11,7 @@ class WrapperImageUpdateProfil extends GetView<ImageUpdateController>
     required this.image,
   }) : super(key: key);
 
-  final ImageHash? image;
+  final String? image;
 
   @override
   Widget build(BuildContext context) {

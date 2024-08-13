@@ -9,4 +9,5 @@ class KeysAssetsImages {
   static const String female = 'assets/images/female.svg';
   static const String maleGender = 'assets/images/male_gender.png';
   static const String femaleGender = 'assets/images/female_gender.png';
+  static const String dataEmpty = 'assets/images/data_empty.svg';
 }

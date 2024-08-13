@@ -1,11 +1,7 @@
-// import 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
-
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:sansgen/model/image_hash.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/update_profil_form_validate.dart';
 
@@ -14,6 +10,7 @@ import 'wrapper_up_profile.dart';
 
 class ProfileUpdateView extends GetView<ProfileUpdateController> {
   const ProfileUpdateView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,22 +44,26 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                   controller: controller.tglLahirController,
                   info: controller.istglLahirMessage.value,
                 ),
-                Gap(context.height * 0.12),
-                ElevatedButton(
-                  onPressed: controller.profilUpdateButton,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: Text(
-                    'Simpan',
-                    style: context.titleMedium
-                        .copyWith(color: context.colorScheme.primary),
-                  ),
-                )
               ],
             ),
+          ),
+        ),
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: ElevatedButton(
+          onPressed: controller.profilUpdateButton,
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            minimumSize: const Size(double.infinity, 50),
+          ),
+          child: Text(
+            'Simpan',
+            style: context.titleMedium
+                .copyWith(color: context.colorScheme.primary),
           ),
         ),
       ),
@@ -115,12 +116,9 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                 style: context.titleLarge
                     .copyWith(color: context.colorScheme.primary)),
             const Gap(20),
-            WrapperImageUpdateProfil(
-              image: ImageHash(
-                imageUrl:
-                    'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//94/MTA-75108153/no-brand_buku-jangan-mulai-bisnis-sebelum-baca-buku-ini-cara-sederhana-tapi-am_full01.jpg',
-                imageHash: 'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
-              ),
+            const WrapperImageUpdateProfil(
+              image:
+                  'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//94/MTA-75108153/no-brand_buku-jangan-mulai-bisnis-sebelum-baca-buku-ini-cara-sederhana-tapi-am_full01.jpg',
             ),
             // Stack(
             //   alignment: Alignment.bottomRight,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -11,16 +13,17 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   PrefService prefService = PrefService();
-  prefService.prefInit();
-  String isToken = prefService.getUserToken ?? 'sdjsb';
+  await prefService.prefInit();
+  String isToken = prefService.getUserToken ?? '';
+  log(prefService.getUserToken ?? 'kosong', name: 'token login');
+  String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.DASHBOARD;
 
-  String initialRoutes = isToken == '' ? Routes.DASHBOARD : Routes.DASHBOARD;
-  // String initialRoutes = Routes.DETAIL;
   runApp(MyApp(initialRoutes));
 }
 
 class MyApp extends StatelessWidget {
   final String initialRoutes;
+
   const MyApp(this.initialRoutes, {super.key});
 
   @override

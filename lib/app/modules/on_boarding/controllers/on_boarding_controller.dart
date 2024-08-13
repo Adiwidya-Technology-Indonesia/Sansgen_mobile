@@ -1,15 +1,25 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/model/user/request_patch_user.dart';
+import 'package:sansgen/provider/user.dart';
 
 import '../../../../keys/assets_images.dart';
-import '../../../../model/on_boarding.dart';
+import '../../../../model/error.dart';
+import '../../../../model/on_boarding/gender.dart';
+import '../../../../model/on_boarding/on_boarding.dart';
+import '../../../../model/on_boarding/referency.dart';
+import '../../../routes/app_pages.dart';
 import '../views/age.dart';
 import '../views/gender.dart';
 import '../views/preferences.dart';
 
 class OnBoardingController extends GetxController {
+  final UserProvider userProvider;
+  OnBoardingController({required this.userProvider});
+
   final PageController pageController = PageController();
   final Rx<int> currentPage = 0.obs;
   final Rx<int> selectedIndexGender = 0.obs;
@@ -67,23 +77,52 @@ class OnBoardingController extends GetxController {
         backgroundColor: Colors.grey,
         colorText: Colors.white,
       );
-    } else if (currentPage.value == 2 &&
-        listPreferences.any((element) => element.isSelected.value == true)) {
-      simpan();
-    } else if (currentPage.value == 2 &&
-        listPreferences.any((element) => element.isSelected.value == false)) {
-      Get.snackbar(
-        'Info',
-        'Silakan pilih kategori buku terlebih dahulu',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.grey,
-        colorText: Colors.white,
-      );
+    } else if (currentPage.value == 2) {
+      final selectedCount = listPreferences
+          .where((element) => element.isSelected.value == true)
+          .length;
+      if (selectedCount >= 3) {
+        simpan();
+      } else {
+        Get.snackbar(
+          'Info',
+          'Silakan pilih setidaknya 3 kategori buku',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.grey,
+          colorText: Colors.white,
+        );
+      }
     }
   }
 
   void simpan() {
-    tampilkanSemuaNilai();
+    try {
+      final request = ModelRequestPatchUser(
+        gender: selectedGender.value,
+        rangeAge: selectedAge.value,
+        category: listPreferences.first.title,
+      );
+      userProvider.patchUserCurrent(request).then((v) async {
+        EasyLoading.dismiss();
+        EasyLoading.showSuccess('Update Data berhasil');
+        log(v.toJson().toString());
+        Get.offAllNamed(Routes.DASHBOARD);
+        return;
+      }).onError((e, st) {
+        EasyLoading.dismiss();
+        final errors = Errors(message: ['$e', '$st']);
+        final dataError = ModelResponseError(errors: errors);
+        log(dataError.toJson().toString());
+        EasyLoading.showError('Update Data Gagal');
+        return;
+      });
+    } catch (e) {
+      Get.defaultDialog(
+        title: 'Error',
+        content: Text('Error: $e'),
+      );
+    }
+    // tampilkanSemuaNilai();
   }
 
   void tampilkanSemuaNilai() {

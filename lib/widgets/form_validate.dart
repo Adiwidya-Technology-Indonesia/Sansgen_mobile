@@ -9,17 +9,21 @@ class FormValidate extends StatelessWidget {
     required this.hint,
     required this.icon,
     required this.controller,
-    required this.info,
+    required this.validator,
+    required this.obscureText,
     this.keyboardType,
     this.color,
+    this.suffixIcon,
   }) : super(key: key);
   final String title;
   final String hint;
   final String icon;
   final TextEditingController controller;
-  final String? info;
   final TextInputType? keyboardType;
   final ColorFilter? color;
+  final String? Function(String?)? validator;
+  final bool obscureText;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +35,18 @@ class FormValidate extends StatelessWidget {
           style: context.labelLargeBold,
         ),
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: controller,
           keyboardType: keyboardType,
+          obscureText: obscureText,
           textInputAction: TextInputAction.done,
-          validator: (value) {
-            if (nullValidation(value)) {
-              return "Harap di isi";
-            }
-            return null;
-          },
+          validator: validator,
+          cursorColor: context.colorScheme.surface,
+          // onChanged: ,
           decoration: InputDecoration(
             alignLabelWithHint: false,
             hintText: hint,
+            suffixIcon: suffixIcon,
             prefixIcon: SvgPicture.asset(
               icon,
               colorFilter: color,
@@ -58,24 +62,8 @@ class FormValidate extends StatelessWidget {
             ),
           ),
         ),
-        Visibility(
-          visible: info != null,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              info ?? "",
-              style: context.formError,
-            ),
-          ),
-        ),
+
       ],
     );
-  }
-
-  bool nullValidation(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return true;
-    }
-    return false;
   }
 }

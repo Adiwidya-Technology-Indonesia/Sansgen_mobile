@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_popup_menu_button/custom_popup_menu_button.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
@@ -6,11 +7,15 @@ import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../state/empty.dart';
+import '../../../../state/error.dart';
+import '../../../../state/loading.dart';
 import '../../../../widgets/card_book.dart';
 import '../controllers/kategori_controller.dart';
 
 class KategoriView extends GetView<KategoriController> {
   const KategoriView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,33 +24,38 @@ class KategoriView extends GetView<KategoriController> {
         backgroundColor: context.colorScheme.primary,
         bottom: bottomAppBar(context),
       ),
-      body: Column(
-        children: [
-          const Gap(12),
-          filterCategory(context),
-          const Gap(16),
-          Expanded(
-            child: componentCard(
-              title: 'Hasil',
-              context: context,
-              heightCom: context.height,
-              widthCom: double.infinity,
-              scrollDirection: Axis.vertical,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: controller.bookList.length,
-              itemBuilder: (context, index) {
-                final book = controller.bookList[index];
-                return cardBook(
-                  book: book,
-                  context: context,
-                  onTap: () {
-                    controller.toDetails(book);
-                  },
-                );
-              },
+      body: controller.obx(
+        (state) => Column(
+          children: [
+            const Gap(12),
+            filterCategory(context),
+            const Gap(16),
+            Expanded(
+              child: componentCard(
+                title: 'Hasil',
+                context: context,
+                heightCom: context.height,
+                widthCom: double.infinity,
+                scrollDirection: Axis.vertical,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: state!.length,
+                itemBuilder: (context, index) {
+                  final book = state[index];
+                  return cardBook(
+                    book: book,
+                    context: context,
+                    onTap: () {
+                      controller.toDetails(book);
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        onLoading: const LoadingState(),
+        onError: (error) => ErrorState(error: error.toString()),
+        onEmpty: const EmptyState(),
       ),
     );
   }
@@ -56,25 +66,34 @@ class KategoriView extends GetView<KategoriController> {
       child: Padding(
         padding: const EdgeInsets.only(left: 16),
         child: Row(
-          children: controller.kategoriList
-              .map(
-                (e) => Container(
+          children: controller.filterListKategori.asMap().entries.map((entry) {
+            final index = entry.key;
+            final e = entry.value;
+            return GestureDetector(
+              onTap: () => controller.onChangeFilterCategory(index),
+              child: Obx(
+                () => Container(
                   height: 36,
                   padding: const EdgeInsets.all(10.0),
                   margin: const EdgeInsets.only(right: 6),
                   decoration: BoxDecoration(
-                    color: context.colorScheme.surface.withOpacity(0.1),
+                    color: e.isSelected.isTrue
+                        ? context.colorScheme.surface
+                        : context.colorScheme.surface.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    e,
+                    e.title,
                     style: context.labelMedium.copyWith(
-                      color: context.colorScheme.surface,
+                      color: e.isSelected.isTrue
+                          ? context.colorScheme.primary
+                          : context.colorScheme.surface,
                     ),
                   ),
                 ),
-              )
-              .toList(),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -101,14 +120,38 @@ class KategoriView extends GetView<KategoriController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(title, style: context.titleMedium),
-                Text(
-                  'Lainnya',
-                  style: context.labelLarge.copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationThickness: 2,
-                    decorationStyle: TextDecorationStyle.solid,
-                    decorationColor: context.colorScheme.secondary,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FlutterPopupMenuButton(
+                      direction: MenuDirection.values.first,
+                      decoration: const BoxDecoration(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(20)),
+                          color: Colors.white),
+                      popupMenuSize: const Size(120, 120),
+                      child: FlutterPopupMenuIcon(
+                        key: GlobalKey(),
+                        child: Obx(
+                              () => Text(controller.genreCurrent.value),
+                        ),
+                      ),
+                      children: controller.genreList
+                          .map(
+                            (v) => FlutterPopupMenuItem(
+                          onTap: () =>
+                              controller.onChangeFilterGenre(v),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, bottom: 16),
+                            child: Text(v),
+                          ),
+                        ),
+                      )
+                          .toList(),
+                    ),
+                    const Icon(Icons.keyboard_arrow_down_sharp),
+                  ],
                 ),
               ],
             ),
@@ -135,6 +178,11 @@ class KategoriView extends GetView<KategoriController> {
         child: Card(
           elevation: 4,
           child: TextFormField(
+            cursorColor: context.colorScheme.onPrimary,
+            onChanged: (v) => controller.onChangeSearch(
+              value: v,
+              isSearch: controller.isSearch,
+            ),
             decoration: InputDecoration(
               hintText: 'Cari',
               filled: true,

@@ -3,23 +3,35 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/model/register/model_request_register.dart';
 
+import '../../../../../model/error.dart';
 import '../../../../../provider/auth.dart';
-import '../../../../../services/prefs.dart';
+import '../../../../routes/app_pages.dart';
 
 class RegisterController extends GetxController {
   final AuthProvider authProvider;
-  final PrefService prefService;
-  RegisterController({required this.authProvider, required this.prefService});
 
+  RegisterController({required this.authProvider});
+
+  final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final komfirPassController = TextEditingController();
-  var isNameMessage = ''.obs;
-  var isEmailMessage = ''.obs;
-  var isPasswordMessage = ''.obs;
-  var isKomfirPassMessage = ''.obs;
+
+  final isObscure = true.obs;
+
+  @override
+  void onClose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    komfirPassController.dispose();
+    super.onClose();
+  }
+
+  void stateObscure() => isObscure.value = !isObscure.value;
 
   void backToLogin() {
     Get.back();
@@ -32,32 +44,32 @@ class RegisterController extends GetxController {
     return false;
   }
 
-  String _validateName(String name) {
+  String? validateName(String? name) {
     if (nullValidation(name)) {
-      return isNameMessage.value = 'Nama harap di isi';
+      return 'Nama harap di isi';
     }
-    return isNameMessage.value = '';
+    return '';
   }
 
-  String _validateEmail(String email) {
+  String? validateEmail(String? email) {
     if (nullValidation(email)) {
-      return isEmailMessage.value = 'Email harap di isi';
+      return 'Email harap di isi';
     }
     // Regex untuk validasi email
     String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$';
     RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(email)) {
-      return isEmailMessage.value = 'Format email tidak valid';
+    if (!regex.hasMatch(email!)) {
+      return 'Format email tidak valid';
     }
-    return isEmailMessage.value = '';
+    return '';
   }
 
   // Berfungsi untuk memvalidasi password
-  String _validatePassword(String password) {
+  String? validatePassword(String? password) {
     // Reset pesan kesalahan
     String errorMessage = '';
     // Panjang kata sandi lebih dari 6
-    if (password.length < 8) {
+    if (password!.length < 8) {
       errorMessage += 'Kata sandi minimal 8 karakter.\n';
     }
     // Berisi setidaknya satu huruf besar
@@ -78,61 +90,67 @@ class RegisterController extends GetxController {
     }
     // Jika tidak ada pesan kesalahan, kata sandi valid
     if (errorMessage.isEmpty) {
-      return isPasswordMessage.value = '';
+      return '';
     } else {
-      return isPasswordMessage.value = errorMessage;
+      return errorMessage;
     }
   }
 
   // Fungsi untuk memvalidasi konfirmasi password
-  String _validateConfirmPassword(String password, String confirmPassword) {
+  String? validateConfirmPassword(String? confirmPassword) {
     if (nullValidation(confirmPassword)) {
-      return isKomfirPassMessage.value = 'Konfirmasi kata sandi harap di isi';
+      return 'Konfirmasi kata sandi harap di isi';
     }
-    if (password != confirmPassword) {
-      return isKomfirPassMessage.value = 'Kata sandi tidak cocok';
+    if (passwordController.text != confirmPassword) {
+      return 'Kata sandi tidak cocok';
     }
-    return isKomfirPassMessage.value = '';
+    return '';
   }
 
   Future register() async {
     try {
-      _validateName(nameController.text);
-      _validateEmail(emailController.text);
-      _validatePassword(passwordController.text);
-      _validateConfirmPassword(
-          passwordController.text, komfirPassController.text);
-
+      log(
+        '${nameController.text} ${emailController.text} ${passwordController.text} ${komfirPassController.text}',
+        name: 'form value',
+      );
       // Cek apakah ada pesan kesalahan
-      if (isNameMessage.value.isEmpty &&
-          isEmailMessage.value.isEmpty &&
-          isPasswordMessage.value.isEmpty &&
-          isKomfirPassMessage.value.isEmpty) {
-        log(
-          '${nameController.text} ${emailController.text} ${passwordController.text} ${komfirPassController.text}',
-          name: 'form value',
+      if (validateName(nameController.text) != '' &&
+          validateEmail(emailController.text) != '' &&
+          validatePassword(passwordController.text) != '' &&
+          validateConfirmPassword(komfirPassController.text) != '') {
+        return Get.snackbar(
+          "Ups!",
+          "Sepertinya ada beberapa field yang terlewat. Yuk, lengkapi dulu!",
         );
-        EasyLoading.show(status: 'loading...');
-        final response = await authProvider.authRegister(
-          nameController.text,
-          emailController.text,
-          passwordController.text,
-        );
-        if (response.success == true) {
-          EasyLoading.dismiss();
-          formCLear();
-          EasyLoading.showSuccess('Register berhasil');
-          log(response.toJson().toString(), name: 'register');
-        } else {
-          EasyLoading.showError('Register gagal');
-        }
       }
+      EasyLoading.show(status: 'loading...');
+      final request = ModelReqestRegister(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      await authProvider.authRegister(request).then((v) {
+        EasyLoading.dismiss();
+        formCLear();
+        EasyLoading.showSuccess('Register berhasil');
+        Get.toNamed(Routes.LOGIN);
+        log(v.toJson().toString(), name: 'register');
+        return;
+      }).onError((e, st) {
+        EasyLoading.dismiss();
+        final errors = Errors(message: ['$e', '$st']);
+        final dataError = ModelResponseError(errors: errors);
+        log(dataError.toJson().toString(), name: 'register');
+        EasyLoading.showError('Register Gagal');
+        return;
+      });
     } catch (e) {
       log(e.toString(), name: 'register error');
       Get.defaultDialog(
         title: 'Error',
         content: Text('Error: $e'),
       );
+      return;
     }
   }
 
@@ -141,11 +159,5 @@ class RegisterController extends GetxController {
     emailController.clear();
     passwordController.clear();
     komfirPassController.clear();
-  }
-
-  @override
-  void onInit() {
-    prefService.removeUserToken();
-    super.onInit();
   }
 }
