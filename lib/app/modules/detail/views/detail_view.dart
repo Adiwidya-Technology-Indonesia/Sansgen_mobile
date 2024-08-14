@@ -9,12 +9,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
-import 'package:sansgen/widgets/book_empty.dart';
 
-import '../../../../state/error.dart';
-import '../../../../state/loading.dart';
 import '../../../../widgets/image_book.dart';
-import '../component/content_comment.dart';
 import '../controllers/detail_controller.dart';
 
 class DetailView extends GetView<DetailController> {
@@ -100,19 +96,8 @@ class DetailView extends GetView<DetailController> {
               const Spacer(),
               GestureDetector(
                 onTap: () => controller.tapViewBottomSheetComment(
-                  controller.comments,
-                  controller.obx(
-                    (s) => contentBottomSheetComment(
-                      context: context,
-                      listComment: s!,
-                      scrollController: controller.scrollController,
-                      controller: controller.commentFormC,
-                      onTapSend: controller.addComment
-                    ),
-                    onLoading: const LoadingState(),
-                    onError: (error) => ErrorState(error: error.toString()),
-                    onEmpty: bookEmpty('Komentar masih kosong'),
-                  ),
+                  controller.listComments,
+                  context,
                 ),
                 child: SvgPicture.asset(
                   KeysAssetsIcons.komen,
@@ -120,7 +105,9 @@ class DetailView extends GetView<DetailController> {
                   height: 24,
                 ),
               ),
-              Text(comment.toString()),
+              Obx(
+                () => Text(controller.listComments.length.toString()),
+              ),
               const Gap(10),
               Obx(
                 () => GestureDetector(

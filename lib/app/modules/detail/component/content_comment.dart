@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/avatar_widget.dart';
+import 'package:sansgen/widgets/book_empty.dart';
 
 import '../../../../model/comment/user_comment.dart';
 import 'input_comment.dart';
@@ -12,8 +15,12 @@ Container contentBottomSheetComment({
   required ScrollController scrollController,
   required TextEditingController controller,
   required void Function() onTapSend,
+  // required bool isEmpty,
 }) {
-  return  Container(
+  listComment.map(
+    (e) => log(e.comment.toString()),
+  );
+  return Container(
     width: double.infinity,
     height: Get.height * 0.8,
     padding: const EdgeInsets.only(
@@ -28,6 +35,7 @@ Container contentBottomSheetComment({
       ),
     ),
     child: Column(
+      // mainAxisSize: MainAxisSize.max,
       children: [
         Text(
           "${listComment.length} Komentar",
@@ -35,30 +43,40 @@ Container contentBottomSheetComment({
         ),
         const Divider(),
         Expanded(
-          child: ListView(
-            controller: scrollController,
-            reverse: true,
-            children: listComment.reversed
-                .map((e) => ListTile(
-                      leading: const AvatarWidget(
-                        image: '',
-                      ),
-                      title: RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: e.user.name, style: context.titleMediumBold),
-                            TextSpan(
-                                text: '  ${e.comment}',
-                                style: context.labelLarge),
-                          ],
+          child: listComment.isEmpty
+              ? Center(child: bookEmpty('Komentar masih kosong'))
+              : ListView(
+                  controller: scrollController,
+                  // reverse: true,
+                  children: listComment.reversed
+                      .map(
+                        (e) => ListTile(
+                          leading: const AvatarWidget(
+                            image: '',
+                            height: 40,
+                            width: 40,
+                            heightPlus: 0,
+                          ),
+                          title: RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: e.user.name,
+                                    style: context.titleMediumBold),
+                                TextSpan(
+                                    text: '  ${e.comment}',
+                                    style: context.labelLarge),
+                              ],
+                            ),
+                          ),
+                          subtitle: const Text(
+                              "DateTimeServices.getDateTime(e.time)"),
                         ),
-                      ),
-                      subtitle: const Text("DateTimeServices.getDateTime(e.time)"),
-                    ))
-                .toList(),
-          ),
+                      )
+                      .toList(),
+                ),
         ),
+        // const Spacer(),
         inputComment(
           hint: 'Tulis komentar anda',
           context: context,

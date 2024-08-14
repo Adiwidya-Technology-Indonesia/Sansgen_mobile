@@ -4,16 +4,17 @@
 
 import 'dart:convert';
 
-UserComment userCommetFromJson(String str) => UserComment.fromJson(json.decode(str));
+UserComment userCommetFromJson(String str) =>
+    UserComment.fromJson(json.decode(str));
 
 String userCommetToJson(UserComment data) => json.encode(data.toJson());
 
 class UserComment {
-  final int id;
-  final String uuid;
-  final String comment;
-  final DateTime createdAt;
-  final String timeElapsed;
+  final int? id;
+  final String? uuid;
+  final String? comment;
+  final String? createdAt;
+  final String? timeElapsed;
   final User user;
 
   UserComment({
@@ -29,7 +30,7 @@ class UserComment {
     int? id,
     String? uuid,
     String? comment,
-    DateTime? createdAt,
+    String? createdAt,
     String? timeElapsed,
     User? user,
   }) =>
@@ -43,29 +44,29 @@ class UserComment {
       );
 
   factory UserComment.fromJson(Map<String, dynamic> json) => UserComment(
-    id: json["id"],
-    uuid: json["uuid"],
-    comment: json["comment"],
-    createdAt: DateTime.parse(json["created_at"]),
-    timeElapsed: json["time_elapsed"],
-    user: User.fromJson(json["user"]),
-  );
+        id: json["id"] ?? 0,
+        uuid: json["uuid"] ?? "",
+        comment: json["comment"] ?? "",
+        createdAt: json["created_at"] ?? "",
+        timeElapsed: json["time_elapsed"] ?? "F",
+        user: User.fromJson(json["user"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "comment": comment,
-    "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
-    "time_elapsed": timeElapsed,
-    "user": user.toJson(),
-  };
+        "id": id,
+        "uuid": uuid,
+        "comment": comment,
+        "created_at": createdAt,
+        "time_elapsed": timeElapsed,
+        "user": user.toJson(),
+      };
 }
 
 class User {
   final int id;
   final String uuid;
   final String name;
-  final dynamic image;
+  final String? image;
 
   User({
     required this.id,
@@ -88,16 +89,16 @@ class User {
       );
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    uuid: json["uuid"],
-    name: json["name"],
-    image: json["image"],
-  );
+        id: json["id"],
+        uuid: json["uuid"],
+        name: json["name"],
+        image: json["image"] ?? "",
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "name": name,
-    "image": image,
-  };
+        "id": id,
+        "uuid": uuid,
+        "name": name,
+        "image": image,
+      };
 }

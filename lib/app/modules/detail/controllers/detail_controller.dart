@@ -10,9 +10,9 @@ import 'package:sansgen/provider/comment.dart';
 import '../../../../model/book/book.dart';
 import '../../../../model/comment/user_comment.dart';
 import '../component/content_chapter.dart';
+import '../component/content_comment.dart';
 
-class DetailController extends GetxController
-    with StateMixin<List<UserComment>> {
+class DetailController extends GetxController {
   final CommentProvider commentProvider;
 
   DetailController({required this.commentProvider});
@@ -23,7 +23,7 @@ class DetailController extends GetxController
   final isLike = false.obs;
   final ratingCurrent = 0.0.obs;
 
-  List<UserComment> comments = [];
+  final listComments = <UserComment>[].obs;
 
   void likeState() => isLike.value = !isLike.value;
 
@@ -32,6 +32,7 @@ class DetailController extends GetxController
     if (Get.arguments != null) {
       dataBook = Get.arguments;
       getAllComment();
+      log(dataBook.uuid, name: 'idBook');
     } else {
       dataBook = book;
     }
@@ -72,11 +73,17 @@ class DetailController extends GetxController
 
   void tapViewBottomSheetComment(
     List<UserComment> listComment,
-      Widget content,
+    BuildContext ctx,
   ) {
     // listComment.sort((a, b) => a.time.compareTo(b.time));
     Get.bottomSheet(
-      content,
+      contentBottomSheetComment(
+        context: ctx,
+        listComment: listComment,
+        scrollController: scrollController,
+        controller: commentFormC,
+        onTapSend: addComment,
+      ),
       ignoreSafeArea: false,
       isScrollControlled: true,
     ).then((_) {
@@ -92,7 +99,7 @@ class DetailController extends GetxController
 
   Future addRating() async {}
 
-    Future addComment() async {
+  Future addComment() async {
     final request = ModelRequestPostComment(comment: commentFormC.text);
     await commentProvider
         .postCommentBook(uuidBook: dataBook.uuid, request: request)
@@ -105,13 +112,18 @@ class DetailController extends GetxController
 
   Future getAllComment() async {
     await commentProvider.fetchCommentByBookId(dataBook.uuid).then((v) {
-      if (v.data != []) {
-        change([], status: RxStatus.empty());
+      v.data.map(
+        (e) => log(e.comment.toString(), name: 'data comment'),
+      );
+      if (v.data == []) {
+        log('comment kosong', name: 'data comment');
+        listComments.value = [];
       } else {
-        change(v.data, status: RxStatus.success());
+        log('comment ada', name: 'data comment');
+        listComments.value = v.data;
       }
     }).onError((e, st) {
-      change(null, status: RxStatus.error('$e & $st'));
+      listComments.value = [];
     });
   }
 }

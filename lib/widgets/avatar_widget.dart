@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sansgen/utils/ext_context.dart';
+
+import '../keys/assets_icons.dart';
 
 class AvatarWidget extends StatelessWidget {
   const AvatarWidget({
@@ -24,17 +27,25 @@ class AvatarWidget extends StatelessWidget {
       width: width,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius!),
-        child: image != null
+        child: image != null && image != ''
             ? Image.network(
                 image!,
                 height: height,
                 width: width,
                 fit: BoxFit.cover,
               )
-            : Icon(
-                Icons.person_pin,
-                size: height! + heightPlus!,
-                color: context.colorScheme.error,
+            : Container(
+                color: context.colorScheme.secondary.withOpacity(0.2),
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  KeysAssetsIcons.user,
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.onSecondary,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
       ),
     );
