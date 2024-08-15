@@ -13,18 +13,19 @@ class BestForYouProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelBooks> fetchBooksBestForYou() async {
+  Future fetchBooksBestForYou() async {
     try {
-      const String urlBestForYou = KeysApi.bestForYou;
+      const String urlBestForYou = KeysApi.books + KeysApi.bestForYou;
       log(urlBestForYou, name: "data url bestForYou");
       final response = await get(urlBestForYou);
-      if (response.status.hasError) {
-        log(response.toString(), name: 'response error');
-        return Future.error(response);
-      } else {
+      // if (response.status.hasError) {
+      //   log(response.bodyString.toString(), name: 'response bestForYou error');
+      //   // return Future.error(response);
+      //   return modelDataEmptyFromJson(response.bodyString  !);
+      // } else {
         // log(response.bodyString!, name: 'data response');
         return booksModelFromJson(response.bodyString!);
-      }
+      // }
     } catch (error) {
       log(error.toString(), name: "data error");
       rethrow;

@@ -106,7 +106,7 @@ class HomeView extends GetView<HomeController> {
               children: [
                 Text(book.title, style: context.titleSmallBold),
                 Text(
-                  book.category,
+                  book.category!,
                   style: context.labelSmall.copyWith(
                     color: context.colorScheme.secondary,
                   ),

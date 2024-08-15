@@ -8,9 +8,10 @@ class DataBook {
   final String language;
   final String gender;
   final String rangeAge;
-  final String category;
+  final dynamic category;
   final String writer;
   final String publisher;
+  final DateTime createdAt;
   final int manyLikes;
   final int manyRatings;
   final int manyChapters;
@@ -28,6 +29,7 @@ class DataBook {
     required this.category,
     required this.writer,
     required this.publisher,
+    required this.createdAt,
     required this.manyLikes,
     required this.manyRatings,
     required this.manyChapters,
@@ -43,9 +45,10 @@ class DataBook {
     String? language,
     String? gender,
     String? rangeAge,
-    String? category,
+    dynamic category,
     String? writer,
     String? publisher,
+    DateTime? createdAt,
     int? manyLikes,
     int? manyRatings,
     int? manyChapters,
@@ -63,6 +66,7 @@ class DataBook {
         category: category ?? this.category,
         writer: writer ?? this.writer,
         publisher: publisher ?? this.publisher,
+        createdAt: createdAt ?? this.createdAt,
         manyLikes: manyLikes ?? this.manyLikes,
         manyRatings: manyRatings ?? this.manyRatings,
         manyChapters: manyChapters ?? this.manyChapters,
@@ -78,9 +82,10 @@ class DataBook {
     language: json["language"],
     gender: json["gender"],
     rangeAge: json["rangeAge"],
-    category: json["category"],
+    category: json["category"] ?? 'Empty',
     writer: json["writer"],
     publisher: json["publisher"],
+    createdAt: DateTime.parse(json["created_at"]),
     manyLikes: json["manyLikes"],
     manyRatings: json["manyRatings"],
     manyChapters: json["manyChapters"],
@@ -99,6 +104,7 @@ class DataBook {
     "category": category,
     "writer": writer,
     "publisher": publisher,
+    "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
     "manyLikes": manyLikes,
     "manyRatings": manyRatings,
     "manyChapters": manyChapters,

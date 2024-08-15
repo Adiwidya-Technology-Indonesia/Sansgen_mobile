@@ -14,7 +14,7 @@ import '../model/register/model_response_register.dart';
 class AuthProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
 
-  Future authLogin(ModelReqestLogin request) async {
+  Future<ModelResponseLogin> authLogin(ModelReqestLogin request) async {
     try {
       final response = await post(
         KeysApi.login,
@@ -22,8 +22,8 @@ class AuthProvider extends GetConnect {
       );
       if (response.status.hasError) {
         log(response.body.toString(), name: 'login error');
-        // throw Exception('Failed to login');
-        return modelResponseErrorFromJson(response.bodyString!);
+        throw Exception('Failed to login');
+        // return modelResponseErrorFromJson(response.bodyString!);
       } else {
         return modelResponseLoginFromJson(response.bodyString!);
       }
