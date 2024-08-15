@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sansgen/provider/like.dart';
 
 import '../../../../provider/comment.dart';
 import '../controllers/detail_controller.dart';
@@ -9,9 +10,13 @@ class DetailBinding extends Bindings {
     Get.lazyPut<CommentProvider>(
       () => CommentProvider(),
     );
+    Get.lazyPut<LikeProvider>(
+      () => LikeProvider(),
+    );
     Get.lazyPut<DetailController>(
       () => DetailController(
         commentProvider: Get.find(),
+        likeProvider: Get.find(),
       ),
     );
   }

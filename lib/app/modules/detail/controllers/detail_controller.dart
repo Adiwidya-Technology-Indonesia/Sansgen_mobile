@@ -6,16 +6,22 @@ import 'package:get/get.dart';
 import 'package:sansgen/app/data/books.dart';
 import 'package:sansgen/model/comment/request_post.dart';
 import 'package:sansgen/provider/comment.dart';
+import 'package:sansgen/provider/like.dart';
 
 import '../../../../model/book/book.dart';
 import '../../../../model/comment/user_comment.dart';
+import '../../../../model/like/data_like.dart';
 import '../component/content_chapter.dart';
 import '../component/content_comment.dart';
 
 class DetailController extends GetxController {
   final CommentProvider commentProvider;
+  final LikeProvider likeProvider;
 
-  DetailController({required this.commentProvider});
+  DetailController({
+    required this.commentProvider,
+    required this.likeProvider,
+  });
 
   late DataBook dataBook;
   final scrollController = ScrollController();
@@ -24,6 +30,7 @@ class DetailController extends GetxController {
   final ratingCurrent = 0.0.obs;
 
   final listComments = <UserComment>[].obs;
+  final listLike = <UserLike>[].obs;
 
   void likeState() => isLike.value = !isLike.value;
 
@@ -128,6 +135,32 @@ class DetailController extends GetxController {
       }
     }).onError((e, st) {
       listComments.value = [];
+    });
+  }
+
+  Future addLike() async {
+    final request = ModelRequestPostComment(comment: commentFormC.text);
+    await likeProvider
+        .postCommentBook(uuidBook: dataBook.uuid, request: request)
+        .then((v) async {
+      await getAllComment();
+      commentFormC.clear();
+    }).onError((e, st) {
+      Get.snackbar('info', 'gagal mengirim like');
+    });
+  }
+
+  Future getAllLike() async {
+    await likeProvider.fetchLikeByBookId(dataBook.uuid).then((v) {
+      if (v.data == []) {
+        log('comment kosong', name: 'data like');
+        listLike.value = [];
+      } else {
+        log('comment ada', name: 'data like');
+        listLike.value = v.data;
+      }
+    }).onError((e, st) {
+      listLike.value = [];
     });
   }
 }

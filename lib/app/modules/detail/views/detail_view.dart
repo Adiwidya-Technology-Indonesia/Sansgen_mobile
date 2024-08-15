@@ -38,14 +38,30 @@ class DetailView extends GetView<DetailController> {
             like: controller.dataBook.manyLikes,
             comment: controller.dataBook.manyComments,
             sinopsis: controller.dataBook.synopsis,
-            listChapter: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            // listChapter: ,
           ),
         ],
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ElevatedButton(
+          onPressed: () =>
+              controller.tapViewBottomSheetChapter([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], context),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: const Text('Baca'),
+        ),
       ),
     );
   }
 
-  Column contentDetail({
+  Widget contentDetail({
     required BuildContext context,
     required String title,
     required String image,
@@ -53,107 +69,95 @@ class DetailView extends GetView<DetailController> {
     required int like,
     required int comment,
     required String sinopsis,
-    required List<int> listChapter,
+    // required List<int> listChapter,
   }) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        const Gap(80),
-        imageBook(
-          image: image,
-          width: 180,
-          height: 240,
-          radius: 8,
-        ),
-        const Gap(20),
-        Text(title, style: context.titleLargeBold),
-        const Gap(8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: controller.tapViewRating,
-                child: RatingBar.builder(
-                  initialRating: rating,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  ignoreGestures: true,
-                  itemSize: 28,
-                  itemCount: 5,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 1),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Gap(80),
+          imageBook(
+            image: image,
+            width: 180,
+            height: 240,
+            radius: 8,
+          ),
+          const Gap(20),
+          Text(title, style: context.titleLargeBold),
+          const Gap(8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: controller.tapViewRating,
+                  child: RatingBar.builder(
+                    initialRating: rating,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    ignoreGestures: true,
+                    itemSize: 28,
+                    itemCount: 5,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 1),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      log(rating.toString(), name: 'rating');
+                    },
                   ),
-                  onRatingUpdate: (rating) {
-                    log(rating.toString(), name: 'rating');
-                  },
                 ),
-              ),
-              Text(rating.toString()),
-              const Spacer(),
-              GestureDetector(
-                onTap: () => controller.tapViewBottomSheetComment(
-                  controller.listComments,
-                  context,
-                ),
-                child: SvgPicture.asset(
-                  KeysAssetsIcons.komen,
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              Obx(
-                () => Text(controller.listComments.length.toString()),
-              ),
-              const Gap(10),
-              Obx(
-                () => GestureDetector(
-                  onTap: controller.likeState,
+                Text(rating.toString()),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () => controller.tapViewBottomSheetComment(
+                    controller.listComments,
+                    context,
+                  ),
                   child: SvgPicture.asset(
-                    KeysAssetsIcons.like,
-                    width: 20,
-                    height: 20,
-                    colorFilter: controller.isLike.isFalse
-                        ? null
-                        : ColorFilter.mode(
-                            context.colorScheme.surface,
-                            BlendMode.srcATop,
-                          ),
+                    KeysAssetsIcons.komen,
+                    width: 24,
+                    height: 24,
                   ),
                 ),
-              ),
-              Text(like.toString()),
-            ],
-          ),
-        ),
-        const Gap(12),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            sinopsis,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        const Spacer(),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ElevatedButton(
-            onPressed: () =>
-                controller.tapViewBottomSheetChapter(listChapter, context),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+                Obx(
+                  () => Text(controller.listComments.length.toString()),
+                ),
+                const Gap(10),
+                Obx(
+                  () => GestureDetector(
+                    onTap: controller.addLike,
+                    child: SvgPicture.asset(
+                      KeysAssetsIcons.like,
+                      width: 20,
+                      height: 20,
+                      colorFilter: controller.isLike.isFalse
+                          ? null
+                          : ColorFilter.mode(
+                              context.colorScheme.surface,
+                              BlendMode.srcATop,
+                            ),
+                    ),
+                  ),
+                ),
+                Obx(
+                  () => Text(controller.listLike.length.toString()),
+                ),
+              ],
             ),
-            child: const Text('Baca'),
           ),
-        ),
-        const Gap(20),
-      ],
+          const Gap(12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              sinopsis,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

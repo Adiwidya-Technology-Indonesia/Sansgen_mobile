@@ -71,8 +71,7 @@ Container contentBottomSheetComment({
                                   ],
                                 ),
                               ),
-                              subtitle: const Text(
-                                  "DateTimeServices.getDateTime(e.time)"),
+                              subtitle: Text(e.timeElapsed.toString()),
                             ),
                           )
                           .toList(),
