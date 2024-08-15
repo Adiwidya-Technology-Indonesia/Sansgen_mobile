@@ -32,6 +32,22 @@ class PrefService {
     await _prefs?.remove(KeysPref.userToken);
   }
 
+
+  /// for getting string from box
+  String? get getUserUuid {
+    return _prefs?.getString(KeysPref.userUuid);
+  }
+
+  /// for storingtCustomer to app
+  Future<void> putUserUuid(String token) async {
+    await _prefs?.setString(KeysPref.userUuid, token);
+  }
+
+  Future<void> removeUserUuid() async {
+    await _prefs?.remove(KeysPref.userUuid);
+  }
+
+
   /// for clearing all data in box
   Future<void> clearAllData() async {
     await _prefs?.clear();

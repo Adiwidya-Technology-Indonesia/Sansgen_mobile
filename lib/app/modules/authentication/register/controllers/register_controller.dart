@@ -20,7 +20,8 @@ class RegisterController extends GetxController {
   final passwordController = TextEditingController();
   final komfirPassController = TextEditingController();
 
-  final isObscure = true.obs;
+  final isObscurePass = true.obs;
+  final isObscureComPass = true.obs;
 
   @override
   void onClose() {
@@ -31,7 +32,8 @@ class RegisterController extends GetxController {
     super.onClose();
   }
 
-  void stateObscure() => isObscure.value = !isObscure.value;
+  void stateObscurePass() => isObscurePass.value = !isObscurePass.value;
+  void stateObscureComPass() => isObscureComPass.value = !isObscureComPass.value;
 
   void backToLogin() {
     Get.back();

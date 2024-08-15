@@ -117,7 +117,8 @@ class LoginController extends GetxController {
         EasyLoading.dismiss();
         formClear();
         EasyLoading.showSuccess('Login berhasil');
-        await prefService.putUserToken(v.data.token);
+        await prefService.putUserToken(v.data.token!);
+        await prefService.putUserUuid(v.data.uuid!);
         Timer.periodic(const Duration(seconds: 3), (t) {
           log(prefService.getUserToken ?? 'kosong', name: 'setToken');
           t.cancel();

@@ -4,5 +4,6 @@ import 'package:flutter/material.dart';
 class KeysPref {
   const KeysPref._();
   static const String userToken = 'userToken';
+  static const String userUuid = 'userUuid';
   static const String firstInstall = 'firstInstall';
 }
