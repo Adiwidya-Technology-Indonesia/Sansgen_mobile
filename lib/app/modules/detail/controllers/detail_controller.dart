@@ -72,7 +72,7 @@ class DetailController extends GetxController {
   }
 
   void tapViewBottomSheetComment(
-    List<UserComment> listComment,
+    RxList<UserComment> listComment,
     BuildContext ctx,
   ) {
     // listComment.sort((a, b) => a.time.compareTo(b.time));
@@ -100,11 +100,15 @@ class DetailController extends GetxController {
   Future addRating() async {}
 
   Future addComment() async {
+    if (commentFormC.text == '') {
+      return Get.snackbar('info', 'tulis komentar anda');
+    }
     final request = ModelRequestPostComment(comment: commentFormC.text);
     await commentProvider
         .postCommentBook(uuidBook: dataBook.uuid, request: request)
-        .then((v) {
-      getAllComment();
+        .then((v) async {
+      await getAllComment();
+      commentFormC.clear();
     }).onError((e, st) {
       Get.snackbar('info', 'gagal mengirim komentar');
     });
