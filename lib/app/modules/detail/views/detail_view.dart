@@ -47,8 +47,8 @@ class DetailView extends GetView<DetailController> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
-          onPressed: () =>
-              controller.tapViewBottomSheetChapter([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], context),
+          onPressed: () => controller.tapViewBottomSheetChapter(
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], context),
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 40),
             shape: RoundedRectangleBorder(
@@ -86,47 +86,45 @@ class DetailView extends GetView<DetailController> {
         const Gap(8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: controller.tapViewRating,
-                child: RatingBar.builder(
-                  initialRating: rating,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  ignoreGestures: true,
-                  itemSize: 28,
-                  itemCount: 5,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 1),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
+          child: Obx(
+            () => Row(
+              children: [
+                GestureDetector(
+                  onTap: controller.tapViewRating,
+                  child: RatingBar.builder(
+                    initialRating: controller.averageRate.value,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    ignoreGestures: true,
+                    itemSize: 28,
+                    itemCount: 5,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 1),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      log(rating.toString(), name: 'rating');
+                    },
                   ),
-                  onRatingUpdate: (rating) {
-                    log(rating.toString(), name: 'rating');
-                  },
                 ),
-              ),
-              Text(rating.toString()),
-              const Spacer(),
-              GestureDetector(
-                onTap: () => controller.tapViewBottomSheetComment(
-                  controller.listComments,
-                  context,
+                Text(controller.averageRate.value.toString()),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () => controller.tapViewBottomSheetComment(
+                    controller.listComments,
+                    context,
+                  ),
+                  child: SvgPicture.asset(
+                    KeysAssetsIcons.komen,
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
-                child: SvgPicture.asset(
-                  KeysAssetsIcons.komen,
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              Obx(
-                () => Text(controller.listComments.length.toString()),
-              ),
-              const Gap(10),
-              Obx(
-                () => GestureDetector(
+                Text(controller.listComments.length.toString()),
+                const Gap(10),
+                GestureDetector(
                   onTap: controller.addLike,
                   child: SvgPicture.asset(
                     KeysAssetsIcons.like,
@@ -140,11 +138,9 @@ class DetailView extends GetView<DetailController> {
                           ),
                   ),
                 ),
-              ),
-              Obx(
-                () => Text(controller.listLike.length.toString()),
-              ),
-            ],
+                Text(controller.listLike.length.toString()),
+              ],
+            ),
           ),
         ),
         const Gap(12),

@@ -11,16 +11,19 @@ import 'package:sansgen/provider/like.dart';
 import '../../../../model/book/book.dart';
 import '../../../../model/comment/user_comment.dart';
 import '../../../../model/like/data_like.dart';
+import '../../../../provider/rate.dart';
 import '../component/content_chapter.dart';
 import '../component/content_comment.dart';
 
 class DetailController extends GetxController {
   final CommentProvider commentProvider;
   final LikeProvider likeProvider;
+  final RatingProvider ratingProvider;
 
   DetailController({
     required this.commentProvider,
     required this.likeProvider,
+    required this.ratingProvider,
   });
 
   late DataBook dataBook;
@@ -31,6 +34,7 @@ class DetailController extends GetxController {
 
   final listComments = <UserComment>[].obs;
   final listLike = <UserLike>[].obs;
+  final averageRate = 0.0.obs;
 
   void likeState() => isLike.value = !isLike.value;
 
@@ -40,6 +44,7 @@ class DetailController extends GetxController {
       dataBook = Get.arguments;
       await getAllComment();
       await getAllLike();
+      await getAllRating();
       log(dataBook.uuid, name: 'idBook');
     } else {
       dataBook = book;
@@ -155,6 +160,20 @@ class DetailController extends GetxController {
       } else {
         log('comment ada', name: 'data like');
         listLike.value = v.data;
+      }
+    }).onError((e, st) {
+      listLike.value = [];
+    });
+  }
+
+  Future getAllRating() async {
+    await ratingProvider.fetchRatingByBookId(uuidBook: dataBook.uuid).then((v) {
+      if (v.data.ratings == []) {
+        log('comment kosong', name: 'data like');
+        averageRate.value = 0.0;
+      } else {
+        log('comment ada', name: 'data like');
+        averageRate.value = v.data.averageRate;
       }
     }).onError((e, st) {
       listLike.value = [];
