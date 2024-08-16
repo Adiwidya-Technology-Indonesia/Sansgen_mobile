@@ -9,6 +9,7 @@ class KeysApi {
   static const String books = '/books';
   static const String comments = '/comments';
   static const String likes = '/likes';
+  static const String rate = '/rate';
   static const String chapters = '/chapters';
   static const String bestForYou = '/bestforyou';
   static const String populer = '/popular';

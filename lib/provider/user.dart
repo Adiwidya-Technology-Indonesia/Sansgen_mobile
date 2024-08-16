@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/model/user/response_user.dart';
+import 'package:sansgen/model/user/response_get.dart';
 
 import '../keys/api.dart';
 import '../keys/env.dart';

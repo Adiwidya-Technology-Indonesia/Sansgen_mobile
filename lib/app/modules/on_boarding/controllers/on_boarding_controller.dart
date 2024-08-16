@@ -18,6 +18,7 @@ import '../views/preferences.dart';
 
 class OnBoardingController extends GetxController {
   final UserProvider userProvider;
+
   OnBoardingController({required this.userProvider});
 
   final PageController pageController = PageController();
@@ -33,14 +34,14 @@ class OnBoardingController extends GetxController {
   final listAge = ['18-24', '25-34', '35-44', '45-54', '55+'];
 
   final listPreferences = <ModelPreferenci>[
-    ModelPreferenci(title: 'Bisnis', isSelected: false.obs),
-    ModelPreferenci(title: 'Pengembangan diri', isSelected: false.obs),
-    ModelPreferenci(title: 'Marketing & Sales', isSelected: false.obs),
-    ModelPreferenci(title: 'Sains', isSelected: false.obs),
-    ModelPreferenci(title: 'Filsafat', isSelected: false.obs),
-    ModelPreferenci(title: 'Agama', isSelected: false.obs),
-    ModelPreferenci(title: 'Politik', isSelected: false.obs),
-    ModelPreferenci(title: 'Sejarah', isSelected: false.obs),
+    ModelPreferenci(id: 1, title: 'Bisnis', isSelected: false.obs),
+    ModelPreferenci(id: 2, title: 'Pengembangan diri', isSelected: false.obs),
+    ModelPreferenci(id: 3, title: 'Marketing & Sales', isSelected: false.obs),
+    ModelPreferenci(id: 4, title: 'Sains', isSelected: false.obs),
+    ModelPreferenci(id: 5, title: 'Filsafat', isSelected: false.obs),
+    ModelPreferenci(id: 6, title: 'Agama', isSelected: false.obs),
+    ModelPreferenci(id: 7, title: 'Politik', isSelected: false.obs),
+    ModelPreferenci(id: 8, title: 'Sejarah', isSelected: false.obs),
   ];
 
   final Rx<String> selectedGender = ''.obs;
@@ -97,10 +98,14 @@ class OnBoardingController extends GetxController {
 
   void simpan() {
     try {
+      final listIdCategory = listPreferences
+          .where((v) => v.isSelected.value == true)
+          .map((e) => e.id)
+          .toList();
       final request = ModelRequestPatchUser(
         gender: selectedGender.value,
         rangeAge: selectedAge.value,
-        category: listPreferences.first.title,
+        idCategory: listIdCategory,
       );
       userProvider.patchUserCurrent(request).then((v) async {
         EasyLoading.dismiss();

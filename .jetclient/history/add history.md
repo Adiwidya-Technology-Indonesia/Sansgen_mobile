@@ -1,7 +1,7 @@
 ```toml
 name = 'add history'
 method = 'POST'
-url = 'https://teknodipani.com/api/history/books/0034d983-aad7-4db8-929d-739989e1419d/chapters/2'
+url = 'https://teknodipani.com/api/history/books/5d08382b-cfc0-4ffa-b27a-9b9c94dee237/chapters/2'
 sortWeight = 2000000
 id = 'bfcd92b8-b3b7-4cb8-85e2-5120bc03d9bb'
 
@@ -10,7 +10,7 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = '9510c38d-42bb-442c-bbf5-5755fe4dd6a5'
+token = '85b06f5e-274b-4623-bc9d-3168fe6de855'
 
 [body]
 type = 'JSON'
@@ -18,7 +18,7 @@ raw = '''
 // users/current
 {
   "isFinished" : false,
-  "lastChapter" : 1,
+  "lastChapter" : 0,
 //  "listChapter" : []
 }'''
 ```

@@ -35,10 +35,11 @@ class DetailController extends GetxController {
   void likeState() => isLike.value = !isLike.value;
 
   @override
-  void onInit() {
+  void onInit() async {
     if (Get.arguments != null) {
       dataBook = Get.arguments;
-      getAllComment();
+      await getAllComment();
+      await getAllLike();
       log(dataBook.uuid, name: 'idBook');
     } else {
       dataBook = book;
@@ -139,18 +140,15 @@ class DetailController extends GetxController {
   }
 
   Future addLike() async {
-    await likeProvider
-        .postLikeBook(uuidBook: dataBook.uuid)
-        .then((v) async {
-      await getAllComment();
-      commentFormC.clear();
+    await likeProvider.postLikeBook(uuidBook: dataBook.uuid).then((v) async {
+      await getAllLike();
     }).onError((e, st) {
       Get.snackbar('info', 'gagal mengirim like');
     });
   }
 
   Future getAllLike() async {
-    await likeProvider.fetchLikeByBookId(dataBook.uuid).then((v) {
+    await likeProvider.fetchLikeByBookId(uuidBook: dataBook.uuid).then((v) {
       if (v.data == []) {
         log('comment kosong', name: 'data like');
         listLike.value = [];

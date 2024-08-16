@@ -9,6 +9,9 @@ id = '79e4537b-b7fb-4b46-aee1-a4cac0da5ccc'
 key = 'Content-Type'
 value = 'application/json'
 
+[auth.bearer]
+token = '85b06f5e-274b-4623-bc9d-3168fe6de855'
+
 [body]
 type = 'JSON'
 raw = '''
@@ -16,6 +19,6 @@ raw = '''
 {
   "isFinished" : true,
   "lastChapter" : 1,
-//    "listChapter" : []
+//  "listChapter" : []
 }'''
 ```

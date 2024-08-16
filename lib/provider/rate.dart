@@ -8,16 +8,18 @@ import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/error.dart';
 import '../model/like/response_like.dart';
+import '../model/ratings/request_post.dart';
+import '../model/ratings/response_get.dart';
 import '../services/prefs.dart';
 
-class LikeProvider extends GetConnect {
+class RatingProvider extends GetConnect {
   // baseUrl
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelResponseGetLike> fetchLikeByBookId({required String uuidBook}) async {
+  Future<ModelResponseGetRate> fetchLikeByBookId({required String uuidBook}) async {
     try {
-      final String urlLikeByBookId = '${KeysApi.books}/$uuidBook${KeysApi.likes}';
+      final String urlLikeByBookId = '${KeysApi.books}/$uuidBook${KeysApi.rate}';
       log(urlLikeByBookId, name: "data url LikeByBookId");
       final response = await get(urlLikeByBookId);
       if (response.status.hasError) {
@@ -26,7 +28,7 @@ class LikeProvider extends GetConnect {
         // return modelResponseErrorFromJson(response.bodyString!);
       } else {
         // log(response.bodyString!, name: 'data response');
-        return modelResponseGetLikeFromJson(response.bodyString!);
+        return modelResponseGetRateFromJson(response.bodyString!);
       }
     } catch (error) {
       log(error.toString(), name: "catch error");
@@ -34,14 +36,14 @@ class LikeProvider extends GetConnect {
     }
   }
 
-  Future postLikeBook({required String uuidBook}) async {
+  Future postLikeBook({required String uuidBook, required ModelRequestRateBook request,}) async {
     try {
       final String urlPostLikeBook =
-          '${KeysApi.books}/$uuidBook${KeysApi.likes}';
-      log(urlPostLikeBook, name: "data url Product");
+          '${KeysApi.books}/$uuidBook${KeysApi.rate}';
+      log(urlPostLikeBook, name: "data url post rate");
       final response = await post(
         urlPostLikeBook,
-        {},
+        request.toJson(),
       );
       if (response.status.hasError) {
         log(response.bodyString.toString(), name: 'data error');

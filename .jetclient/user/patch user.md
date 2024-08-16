@@ -10,15 +10,18 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = 'a977f970-fb3b-4161-9ddf-6a61d17690b5'
+token = '85b06f5e-274b-4623-bc9d-3168fe6de855'
 
 [body]
 type = 'JSON'
 raw = '''
 {
-//  "gender": "Laki-laki",
+//  "name": "rahmat",
+//  "image" : "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
+//  "dateOfBirth": null,
 //  "rangeAge": "18-24",
-//  "category": "Pengembangan diri"
-  "image" : "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
+//  "gender": "Laki-laki",
+//  "hobby": null,
+  "idCategory":[1,2,3,4,5,6,7,8]
 }'''
 ```

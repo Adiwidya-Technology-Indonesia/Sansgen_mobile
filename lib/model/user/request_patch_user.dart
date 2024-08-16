@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final modelRequestPatchUser = modelRequestPatchUserFromJson(jsonString);
-
 import 'dart:convert';
 
 ModelRequestPatchUser modelRequestPatchUserFromJson(String str) => ModelRequestPatchUser.fromJson(json.decode(str));
@@ -9,66 +5,60 @@ ModelRequestPatchUser modelRequestPatchUserFromJson(String str) => ModelRequestP
 String modelRequestPatchUserToJson(ModelRequestPatchUser data) => json.encode(data.toJson());
 
 class ModelRequestPatchUser {
-  final String? email;
   final String? name;
   final String? image;
-  final DateTime? dateOfBirth;
+  final dynamic dateOfBirth;
   final String? rangeAge;
   final String? gender;
-  final String? category;
-  final String? hobby;
+  final dynamic hobby;
+  final List<int>? idCategory;
 
   ModelRequestPatchUser({
-    this.email,
     this.name,
     this.image,
     this.dateOfBirth,
     this.rangeAge,
     this.gender,
-    this.category,
     this.hobby,
+    this.idCategory,
   });
 
   ModelRequestPatchUser copyWith({
-    String? email,
     String? name,
     String? image,
-    DateTime? dateOfBirth,
+    dynamic dateOfBirth,
     String? rangeAge,
     String? gender,
-    String? category,
-    String? hobby,
+    dynamic hobby,
+    List<int>? idCategory,
   }) =>
       ModelRequestPatchUser(
-        email: email ?? this.email,
         name: name ?? this.name,
         image: image ?? this.image,
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
         rangeAge: rangeAge ?? this.rangeAge,
         gender: gender ?? this.gender,
-        category: category ?? this.category,
         hobby: hobby ?? this.hobby,
+        idCategory: idCategory ?? this.idCategory,
       );
 
   factory ModelRequestPatchUser.fromJson(Map<String, dynamic> json) => ModelRequestPatchUser(
-    email: json["email"],
     name: json["name"],
     image: json["image"],
     dateOfBirth: json["dateOfBirth"],
     rangeAge: json["rangeAge"],
     gender: json["gender"],
-    category: json["category"],
     hobby: json["hobby"],
+    idCategory: json["idCategory"] == null ? [] : List<int>.from(json["idCategory"]!.map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "email": email,
     "name": name,
     "image": image,
     "dateOfBirth": dateOfBirth,
     "rangeAge": rangeAge,
     "gender": gender,
-    "category": category,
     "hobby": hobby,
+    "idCategory": idCategory == null ? [] : List<dynamic>.from(idCategory!.map((x) => x)),
   };
 }
