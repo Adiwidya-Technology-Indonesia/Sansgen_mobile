@@ -21,7 +21,7 @@ class HomeView extends GetView<HomeController> {
       (state) => Scaffold(
         appBar: appBarCustom(
           context: context,
-          name: state!.profil.name!,
+          name: state!.profil.name,
           image: state.profil.image,
         ),
         body: ListView(

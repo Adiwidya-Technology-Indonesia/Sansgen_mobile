@@ -7,7 +7,6 @@ import 'package:sansgen/model/comment/response_post.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/error.dart';
-import '../model/like/response_like.dart';
 import '../model/ratings/request_post.dart';
 import '../model/ratings/response_get.dart';
 import '../services/prefs.dart';
@@ -17,11 +16,11 @@ class RatingProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelResponseGetRate> fetchLikeByBookId({required String uuidBook}) async {
+  Future<ModelResponseGetRate> fetchRatingByBookId({required String uuidBook}) async {
     try {
-      final String urlLikeByBookId = '${KeysApi.books}/$uuidBook${KeysApi.rate}';
-      log(urlLikeByBookId, name: "data url LikeByBookId");
-      final response = await get(urlLikeByBookId);
+      final String urlRatingByBookId = '${KeysApi.books}/$uuidBook${KeysApi.rate}';
+      log(urlRatingByBookId, name: "data url RatingByBookId");
+      final response = await get(urlRatingByBookId);
       if (response.status.hasError) {
         log(response.toString(), name: 'response error');
         return Future.error(response);
@@ -36,13 +35,13 @@ class RatingProvider extends GetConnect {
     }
   }
 
-  Future postLikeBook({required String uuidBook, required ModelRequestRateBook request,}) async {
+  Future postRatingBook({required String uuidBook, required ModelRequestRateBook request,}) async {
     try {
-      final String urlPostLikeBook =
+      final String urlPostRatingBook =
           '${KeysApi.books}/$uuidBook${KeysApi.rate}';
-      log(urlPostLikeBook, name: "data url post rate");
+      log(urlPostRatingBook, name: "data url post rate");
       final response = await post(
-        urlPostLikeBook,
+        urlPostRatingBook,
         request.toJson(),
       );
       if (response.status.hasError) {
