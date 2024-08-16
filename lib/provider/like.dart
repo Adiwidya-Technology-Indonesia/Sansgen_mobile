@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/model/comment/request_post.dart';
 import 'package:sansgen/model/comment/response_post.dart';
 
 import '../keys/api.dart';
@@ -18,7 +17,7 @@ class LikeProvider extends GetConnect {
 
   Future<ModelResponseGetLike> fetchLikeByBookId(String id) async {
     try {
-      final String urlLikeByBookId = '${KeysApi.books}/$id/${KeysApi.likes}';
+      final String urlLikeByBookId = '${KeysApi.books}/$id${KeysApi.likes}';
       log(urlLikeByBookId, name: "data url LikeByBookId");
       final response = await get(urlLikeByBookId);
       if (response.status.hasError) {
@@ -35,16 +34,15 @@ class LikeProvider extends GetConnect {
     }
   }
 
-  Future postCommentBook({
+  Future postLikeBook({
     required String uuidBook,
-    required ModelRequestPostComment request,
   }) async {
     try {
-      final String urlPostCommentBook = '${KeysApi.books}/$uuidBook/comments';
-      log(urlPostCommentBook, name: "data url Product");
+      final String urlPostLikeBook = '${KeysApi.books}/$uuidBook${KeysApi.likes}';
+      log(urlPostLikeBook, name: "data url Product");
       final response = await post(
-        urlPostCommentBook,
-        request.toJson(),
+        urlPostLikeBook,
+        {},
       );
       if (response.status.hasError) {
         log(response.statusText.toString(), name: 'data error');

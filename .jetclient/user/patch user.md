@@ -1,7 +1,7 @@
 ```toml
 name = 'patch user'
 method = 'PATCH'
-url = 'https://testimoni.contohdomain.com/api/users/current'
+url = 'https://teknodipani.com/api/users/current'
 sortWeight = 2000000
 id = '9fb69c1d-e569-4011-8398-4a593d374e4c'
 
@@ -10,7 +10,7 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = '81bc451c-dcaf-476c-8e0b-079521e6e604'
+token = 'a977f970-fb3b-4161-9ddf-6a61d17690b5'
 
 [body]
 type = 'JSON'

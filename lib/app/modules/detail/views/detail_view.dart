@@ -23,24 +23,28 @@ class DetailView extends GetView<DetailController> {
         backgroundColor: context.colorScheme.primary,
         title: const Text('DetailView'),
       ),
-      body: Stack(
-        alignment: AlignmentDirectional.topCenter,
-        children: [
-          contentHeader(
-            context: context,
-            image: controller.dataBook.image,
+      body: Expanded(
+        child: SingleChildScrollView(
+          child: Stack(
+            alignment: AlignmentDirectional.topCenter,
+            children: [
+              contentHeader(
+                context: context,
+                image: controller.dataBook.image,
+              ),
+              contentDetail(
+                context: context,
+                title: controller.dataBook.title,
+                image: controller.dataBook.image,
+                rating: controller.dataBook.manyRatings.toDouble(),
+                like: controller.dataBook.manyLikes,
+                comment: controller.dataBook.manyComments,
+                sinopsis: controller.dataBook.synopsis,
+                // listChapter: ,
+              ),
+            ],
           ),
-          contentDetail(
-            context: context,
-            title: controller.dataBook.title,
-            image: controller.dataBook.image,
-            rating: controller.dataBook.manyRatings.toDouble(),
-            like: controller.dataBook.manyLikes,
-            comment: controller.dataBook.manyComments,
-            sinopsis: controller.dataBook.synopsis,
-            // listChapter: ,
-          ),
-        ],
+        ),
       ),
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -71,92 +75,94 @@ class DetailView extends GetView<DetailController> {
     required String sinopsis,
     // required List<int> listChapter,
   }) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          const Gap(80),
-          imageBook(
-            image: image,
-            width: 180,
-            height: 240,
-            radius: 8,
-          ),
-          const Gap(20),
-          Text(title, style: context.titleLargeBold),
-          const Gap(8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: controller.tapViewRating,
-                  child: RatingBar.builder(
-                    initialRating: rating,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    ignoreGestures: true,
-                    itemSize: 28,
-                    itemCount: 5,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 1),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.amber,
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            const Gap(80),
+            imageBook(
+              image: image,
+              width: 180,
+              height: 240,
+              radius: 8,
+            ),
+            const Gap(20),
+            Text(title, style: context.titleLargeBold),
+            const Gap(8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: controller.tapViewRating,
+                    child: RatingBar.builder(
+                      initialRating: rating,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      ignoreGestures: true,
+                      itemSize: 28,
+                      itemCount: 5,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 1),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        log(rating.toString(), name: 'rating');
+                      },
                     ),
-                    onRatingUpdate: (rating) {
-                      log(rating.toString(), name: 'rating');
-                    },
                   ),
-                ),
-                Text(rating.toString()),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () => controller.tapViewBottomSheetComment(
-                    controller.listComments,
-                    context,
-                  ),
-                  child: SvgPicture.asset(
-                    KeysAssetsIcons.komen,
-                    width: 24,
-                    height: 24,
-                  ),
-                ),
-                Obx(
-                  () => Text(controller.listComments.length.toString()),
-                ),
-                const Gap(10),
-                Obx(
-                  () => GestureDetector(
-                    onTap: controller.addLike,
+                  Text(rating.toString()),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () => controller.tapViewBottomSheetComment(
+                      controller.listComments,
+                      context,
+                    ),
                     child: SvgPicture.asset(
-                      KeysAssetsIcons.like,
-                      width: 20,
-                      height: 20,
-                      colorFilter: controller.isLike.isFalse
-                          ? null
-                          : ColorFilter.mode(
-                              context.colorScheme.surface,
-                              BlendMode.srcATop,
-                            ),
+                      KeysAssetsIcons.komen,
+                      width: 24,
+                      height: 24,
                     ),
                   ),
-                ),
-                Obx(
-                  () => Text(controller.listLike.length.toString()),
-                ),
-              ],
+                  Obx(
+                    () => Text(controller.listComments.length.toString()),
+                  ),
+                  const Gap(10),
+                  Obx(
+                    () => GestureDetector(
+                      onTap: controller.addLike,
+                      child: SvgPicture.asset(
+                        KeysAssetsIcons.like,
+                        width: 20,
+                        height: 20,
+                        colorFilter: controller.isLike.isFalse
+                            ? null
+                            : ColorFilter.mode(
+                                context.colorScheme.surface,
+                                BlendMode.srcATop,
+                              ),
+                      ),
+                    ),
+                  ),
+                  Obx(
+                    () => Text(controller.listLike.length.toString()),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Gap(12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              sinopsis,
-              textAlign: TextAlign.center,
+            const Gap(12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                sinopsis,
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -139,9 +139,8 @@ class DetailController extends GetxController {
   }
 
   Future addLike() async {
-    final request = ModelRequestPostComment(comment: commentFormC.text);
     await likeProvider
-        .postCommentBook(uuidBook: dataBook.uuid, request: request)
+        .postLikeBook(uuidBook: dataBook.uuid)
         .then((v) async {
       await getAllComment();
       commentFormC.clear();

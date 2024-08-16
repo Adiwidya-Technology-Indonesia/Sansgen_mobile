@@ -1,7 +1,7 @@
 ```toml
 name = 'login'
 method = 'POST'
-url = 'https://testimoni.contohdomain.com/api/login'
+url = 'https://teknodipani.com/api/login'
 sortWeight = 2000000
 id = 'eed8822b-5a91-4dc3-a0d2-28ebd60ad577'
 
@@ -13,7 +13,7 @@ value = 'application/json'
 type = 'JSON'
 raw = '''
 {
-  "email": "rahmat999ht@gmail.com",
-  "password": "Rah999ht"
+  "email": "rahmat99@gmail.com",
+  "password": "R@h999ht"
 }'''
 ```

@@ -1,24 +1,18 @@
 ```toml
 name = 'add like'
 method = 'POST'
-url = 'http://192.168.1.6/api/books/0afb9a35-352c-4c88-b781-66a2f7e98356/likes'
+url = 'https://teknodipani.com/api/books/0034d983-aad7-4db8-929d-739989e1419d/likes'
 sortWeight = 1000000
 id = '66f15234-0e89-4b6f-bf91-cf0801dc7e98'
 
 [[headers]]
 key = 'Content-Type'
-value = 'multipart/form-data'
+value = 'application/json'
 
 [auth.bearer]
-token = '81bc451c-dcaf-476c-8e0b-079521e6e604'
+token = '39f980b2-4b58-4bbc-8914-64cfe336ebb5'
 
-[[body.formData]]
-key = 'idBook'
-value = '2'
-disabled = true
-
-[[body.formData]]
-key = 'idUser'
-value = '2'
-disabled = true
+[body]
+type = 'JSON'
+raw = '{}'
 ```
