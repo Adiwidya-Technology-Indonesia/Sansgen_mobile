@@ -46,7 +46,7 @@ GestureDetector cardBook({
                     borderRadius: BorderRadius.circular(0),
                   ),
                   child: Text(
-                    book.category!,
+                    book.category,
                     style: context.labelSmall.copyWith(
                       color: context.colorScheme.primary,
                       height: 1,

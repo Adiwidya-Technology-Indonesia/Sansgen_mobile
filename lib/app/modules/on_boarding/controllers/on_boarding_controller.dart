@@ -102,22 +102,25 @@ class OnBoardingController extends GetxController {
           .where((v) => v.isSelected.value == true)
           .map((e) => e.id)
           .toList();
+      log(listIdCategory.toString(), name: "data list preferenci is selected");
       final request = ModelRequestPatchUser(
         gender: selectedGender.value,
         rangeAge: selectedAge.value,
         idCategory: listIdCategory,
       );
+      log(request.toJson().toString(), name: "request patch user");
+
       userProvider.patchUserCurrent(request).then((v) async {
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Update Data berhasil');
-        log(v.toJson().toString());
+        log(v.toString().toString());
         Get.offAllNamed(Routes.DASHBOARD);
         return;
       }).onError((e, st) {
         EasyLoading.dismiss();
         final errors = Errors(message: ['$e', '$st']);
         final dataError = ModelResponseError(errors: errors);
-        log(dataError.toJson().toString());
+        log(dataError.toJson().toString(), name: "onError");
         EasyLoading.showError('Update Data Gagal');
         return;
       });

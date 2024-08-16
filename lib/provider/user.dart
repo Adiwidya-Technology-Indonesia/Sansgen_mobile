@@ -18,10 +18,10 @@ class UserProvider extends GetConnect {
   Future<ModelResponseUser> fetchUserId() async {
     try {
       const String urlUserId = KeysApi.users + KeysApi.current;
-      log(urlUserId, name: "data url Product");
+      log(urlUserId, name: "data url User Id");
       final response = await get(urlUserId);
       if (response.status.hasError) {
-        log(response.toString(), name: 'response error');
+        log(response.bodyString.toString(), name: 'response urlUserId error');
         return Future.error(response);
         // return modelResponseErrorFromJson(response.bodyString!);
       } else {
@@ -29,7 +29,7 @@ class UserProvider extends GetConnect {
         return modelResponseUserFromJson(response.bodyString!);
       }
     } catch (error) {
-      log(error.toString(), name: "data error");
+      log(error.toString(), name: "catch user error");
       rethrow;
     }
   }
@@ -37,13 +37,13 @@ class UserProvider extends GetConnect {
   Future patchUserCurrent(ModelRequestPatchUser request) async {
     try {
       const String patchUserCurrent = KeysApi.users + KeysApi.current;
-      log(patchUserCurrent, name: "data url Product");
+      log(patchUserCurrent, name: "data url patchUserCurrent");
       final response = await patch(
         patchUserCurrent,
         request.toJson(),
       );
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error');
+        log(response.toString(), name: 'data error patchUserCurrent');
         // return Future.error(response);
         return modelResponseErrorFromJson(response.bodyString!);
       } else {
@@ -51,7 +51,7 @@ class UserProvider extends GetConnect {
         return modelResponseUserFromJson(response.bodyString!);
       }
     } catch (error) {
-      log(error.toString(), name: "data error");
+      log(error.toString(), name: "catch error patchUserCurrent");
       rethrow;
     }
   }

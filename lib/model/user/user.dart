@@ -1,13 +1,12 @@
-
 class ModelUser {
   final int id;
   final String uuid;
   final String email;
   final String name;
-  final String image;
+  final dynamic image;
   final dynamic dateOfBirth;
-  final String rangeAge;
-  final String gender;
+  final String? rangeAge;
+  final String? gender;
   final dynamic hobby;
   final List<String> categories;
   final String token;
@@ -54,30 +53,39 @@ class ModelUser {
       );
 
   factory ModelUser.fromJson(Map<String, dynamic> json) => ModelUser(
-    id: json["id"],
-    uuid: json["uuid"],
-    email: json["email"],
-    name: json["name"],
-    image: json["image"],
-    dateOfBirth: json["dateOfBirth"],
-    rangeAge: json["rangeAge"],
-    gender: json["gender"],
-    hobby: json["hobby"],
-    categories: List<String>.from(json["categories"].map((x) => x)),
-    token: json["token"],
-  );
+        id: json["id"] ?? 0,
+        uuid: json["uuid"],
+        email: json["email"],
+        name: json["name"],
+        image: json["image"] ?? "kosong",
+        dateOfBirth: json["dateOfBirth"] ?? "kosong",
+        rangeAge: json["rangeAge"] ?? "kosong",
+        gender: json["gender"] ?? "kosong",
+        hobby: json["hobby"] ?? "kosong",
+        categories: json["categories"] == null
+            ? []
+            : List<String>.from(
+                (json["categories"] as List<dynamic>).map(
+                  (x) {
+                    x as String;
+                    return x;
+                  },
+                ).toList(),
+              ),
+        token: json["token"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "email": email,
-    "name": name,
-    "image": image,
-    "dateOfBirth": dateOfBirth,
-    "rangeAge": rangeAge,
-    "gender": gender,
-    "hobby": hobby,
-    "categories": List<dynamic>.from(categories.map((x) => x)),
-    "token": token,
-  };
+        "id": id,
+        "uuid": uuid,
+        "email": email,
+        "name": name,
+        "image": image,
+        "dateOfBirth": dateOfBirth,
+        "rangeAge": rangeAge,
+        "gender": gender,
+        "hobby": hobby,
+        "categories": List<dynamic>.from(categories.map((x) => x)),
+        "token": token,
+      };
 }

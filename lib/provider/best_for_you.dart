@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/book/books_all.dart';
-import '../model/empty.dart';
+// import '../model/empty.dart';
 import '../services/prefs.dart';
 
 class BestForYouProvider extends GetConnect {
@@ -14,23 +14,23 @@ class BestForYouProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future fetchBooksBestForYou() async {
+  Future<ModelBooks> fetchBooksBestForYou() async {
     try {
-      const String urlBestForYou = KeysApi.books + KeysApi.bestForYou;
+      const String urlBestForYou = KeysApi.bestForYou;
       log(urlBestForYou, name: "data url bestForYou");
       final response = await get(urlBestForYou);
       log(response.statusCode.toString(), name: 'response status code');
       if (response.status.hasError) {
         log(response.bodyString.toString(), name: 'response bestForYou error');
         return Future.error(response);
-      } else if (response.statusCode == 404) {
-        return modelDataEmptyFromJson(response.bodyString!);
+      // } else if (response.statusCode == 404) {
+      //   return modelDataEmptyFromJson(response.bodyString!);
       } else {
-        log(response.bodyString!, name: 'data response');
+        log(response.bodyString!, name: 'data response bestForYou');
         return booksModelFromJson(response.bodyString!);
       }
     } catch (error) {
-      log(error.toString(), name: "data error");
+      log(error.toString(), name: "catch error bestForYou");
       rethrow;
     }
   }

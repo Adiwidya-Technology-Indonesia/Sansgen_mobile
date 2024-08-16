@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:sansgen/model/user/response_get.dart';
 
 import 'package:sansgen/provider/book.dart';
 
@@ -36,81 +37,57 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
 
   Future<void> fetchDataHome() async {
     try {
+      late List<DataBook> populerList;
+      late ModelUser infoUser;
+      late List<DataBook> bestForYouList;
+
       final resultPopuler = await bookProvider.fetchBooksPopuler();
       final resultInfoUser = await userProvider.fetchUserId();
-      // final resultBestForYou = await bestForYouProvider.fetchBooksBestForYou();
+      final resultBestForYou = await bestForYouProvider.fetchBooksBestForYou();
 
       if (resultPopuler.status != true) {
-        change(null, status: RxStatus.empty());
+        populerList = [];
         log('Permintaan buku populer gagal', name: 'data kosong');
-        return; // Keluar dari fungsi jika permintaan buku populer gagal
+      } else {
+        populerList = resultPopuler.data;
+        log(populerList.map((e) => e.toJson()).toString(), name: 'populerList');
       }
-
-      // if (resultBestForYou.status == null) {
-      //   change(null, status: RxStatus.empty());
-      //   log('Permintaan buku terbaik untuk Anda gagal', name: 'data kosong');
-      //   return; // Keluar dari fungsi jika permintaan buku terbaik untuk Anda gagal
-      // }
-
-      if (resultInfoUser.data == ModelUser.fromJson({})) {
-        change(null, status: RxStatus.empty());
+      if (resultBestForYou.status != true) {
+        bestForYouList = [];
+        log('Permintaan buku terbaik untuk Anda gagal', name: 'data kosong');
+      } else {
+        bestForYouList = resultBestForYou.data;
+        log(
+          bestForYouList.map((e) => e.toJson()).toString(),
+          name: 'bestForYouList',
+        );
+      }
+      if (resultInfoUser.data == null) {
+        infoUser = ModelUser.fromJson({});
         log('Permintaan informasi pengguna gagal', name: 'data kosong');
-        return; // Keluar dari fungsi jika permintaan informasi pengguna gagal
+      } else {
+        infoUser = resultInfoUser.data!;
+        log(infoUser.toJson().toString(), name: 'infoUser');
       }
-
-      // Semua permintaan berhasil
-      final populerList = resultPopuler.data;
-      final infoUser = resultInfoUser;
-      // final bestForYouList = resultBestForYou.data;
-
+      if (populerList.isEmpty &&
+          bestForYouList.isEmpty &&
+          infoUser == ModelUser.fromJson({})) {
+        change(null, status: RxStatus.empty());
+        log('Semua data kosong', name: 'data kosong');
+      }
       change(
         ModelDataHome(
           populer: populerList,
-          bestForYou: [],
-          profil: infoUser.data,
+          bestForYou: bestForYouList,
+          profil: infoUser,
           focus: {},
         ),
         status: RxStatus.success(),
       );
     } catch (err) {
-      log(err.toString(), name: 'pesan error');
+      log(err.toString(), name: 'pesan error home controller');
       change(null, status: RxStatus.error(err.toString()));
     }
-    // change(null, status: RxStatus.loading()); // Menampilkan status loading
-    // try {
-    //   final resultPopuler = await bookProvider.fetchBooksPopuler();
-    //   final resultInfoUser = await userProvider.fetchUserId();
-    //   final resultBestForYou = await bestForYouProvider.fetchBooksBestForYou();
-    //   // log(resultPopuler.toJson().toString(), name: 'resultPopuler.status');
-    //   // log(resultInfoUser.toJson().toString(), name: 'resultInfoUser.status');
-    //   // log(resultBestForYou.toJson().toString(), name: 'resultBestForYou.status');
-    //
-    //   if (resultPopuler.status == true &&
-    //       resultBestForYou.status == true &&
-    //       resultInfoUser.data != ModelUser.fromJson({})) {
-    //     final populerList = resultPopuler.data;
-    //     final infoUser = resultInfoUser as ModelResponseUser;
-    //     final bestForYouList = resultBestForYou.data;
-    //
-    //     // log(populerList.toString(), name: 'populerList');
-    //     // log(infoUser.toString(), name: 'infoUser');
-    //     // log(bestForYouList.toString(), name: 'bestForYouList');
-    //     change(
-    //       ModelDataHome(
-    //         populer: populerList,
-    //         bestForYou: bestForYouList,
-    //         profil: infoUser.data, // Ganti dengan data profil yang sesuai
-    //         focus: {}, // Ganti dengandata focus yang sesuai
-    //       ),
-    //       status: RxStatus.success(),
-    //     );
-    //   } else {
-    //     change(null, status: RxStatus.empty());
-    //     log('Salah satu atau kedua permintaan gagal', name: 'data kosong');
-    //   }
-    // } catch (err) {
-    //   change(null, status: RxStatus.error(err.toString()));
-    // }
   }
 }
 

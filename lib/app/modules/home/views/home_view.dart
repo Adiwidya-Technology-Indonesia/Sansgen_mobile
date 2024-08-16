@@ -22,7 +22,7 @@ class HomeView extends GetView<HomeController> {
         appBar: appBarCustom(
           context: context,
           name: state!.profil.name,
-          image: state.profil.image,
+          image: state.profil.image ?? "",
         ),
         body: ListView(
           children: [

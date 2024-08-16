@@ -36,14 +36,14 @@ class BookProvider extends GetConnect {
       log(urlBooks, name: "data url Books");
       final response = await get(urlBooks);
       if (response.status.hasError) {
-        log(response.toString(), name: 'response error');
+        log(response.toString(), name: 'response error fetchBooks');
         return Future.error(response);
       } else {
         // log(response.bodyString!, name: 'data response');
         return booksModelFromJson(response.bodyString!);
       }
     } catch (error) {
-      log(error.toString(), name: "data error");
+      log(error.toString(), name: "catch error fetchBooks");
       rethrow;
     }
   }
@@ -54,21 +54,20 @@ class BookProvider extends GetConnect {
       log(urlBooksPopuler, name: "data url book populer");
       final response = await get(urlBooksPopuler);
       if (response.status.hasError) {
-        log(response.toString(), name: 'response error');
+        log(response.toString(), name: 'response error populer');
         return Future.error(response);
       } else {
         // log(response.bodyString!, name: 'data response');
         return booksModelFromJson(response.bodyString!);
       }
     } catch (error) {
-      log(error.toString(), name: "data error");
+      log(error.toString(), name: "catch error populer");
       rethrow;
     }
   }
 
   @override
   void onInit() {
-
     httpClient.baseUrl = baseURL;
     super.onInit();
   }
