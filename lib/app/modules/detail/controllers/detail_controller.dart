@@ -8,6 +8,7 @@ import 'package:sansgen/model/comment/request_post.dart';
 import 'package:sansgen/model/ratings/request_post.dart';
 import 'package:sansgen/provider/comment.dart';
 import 'package:sansgen/provider/like.dart';
+import 'package:sansgen/services/prefs.dart';
 
 import '../../../../model/book/book.dart';
 import '../../../../model/comment/user_comment.dart';
@@ -27,17 +28,19 @@ class DetailController extends GetxController {
     required this.ratingProvider,
   });
 
+  final prefServices = PrefService();
+
   late DataBook dataBook;
   final scrollController = ScrollController();
   final commentFormC = TextEditingController();
-  final isLike = false.obs;
+  final isLikeState = false.obs;
   final ratingCurrent = 0.0.obs;
 
   final listComments = <UserComment>[].obs;
   final listLike = <UserLike>[].obs;
   final averageRate = 0.0.obs;
 
-  void likeState() => isLike.value = !isLike.value;
+  // void likeState() => isLike.value = !isLike.value;
 
   @override
   void onInit() async {
@@ -46,6 +49,7 @@ class DetailController extends GetxController {
       await getAllComment();
       await getAllLike();
       await getAllRating();
+      await prefServices.prefInit();
       log(dataBook.uuid, name: 'idBook');
     } else {
       dataBook = book;
@@ -179,6 +183,13 @@ class DetailController extends GetxController {
       } else {
         log('comment ada', name: 'data like');
         listLike.value = v.data;
+        final idUser = prefServices.getUserUuid;
+        final isLike = v.data.where((e) => e.user.uuid == idUser);
+        if (isLike.isEmpty) {
+          isLikeState.value = false;
+        } else {
+          isLikeState.value = true;
+        }
       }
     }).onError((e, st) {
       listLike.value = [];

@@ -130,7 +130,7 @@ class DetailView extends GetView<DetailController> {
                     KeysAssetsIcons.like,
                     width: 20,
                     height: 20,
-                    colorFilter: controller.isLike.isFalse
+                    colorFilter: controller.isLikeState.isFalse
                         ? null
                         : ColorFilter.mode(
                             context.colorScheme.surface,
