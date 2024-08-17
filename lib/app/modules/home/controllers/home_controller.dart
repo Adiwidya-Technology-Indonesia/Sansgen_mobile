@@ -1,11 +1,12 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:sansgen/model/user/response_get.dart';
 
 import 'package:sansgen/provider/book.dart';
+import 'package:sansgen/provider/focus.dart';
 
 import '../../../../model/book/book.dart';
+import '../../../../model/focus/data_focus.dart';
 import '../../../../model/user/user.dart';
 import '../../../../provider/best_for_you.dart';
 import '../../../../provider/user.dart';
@@ -13,13 +14,16 @@ import '../../../routes/app_pages.dart';
 
 class HomeController extends GetxController with StateMixin<ModelDataHome> {
   final BookProvider bookProvider;
-  final UserProvider userProvider;
   final BestForYouProvider bestForYouProvider;
+  final UserProvider userProvider;
+  final FocusProvider focusProvider;
+
 
   HomeController({
     required this.bookProvider,
-    required this.userProvider,
     required this.bestForYouProvider,
+    required this.userProvider,
+    required this.focusProvider,
   });
 
   // final List<DataBook> bookList = List.generate(7, (index) => book);
@@ -38,12 +42,14 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
   Future<void> fetchDataHome() async {
     try {
       late List<DataBook> populerList;
-      late ModelUser infoUser;
       late List<DataBook> bestForYouList;
+      late ModelUser infoUser;
+      late DataFocus infoFocus;
 
       final resultPopuler = await bookProvider.fetchBooksPopuler();
       final resultInfoUser = await userProvider.fetchUserId();
       final resultBestForYou = await bestForYouProvider.fetchBooksBestForYou();
+      final resultFocus = await focusProvider.fetchFocusByUser();
 
       if (resultPopuler.status != true) {
         populerList = [];
@@ -69,6 +75,11 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
         infoUser = resultInfoUser.data!;
         log(infoUser.toJson().toString(), name: 'infoUser');
       }
+      if(resultFocus.data == null){
+        infoFocus = DataFocus.fromJson({});
+      } else {
+        infoFocus = resultFocus.data!;
+      }
       if (populerList.isEmpty &&
           bestForYouList.isEmpty &&
           infoUser == ModelUser.fromJson({})) {
@@ -80,7 +91,7 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
           populer: populerList,
           bestForYou: bestForYouList,
           profil: infoUser,
-          focus: {},
+          focus: infoFocus,
         ),
         status: RxStatus.success(),
       );
@@ -95,7 +106,7 @@ class ModelDataHome {
   final List<DataBook> populer;
   final List<DataBook> bestForYou;
   final ModelUser profil;
-  final Object focus;
+  final DataFocus focus;
 
   ModelDataHome({
     required this.populer,

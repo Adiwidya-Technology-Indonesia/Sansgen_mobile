@@ -6,5 +6,5 @@ sortWeight = 1000000
 id = '81502e53-4014-4fbf-99c8-d1c08a7c5cc7'
 
 [auth.bearer]
-token = '85b06f5e-274b-4623-bc9d-3168fe6de855'
+token = '36e44165-6ebe-4ccd-bc9f-fe012a3f5fee'
 ```

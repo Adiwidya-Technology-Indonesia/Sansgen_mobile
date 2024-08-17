@@ -24,7 +24,9 @@ class ModelResponseUser {
 
   factory ModelResponseUser.fromJson(Map<String, dynamic> json) =>
       ModelResponseUser(
-        data: json["data"] == null ? ModelUser.fromJson({}) : ModelUser.fromJson(json["data"]),
+        data: json["data"] == null
+            ? ModelUser.fromJson({})
+            : ModelUser.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
