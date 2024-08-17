@@ -16,7 +16,7 @@ token = '36e44165-6ebe-4ccd-bc9f-fe012a3f5fee'
 type = 'JSON'
 raw = '''
 {
-  "readings" : "00:30:00",
+  "readings" : "01:30:00",
   "manyBooks" : 10,
   "focus" : "00:30:00"
 }

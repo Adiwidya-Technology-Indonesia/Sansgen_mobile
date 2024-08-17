@@ -5,6 +5,7 @@ import 'package:sansgen/app/modules/profil/controllers/profil_controller.dart';
 import 'package:sansgen/app/modules/riwayat/controllers/riwayat_controller.dart';
 import 'package:sansgen/provider/book.dart';
 import 'package:sansgen/provider/focus.dart';
+import 'package:sansgen/provider/history.dart';
 import 'package:sansgen/provider/user.dart';
 
 import '../../../../provider/best_for_you.dart';
@@ -15,6 +16,9 @@ class DashboardBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<BookProvider>(
       () => BookProvider(),
+    );
+    Get.lazyPut<HistoryProvider>(
+          () => HistoryProvider(),
     );
     Get.lazyPut<UserProvider>(
       () => UserProvider(),
@@ -42,7 +46,10 @@ class DashboardBinding extends Bindings {
       ),
     );
     Get.lazyPut<RiwayatController>(
-      () => RiwayatController(),
+      () => RiwayatController(
+        historyProvider: Get.find(),
+        bookProvider: Get.find(),
+      ),
     );
     Get.lazyPut<ProfilController>(
       () => ProfilController(),

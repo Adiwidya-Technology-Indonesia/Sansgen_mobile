@@ -7,6 +7,7 @@ import '../controllers/riwayat_controller.dart';
 
 class RiwayatView extends GetView<RiwayatController> {
   const RiwayatView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -46,6 +47,7 @@ class RiwayatView extends GetView<RiwayatController> {
           ),
         ),
         body: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
           children: controller.listPage,
         ),
       ),
