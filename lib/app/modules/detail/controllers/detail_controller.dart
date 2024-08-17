@@ -3,17 +3,19 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/app/data/books.dart';
-import 'package:sansgen/model/comment/request_post.dart';
-import 'package:sansgen/model/ratings/request_post.dart';
-import 'package:sansgen/provider/comment.dart';
-import 'package:sansgen/provider/like.dart';
-import 'package:sansgen/services/prefs.dart';
+import 'package:sansgen/model/chapter/response_get.dart';
 
+import '../../../../app/data/books.dart';
+import '../../../../model/comment/request_post.dart';
+import '../../../../model/ratings/request_post.dart';
+import '../../../../provider/comment.dart';
+import '../../../../provider/like.dart';
+import '../../../../services/prefs.dart';
 import '../../../../model/book/book.dart';
 import '../../../../model/comment/user_comment.dart';
 import '../../../../model/like/data_like.dart';
 import '../../../../provider/rate.dart';
+import '../../../../provider/chapter.dart';
 import '../component/content_chapter.dart';
 import '../component/content_comment.dart';
 
@@ -21,11 +23,13 @@ class DetailController extends GetxController {
   final CommentProvider commentProvider;
   final LikeProvider likeProvider;
   final RatingProvider ratingProvider;
+  final ChapterProvider chapterProvider;
 
   DetailController({
     required this.commentProvider,
     required this.likeProvider,
     required this.ratingProvider,
+    required this.chapterProvider,
   });
 
   final prefServices = PrefService();
@@ -38,9 +42,10 @@ class DetailController extends GetxController {
 
   final listComments = <UserComment>[].obs;
   final listLike = <UserLike>[].obs;
+  final listChapter = <DataChapter>[].obs;
   final averageRate = 0.0.obs;
 
-  // void likeState() => isLike.value = !isLike.value;
+// void likeState() => isLike.value = !isLike.value;
 
   @override
   void onInit() async {
@@ -49,6 +54,7 @@ class DetailController extends GetxController {
       await getAllComment();
       await getAllLike();
       await getAllRating();
+      await getAllChapter();
       await prefServices.prefInit();
       log(dataBook.uuid, name: 'idBook');
     } else {
@@ -57,7 +63,7 @@ class DetailController extends GetxController {
     super.onInit();
   }
 
-  void tapViewBottomSheetChapter(List<int> listChapter, BuildContext context) {
+  void tapViewBottomSheetChapter(List<DataChapter> listChapter, BuildContext context) {
     Get.bottomSheet(
       contentBottomSheetChapter(context, listChapter, dataBook),
     );
@@ -204,6 +210,20 @@ class DetailController extends GetxController {
       } else {
         log('comment ada', name: 'data like');
         averageRate.value = v.data.averageRate;
+      }
+    }).onError((e, st) {
+      listLike.value = [];
+    });
+  }
+
+  Future getAllChapter() async {
+    await chapterProvider.fetchChapter(dataBook.uuid).then((v) {
+      if (v.status == false) {
+        log('comment kosong', name: 'data listChapter');
+        listChapter.value = [];
+      } else {
+        log('comment ada', name: 'data listChapter');
+        listChapter.value = v.data;
       }
     }).onError((e, st) {
       listLike.value = [];

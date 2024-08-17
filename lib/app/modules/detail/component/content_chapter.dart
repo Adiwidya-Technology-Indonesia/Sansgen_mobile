@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../model/chapter/response_get.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../model/book/book.dart';
 import 'card_chapter.dart';
 
 Container contentBottomSheetChapter(
     BuildContext context,
-    List<int> listChapter,
+    List<DataChapter> listChapter,
     DataBook dataBook,
     ) {
   return Container(

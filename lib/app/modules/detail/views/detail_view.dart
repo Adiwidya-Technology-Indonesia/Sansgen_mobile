@@ -48,7 +48,7 @@ class DetailView extends GetView<DetailController> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
           onPressed: () => controller.tapViewBottomSheetChapter(
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], context),
+              controller.listChapter.value, context),
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 40),
             shape: RoundedRectangleBorder(
