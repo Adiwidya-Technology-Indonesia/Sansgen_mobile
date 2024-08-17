@@ -1,24 +1,24 @@
 import 'dart:convert';
 
-ModelRequestRateBook modelRequestRateBookFromJson(String str) => ModelRequestRateBook.fromJson(json.decode(str));
+ModelRequestPostRate modelRequestPostRateFromJson(String str) => ModelRequestPostRate.fromJson(json.decode(str));
 
-String modelRequestRateBookToJson(ModelRequestRateBook data) => json.encode(data.toJson());
+String modelRequestPostRateToJson(ModelRequestPostRate data) => json.encode(data.toJson());
 
-class ModelRequestRateBook {
+class ModelRequestPostRate {
   final double rate;
 
-  ModelRequestRateBook({
+  ModelRequestPostRate({
     required this.rate,
   });
 
-  ModelRequestRateBook copyWith({
+  ModelRequestPostRate copyWith({
     double? rate,
   }) =>
-      ModelRequestRateBook(
+      ModelRequestPostRate(
         rate: rate ?? this.rate,
       );
 
-  factory ModelRequestRateBook.fromJson(Map<String, dynamic> json) => ModelRequestRateBook(
+  factory ModelRequestPostRate.fromJson(Map<String, dynamic> json) => ModelRequestPostRate(
     rate: json["rate"]?.toDouble(),
   );
 

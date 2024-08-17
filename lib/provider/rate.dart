@@ -35,7 +35,7 @@ class RatingProvider extends GetConnect {
     }
   }
 
-  Future postRatingBook({required String uuidBook, required ModelRequestRateBook request,}) async {
+  Future postRatingBook({required String uuidBook, required ModelRequestPostRate request,}) async {
     try {
       final String urlPostRatingBook =
           '${KeysApi.books}/$uuidBook${KeysApi.rate}';

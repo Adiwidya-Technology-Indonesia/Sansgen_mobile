@@ -10,7 +10,7 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = '692880c6-e29d-426b-b8cd-793e1083484e'
+token = 'c947ee77-0868-4753-a917-7cebb0faf219'
 
 [body]
 type = 'JSON'

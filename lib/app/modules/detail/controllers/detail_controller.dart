@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/app/data/books.dart';
 import 'package:sansgen/model/comment/request_post.dart';
+import 'package:sansgen/model/ratings/request_post.dart';
 import 'package:sansgen/provider/comment.dart';
 import 'package:sansgen/provider/like.dart';
 
@@ -61,7 +62,13 @@ class DetailController extends GetxController {
   void tapViewRating() {
     Get.defaultDialog(
       title: 'Berikan rating anda',
-      onConfirm: () {},
+      onConfirm: () async {
+        await addRating(ratingCurrent.value);
+        Get.back();
+      },
+      textConfirm: 'Berikan',
+      onCancel: Get.back,
+      textCancel: 'Batal',
       content: Obx(
         () => RatingBar.builder(
           initialRating: ratingCurrent.value,
@@ -110,7 +117,19 @@ class DetailController extends GetxController {
     });
   }
 
-  Future addRating() async {}
+  Future addRating(double rate) async {
+    final request = ModelRequestPostRate(rate: rate);
+    await ratingProvider
+        .postRatingBook(
+      uuidBook: dataBook.uuid,
+      request: request,
+    )
+        .then((v) async {
+      await getAllRating();
+    }).onError((e, st) {
+      Get.snackbar('info', 'Anda sudah memberikan Rating');
+    });
+  }
 
   Future addComment() async {
     if (commentFormC.text == '') {
