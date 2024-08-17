@@ -55,7 +55,6 @@ class UserProvider extends GetConnect {
       rethrow;
     }
   }
-
   @override
   void onInit() {
     _prefService.prefInit();

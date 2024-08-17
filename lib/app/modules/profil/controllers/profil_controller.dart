@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
 import '../../../routes/app_pages.dart';
@@ -20,4 +21,10 @@ class ProfilController extends GetxController {
             onPressed: () => Get.back(), child:Text('Cancel', style: context.titleMedium
                   .copyWith(color: context.colorScheme.surface),)));
   }
+}
+class ModelDataProfil{
+  final ModelUser profil;
+  ModelDataProfil({
+    required this.profil
+  });
 }

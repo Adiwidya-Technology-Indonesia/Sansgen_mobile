@@ -37,10 +37,10 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
                   txt:
                       'Jangan lewatkan kesempatan untuk meningkatkan pengalaman membaca Anda! Berlangganan Akun Premium hanya dengan membayar \$12 di aplikasi baca buku Sansgen sekarang dan rasakan sendiri perbedaannya.',
                   context: context),
-              Gap(180),
+              const Gap(180),
               ElevatedButton(
                 onPressed: () {
-                  controller.Payment(context);
+                  controller.payment(context);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -79,8 +79,8 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
     );
   }
 
-  Container txtMain({required String txt, required BuildContext context}) {
-    return Container(
+  SizedBox txtMain({required String txt, required BuildContext context}) {
+    return SizedBox(
       width: double.infinity,
       child: Column(
         children: [
@@ -93,8 +93,8 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
     );
   }
 
-  Container txtDot({required String txtDot, required BuildContext context}) {
-    return Container(
+  SizedBox txtDot({required String txtDot, required BuildContext context}) {
+    return SizedBox(
         width: double.infinity,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

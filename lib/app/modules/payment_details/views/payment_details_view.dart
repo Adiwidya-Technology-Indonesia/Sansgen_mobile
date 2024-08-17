@@ -20,7 +20,7 @@ class PaymentDetailsView extends GetView<PaymentDetailsController> {
       ),
       body: Stack(alignment: Alignment.topCenter, children: [
         receipt(context),
-        CircleAvatar(
+        const CircleAvatar(
           radius: 42,
           child: Icon(
             Icons.check,
@@ -32,11 +32,11 @@ class PaymentDetailsView extends GetView<PaymentDetailsController> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Gap(30),
+          const Gap(30),
           Container(
             width: 300,
             height: 50,
-            child: ElevatedButton(onPressed: () {}, child: Text('Selesai')),
+            child: ElevatedButton(onPressed: () {}, child: const Text('Selesai')),
           ),
         ],
       ),
@@ -47,9 +47,9 @@ class PaymentDetailsView extends GetView<PaymentDetailsController> {
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: SKSTicketView(
-        backgroundPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+        backgroundPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         backgroundColor: Colors.transparent,
-        contentPadding: EdgeInsets.symmetric(vertical: 100, horizontal: 0),
+        contentPadding: const EdgeInsets.symmetric(vertical: 100, horizontal: 0),
         drawArc: false,
         triangleAxis: Axis.vertical,
         borderRadius: 6,
@@ -68,19 +68,19 @@ class PaymentDetailsView extends GetView<PaymentDetailsController> {
                   '\$12.00',
                   style: context.titleLargeBold,
                 ),
-                Gap(20),
+                const Gap(20),
                txtReceipt(context: context, label: 'Date', content: '12 May 2024'),
-                Gap(20),
+                const Gap(20),
                txtReceipt(context: context, label: 'Details', content: 'Premium Sansgen'),
-                Gap(20),
+                const Gap(20),
                txtReceipt(context: context, label: 'Reference num', content: 'A06453826151'),
-                Gap(20),
+                const Gap(20),
                txtReceipt(context: context, label: 'Account', content: 'Rahmat Hidayat'),
-               Gap(100),
+               const Gap(100),
                txtReceipt(context: context, label: 'Total Payment', content: '\$11.00'),
-               Gap(20),
+               const Gap(20),
                txtReceipt(context: context, label: 'Admin fee', content: '\$1.00'),
-               Gap(20),
+               const Gap(20),
                Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

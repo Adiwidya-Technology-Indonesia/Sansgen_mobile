@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/payment_direct.dart';
 
 class PaymentBuyController extends GetxController {
-  void Payment(BuildContext context) {
+  void payment(BuildContext context) {
     Get.bottomSheet(
       ignoreSafeArea: false,
       isScrollControlled: true,
       Container(
-        height: 700,
+        height: 450,
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -17,7 +19,7 @@ class PaymentBuyController extends GetxController {
         ),
         child: Column(
           children: [
-            Gap(10),
+            const Gap(10),
             Container(
               width: 80,
               height: 5,
@@ -25,33 +27,35 @@ class PaymentBuyController extends GetxController {
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(10)),
             ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Total',
-                          style: context.titleLargeBold,
-                        ),
-                        Text('Rp100.000',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
-                      ],
-                    ),
-                    Gap(10),
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: context.colorScheme.secondary,
-                    ),
-                    Gap(20),
-                    Text('Pilih Metode Pembayaran',style: context.titleLargeBold.copyWith(color: context.colorScheme.secondary),)
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total',
+                        style: context.titleLargeBold,
+                      ),
+                      const Text('Rp100.000',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
+                    ],
+                  ),
+                  const Gap(10),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: context.colorScheme.secondary,
+                  ),
+                  const Gap(20),
+                  Text('Pilih Metode Pembayaran',style: context.titleLargeBold.copyWith(color: context.colorScheme.secondary),),
+                  const Gap(20),
+                  paymentDirect(img: 'assets/images/Dana.png'),
+                  const Gap(20),
+                  paymentDirect(img: 'assets/images/Gopay.png'),
+                ],
               ),
             )
           ],

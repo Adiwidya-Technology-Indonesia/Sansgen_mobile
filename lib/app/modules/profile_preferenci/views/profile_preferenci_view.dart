@@ -69,22 +69,26 @@ class ProfilePreferenciView extends GetView<ProfilePreferenciController> {
               ),
             ),
             Gap(450),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                minimumSize: const Size(350, 50),
-              ),
-              child: Text(
-                'Simpan',
-                style: context.titleMedium
-                    .copyWith(color: context.colorScheme.primary),
-              ),
-            )
           ],
+        ),),
+       resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: ElevatedButton(
+          onPressed:(){controller.simpan();},
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            minimumSize: const Size(double.infinity, 50),
+          ),
+          child: Text(
+            'Simpan',
+            style: context.titleMedium
+                .copyWith(color: context.colorScheme.primary),
+          ),
         ),
       ),
-    );
+        );
   }
 }
