@@ -92,7 +92,7 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
           profil: infoUser,
           focus: infoFocus,
         ),
-        status: RxStatus.error(''),
+        status: RxStatus.success(),
       );
     } catch (err) {
       log(err.toString(), name: 'pesan error home controller');
