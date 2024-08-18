@@ -33,7 +33,7 @@ class ProfileUpdateController extends GetxController {
   void onInit() {
     if (Get.arguments != null) {
       user = Get.arguments;
-      nameController.text = user.name ?? 'Nama';
+      nameController.text = user.name;
       jkelController.text = user.gender ?? 'Jenis kelamin';
       tglLahirController.text = user.dateOfBirth;
     } else {

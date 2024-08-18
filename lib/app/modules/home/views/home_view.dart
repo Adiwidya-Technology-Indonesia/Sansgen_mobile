@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/utils/ext_string.dart';
 import 'package:sansgen/widgets/book_empty.dart';
 
 import '../../../../state/empty.dart';
@@ -21,8 +22,11 @@ class HomeView extends GetView<HomeController> {
       (state) => Scaffold(
         appBar: appBarCustom(
           context: context,
-          name: state!.profil.name!,
-          image: state.profil.image,
+          name: state!.profil.name,
+          image: state.profil.image ?? "",
+          reading: state.focus.readings,
+          books: state.focus.manyBooks,
+          focus: state.focus.focus,
         ),
         body: ListView(
           children: [
@@ -208,6 +212,9 @@ class HomeView extends GetView<HomeController> {
     required BuildContext context,
     required String name,
     required String image,
+    required String reading,
+    required String books,
+    required String focus,
   }) {
     return AppBar(
       backgroundColor: context.colorScheme.primary,
@@ -267,11 +274,21 @@ class HomeView extends GetView<HomeController> {
         ),
         const Gap(20),
       ],
-      bottom: bottomAppBar(context),
+      bottom: bottomAppBar(
+        context: context,
+        reading: reading,
+        books: books,
+        focus: focus,
+      ),
     );
   }
 
-  PreferredSize bottomAppBar(BuildContext context) {
+  PreferredSize bottomAppBar({
+    required BuildContext context,
+    required String reading,
+    required String books,
+    required String focus,
+  }) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(60.0),
       child: Expanded(
@@ -301,9 +318,21 @@ class HomeView extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    dataHeader(context, title: '10m', subTitle: 'Reading'),
-                    dataHeader(context, title: '10', subTitle: 'Books'),
-                    dataHeader(context, title: '10m', subTitle: 'Focus'),
+                    dataHeader(
+                      context,
+                      title: reading.formatDuration(),
+                      subTitle: 'Reading',
+                    ),
+                    dataHeader(
+                      context,
+                      title: books.formatDuration(),
+                      subTitle: 'Books',
+                    ),
+                    dataHeader(
+                      context,
+                      title: focus.formatDuration(),
+                      subTitle: 'Focus',
+                    ),
                   ],
                 ),
               ),

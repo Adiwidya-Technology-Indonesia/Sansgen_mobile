@@ -1,7 +1,7 @@
 ```toml
 name = 'add subcriber'
 method = 'POST'
-url = 'https://testimoni.contohdomain.com/api/subscribe/current'
+url = 'https://teknodipani.com/api/subscribe/current'
 sortWeight = 2000000
 id = 'e26a004a-6793-4a78-beb9-b8316033427a'
 

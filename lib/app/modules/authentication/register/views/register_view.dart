@@ -60,11 +60,11 @@ class RegisterView extends GetView<RegisterController> {
                     controller: controller.passwordController,
                     validator: (v) => controller.validatePassword(v),
                     keyboardType: TextInputType.visiblePassword,
-                    obscureText: controller.isObscure.value,
+                    obscureText: controller.isObscurePass.value,
                     suffixIcon: GestureDetector(
-                      onTap: controller.stateObscure,
+                      onTap: controller.stateObscurePass,
                       child: Icon(
-                        !controller.isObscure.value
+                        !controller.isObscurePass.value
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
                         size: 26,
@@ -82,11 +82,11 @@ class RegisterView extends GetView<RegisterController> {
                     controller: controller.komfirPassController,
                     validator: (v) => controller.validateConfirmPassword(v),
                     keyboardType: TextInputType.visiblePassword,
-                    obscureText: controller.isObscure.value,
+                    obscureText: controller.isObscureComPass.value,
                     suffixIcon: GestureDetector(
-                      onTap: controller.stateObscure,
+                      onTap: controller.stateObscureComPass,
                       child: Icon(
-                        !controller.isObscure.value
+                        !controller.isObscureComPass.value
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
                         size: 26,

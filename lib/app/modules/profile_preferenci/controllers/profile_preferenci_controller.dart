@@ -16,20 +16,20 @@ class ProfilePreferenciController extends GetxController with StateMixin<ModelUs
   final UserProvider userProvider;
   ProfilePreferenciController({required this.userProvider});
   final listPreferences = <ModelPreferenci>[
-    ModelPreferenci(title: 'Bisnis', isSelected: false.obs),
-    ModelPreferenci(title: 'Pengembangan diri', isSelected: false.obs),
-    ModelPreferenci(title: 'Marketing & Sales', isSelected: false.obs),
-    ModelPreferenci(title: 'Sains', isSelected: false.obs),
-    ModelPreferenci(title: 'Filsafat', isSelected: false.obs),
-    ModelPreferenci(title: 'Agama', isSelected: false.obs),
-    ModelPreferenci(title: 'Politik', isSelected: false.obs),
-    ModelPreferenci(title: 'Sejarah', isSelected: false.obs),
+    ModelPreferenci(id: 1, title: 'Bisnis', isSelected: false.obs),
+    ModelPreferenci(id: 2, title: 'Pengembangan diri', isSelected: false.obs),
+    ModelPreferenci(id: 3, title: 'Marketing & Sales', isSelected: false.obs),
+    ModelPreferenci(id: 4, title: 'Sains', isSelected: false.obs),
+    ModelPreferenci(id: 5, title: 'Filsafat', isSelected: false.obs),
+    ModelPreferenci(id: 6, title: 'Agama', isSelected: false.obs),
+    ModelPreferenci(id: 7, title: 'Politik', isSelected: false.obs),
+    ModelPreferenci(id: 8, title: 'Sejarah', isSelected: false.obs),
   ];
   void simpan() {
     try {
-      // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
+      final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).map((v)=>v.id).toList();
       final request = ModelRequestPatchUser(
-        category: listPreferences.first.title
+          idCategory: categorySelesai
       );
       userProvider.patchUserCurrent(request).then((v) async {
         EasyLoading.dismiss();

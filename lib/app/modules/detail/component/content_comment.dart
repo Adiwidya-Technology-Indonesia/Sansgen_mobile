@@ -11,7 +11,7 @@ import 'input_comment.dart';
 
 Container contentBottomSheetComment({
   required BuildContext context,
-  required List<UserComment> listComment,
+  required RxList<UserComment> listComment,
   required ScrollController scrollController,
   required TextEditingController controller,
   required void Function() onTapSend,
@@ -45,35 +45,38 @@ Container contentBottomSheetComment({
         Expanded(
           child: listComment.isEmpty
               ? Center(child: bookEmpty('Komentar masih kosong'))
-              : ListView(
+              : SingleChildScrollView(
                   controller: scrollController,
                   // reverse: true,
-                  children: listComment.reversed
-                      .map(
-                        (e) => ListTile(
-                          leading: const AvatarWidget(
-                            image: '',
-                            height: 40,
-                            width: 40,
-                            heightPlus: 0,
-                          ),
-                          title: RichText(
-                            text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: e.user.name,
-                                    style: context.titleMediumBold),
-                                TextSpan(
-                                    text: '  ${e.comment}',
-                                    style: context.labelLarge),
-                              ],
+                  child: Obx(
+                    () => Column(
+                      children: listComment.reversed
+                          .map(
+                            (e) => ListTile(
+                              leading: const AvatarWidget(
+                                image: '',
+                                height: 40,
+                                width: 40,
+                                heightPlus: 0,
+                              ),
+                              title: RichText(
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: e.user.name,
+                                        style: context.titleMediumBold),
+                                    TextSpan(
+                                        text: '  ${e.comment}',
+                                        style: context.labelLarge),
+                                  ],
+                                ),
+                              ),
+                              subtitle: Text(e.timeElapsed.toString()),
                             ),
-                          ),
-                          subtitle: const Text(
-                              "DateTimeServices.getDateTime(e.time)"),
-                        ),
-                      )
-                      .toList(),
+                          )
+                          .toList(),
+                    ),
+                  ),
                 ),
         ),
         // const Spacer(),

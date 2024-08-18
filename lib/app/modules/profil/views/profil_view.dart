@@ -18,8 +18,7 @@ class ProfilView extends GetView<ProfilController> {
   @override
   Widget build(BuildContext context) {
     return controller.obx((state) =>Scaffold(
-        appBar: appBarCustom(context: context, name: state!.name!, image: state.image),
-       
+        appBar: appBarCustom(context: context, name: state!.name, image: state.image),
         body: ListView(
           children: [
             profilCard(

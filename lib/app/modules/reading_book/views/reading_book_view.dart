@@ -8,7 +8,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hidable/hidable.dart';
 import 'package:sansgen/keys/assets_icons.dart';
+import 'package:sansgen/model/chapter/response_get.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/image_book.dart';
 
 import '../controllers/reading_book_controller.dart';
 
@@ -63,27 +65,12 @@ class ReadingBookView extends GetView<ReadingBookController> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
-              Text(controller.book.synopsis),
+              Obx(
+                () => Text(
+                  controller.currentContentChapter.value,
+                  style: context.titleMedium,
+                ),
+              ),
             ],
           ),
         ),
@@ -106,14 +93,14 @@ class ReadingBookView extends GetView<ReadingBookController> {
       bottomNavigationBar: Hidable(
         controller: controller.scrollController,
         enableOpacityAnimation: true, // optional, defaults to `true`.
-        child: bottomNavBarReading(
-          context: context,
-          chapter: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-              .indexOf(controller.chapter)
-              .toString(),
-          onTapPrevious: () {},
-          onTapNext: () {},
-          onTapDrawerChapter: controller.openDrawer,
+        child: Obx(
+          () => bottomNavBarReading(
+            context: context,
+            chapter: controller.currentChapter.value.toString(),
+            onTapPrevious: controller.previousChapter,
+            onTapNext: controller.nextChapter,
+            onTapDrawerChapter: controller.openDrawer,
+          ),
         ),
       ),
     );
@@ -224,7 +211,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
             color: context.colorScheme.onPrimary,
             height: 1,
           ),
-          ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
+          ...controller.listChapter.map(
             (e) => cardDrawer(e, context),
           ),
         ],
@@ -238,10 +225,11 @@ class ReadingBookView extends GetView<ReadingBookController> {
       child: Column(
         children: [
           const Gap(20),
-          Image.network(
-            width: 140,
+          imageBook(
+            image: controller.book.image,
             height: 200,
-            controller.book.image,
+            width: 140,
+            radius: 8,
           ),
           const Gap(8),
           Text(
@@ -251,7 +239,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              'Total: ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].length} Bab',
+              'Total: ${controller.listChapter.length} Bab',
               style: context.titleSmall,
             ),
           ),
@@ -260,21 +248,21 @@ class ReadingBookView extends GetView<ReadingBookController> {
     );
   }
 
-  Padding cardDrawer(int e, BuildContext context) {
+  Padding cardDrawer(DataChapter e, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 8,
       ),
       child: GestureDetector(
-        onTap: () => controller.setCurrentChapter(e),
+        onTap: () => controller.setCurrentChapter(e.number),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
               width: context.width * 0.4,
               child: Text(
-                'lorem ipsum dnkdnsndsc dcjdk c cjdbcjkd',
+                e.title,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: context.titleMedium.copyWith(
@@ -284,7 +272,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
                 ),
               ),
             ),
-            Text(e.toString(), style: context.titleMediumBold),
+            Text(e.number.toString(), style: context.titleMediumBold),
           ],
         ),
       ),

@@ -1,22 +1,15 @@
-import 'dart:convert';
-
-ModelUser modelUserFromJson(String str) => ModelUser.fromJson(json.decode(str));
-
-String modelUserToJson(ModelUser data) => json.encode(data.toJson());
-
 class ModelUser {
-  final int? id;
-  final String? uuid;
-  final String? email;
-  final String? name;
+  final int id;
+  final String uuid;
+  final String email;
+  final String name;
   final dynamic image;
   final dynamic dateOfBirth;
   final String? rangeAge;
   final String? gender;
-  final String? category;
   final dynamic hobby;
-  final String? token;
-  // final List<dynamic>? history;
+  final List<String> categories;
+  final String token;
 
   ModelUser({
     required this.id,
@@ -27,10 +20,9 @@ class ModelUser {
     required this.dateOfBirth,
     required this.rangeAge,
     required this.gender,
-    required this.category,
     required this.hobby,
+    required this.categories,
     required this.token,
-    // required this.history,
   });
 
   ModelUser copyWith({
@@ -38,14 +30,13 @@ class ModelUser {
     String? uuid,
     String? email,
     String? name,
-    dynamic image,
+    String? image,
     dynamic dateOfBirth,
     String? rangeAge,
     String? gender,
-    String? category,
     dynamic hobby,
+    List<String>? categories,
     String? token,
-    // List<dynamic>? history,
   }) =>
       ModelUser(
         id: id ?? this.id,
@@ -56,27 +47,32 @@ class ModelUser {
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
         rangeAge: rangeAge ?? this.rangeAge,
         gender: gender ?? this.gender,
-        category: category ?? this.category,
         hobby: hobby ?? this.hobby,
+        categories: categories ?? this.categories,
         token: token ?? this.token,
-        // history: history ?? this.history,
       );
 
   factory ModelUser.fromJson(Map<String, dynamic> json) => ModelUser(
         id: json["id"] ?? 0,
-        uuid: json["uuid"] ?? "",
-        email: json["email"] ?? "",
-        name: json["name"] ?? "",
-        image: json["image"] ?? "",
-        dateOfBirth: json["dateOfBirth"] ?? "",
-        rangeAge: json["rangeAge"] ?? "",
-        gender: json["gender"] ?? "",
-        category: json["category"] ?? "",
-        hobby: json["hobby"] ?? "",
-        token: json["token"] ?? "",
-        // history: json["history"] == []
-        //     ? []
-        //     : List<dynamic>.from(json["history"].map((x) => x)),
+        uuid: json["uuid"],
+        email: json["email"],
+        name: json["name"],
+        image: json["image"] ?? "kosong",
+        dateOfBirth: json["dateOfBirth"] ?? "kosong",
+        rangeAge: json["rangeAge"] ?? "kosong",
+        gender: json["gender"] ?? "kosong",
+        hobby: json["hobby"] ?? "kosong",
+        categories: json["categories"] == null
+            ? []
+            : List<String>.from(
+                (json["categories"] as List<dynamic>).map(
+                  (x) {
+                    x as String;
+                    return x;
+                  },
+                ).toList(),
+              ),
+        token: json["token"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -88,9 +84,8 @@ class ModelUser {
         "dateOfBirth": dateOfBirth,
         "rangeAge": rangeAge,
         "gender": gender,
-        "category": category,
         "hobby": hobby,
+        "categories": List<dynamic>.from(categories.map((x) => x)),
         "token": token,
-        // "history": history!.isEmpty ? [] : List<dynamic>.from(history!.map((x) => x)),
       };
 }

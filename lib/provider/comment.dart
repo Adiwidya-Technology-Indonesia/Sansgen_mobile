@@ -42,20 +42,20 @@ class CommentProvider extends GetConnect {
     try {
       final String urlPostCommentBook = '${KeysApi.books}/$uuidBook/comments';
       log(urlPostCommentBook, name: "data url Product");
-      final response = await patch(
+      final response = await post(
         urlPostCommentBook,
         request.toJson(),
       );
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error');
-        // return Future.error(response);
+        log(response.statusText.toString(), name: 'data error');
+        // return Future.error(response.bodyString.toString());
         return modelResponseErrorFromJson(response.bodyString!);
       } else {
-        // log(response.bodyString!, name: 'data response');
+        log(response.bodyString!, name: 'data response');
         return modelResponsePostCommentFromJson(response.bodyString!);
       }
     } catch (error) {
-      log(error.toString(), name: "data error");
+      log(error.toString(), name: "catch error");
       rethrow;
     }
   }
