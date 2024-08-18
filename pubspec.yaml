@@ -32,6 +32,10 @@ dependencies:
   just_audio: ^0.9.37
   just_audio_background: ^0.0.1-beta.13
   audio_video_progress_bar: ^2.0.3
+  rxdart: ^0.28.0
+  just_audio_mpv: ^0.1.7
+  audio_session: ^0.1.21
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

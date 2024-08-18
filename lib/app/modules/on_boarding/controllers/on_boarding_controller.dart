@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/user/request_patch_user.dart';
 import 'package:sansgen/provider/user.dart';
+import 'package:sansgen/services/prefs.dart';
 
 import '../../../../keys/assets_images.dart';
 import '../../../../model/error.dart';
@@ -20,6 +21,8 @@ class OnBoardingController extends GetxController {
   final UserProvider userProvider;
 
   OnBoardingController({required this.userProvider});
+
+  final PrefService prefService = PrefService();
 
   final PageController pageController = PageController();
   final Rx<int> currentPage = 0.obs;
@@ -110,10 +113,11 @@ class OnBoardingController extends GetxController {
       );
       log(request.toJson().toString(), name: "request patch user");
 
-      userProvider.patchUserCurrent(request).then((v) async {
+      userProvider.patchOnBoarding(request).then((v) async {
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Update Data berhasil');
         log(v.toString().toString());
+        await prefService.putOnBoarding(true);
         Get.offAllNamed(Routes.DASHBOARD);
         return;
       }).onError((e, st) {
@@ -168,7 +172,8 @@ class OnBoardingController extends GetxController {
   ];
 
   @override
-  void onInit() {
+  void onInit() async {
+    await prefService.prefInit();
     currentPage.value = 0;
     super.onInit();
   }

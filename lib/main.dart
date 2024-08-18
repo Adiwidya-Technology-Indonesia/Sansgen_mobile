@@ -11,13 +11,17 @@ import 'app/routes/app_pages.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
   PrefService prefService = PrefService();
+
+  await dotenv.load(fileName: ".env");
   await prefService.prefInit();
   String isToken = prefService.getUserToken ?? '';
+  bool isOnBoarding = prefService.getOnBoarding ?? false;
   log(isToken, name: 'token login');
 
-  String initialRoutes = isToken == '' ? Routes.LOGIN : Routes.DASHBOARD;
+  String onBoarding =
+      isOnBoarding == false ? Routes.ON_BOARDING : Routes.DASHBOARD;
+  String initialRoutes = isToken == '' ? Routes.LOGIN : onBoarding;
   // String initialRoutes = Routes.DETAIL;
   runApp(MyApp(initialRoutes));
 }

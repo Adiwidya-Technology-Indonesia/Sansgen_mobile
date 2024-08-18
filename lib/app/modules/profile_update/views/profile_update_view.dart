@@ -36,8 +36,8 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                   info: controller.isNameMessage.value,
                 ),
                 UpdateProfilFormValidate(
-                  hintText: 'Jenis Kelamin',
-                  controller: controller.jkelController,
+                  hintText: 'Hobby',
+                  controller: controller.hobbyController,
                   info: controller.isjkelMessage.value,
                 ),
                 GestureDetector(

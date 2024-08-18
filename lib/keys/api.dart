@@ -6,6 +6,7 @@ class KeysApi {
 
   static const String register = '/register';
   static const String login = '/login';
+  static const String logout = '/logout';
   static const String books = '/books';
   static const String comments = '/comments';
   static const String likes = '/likes';
@@ -18,4 +19,5 @@ class KeysApi {
   static const String history = '/history';
   static const String focus = '/focus';
   static const String subscribe = '/subscribe';
+  static const String payment = '/payment';
 }

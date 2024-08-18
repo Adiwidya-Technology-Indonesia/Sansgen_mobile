@@ -1,3 +1,13 @@
+// To parse this JSON data, do
+//
+//     final modelUser = modelUserFromJson(jsonString);
+
+import 'dart:convert';
+
+ModelUser modelUserFromJson(String str) => ModelUser.fromJson(json.decode(str));
+
+String modelUserToJson(ModelUser data) => json.encode(data.toJson());
+
 class ModelUser {
   final int id;
   final String uuid;
@@ -5,10 +15,11 @@ class ModelUser {
   final String name;
   final dynamic image;
   final dynamic dateOfBirth;
-  final String? rangeAge;
-  final String? gender;
+  final dynamic rangeAge;
+  final dynamic gender;
   final dynamic hobby;
   final List<String> categories;
+  final String isPremium;
   final String token;
 
   ModelUser({
@@ -22,6 +33,7 @@ class ModelUser {
     required this.gender,
     required this.hobby,
     required this.categories,
+    required this.isPremium,
     required this.token,
   });
 
@@ -30,12 +42,13 @@ class ModelUser {
     String? uuid,
     String? email,
     String? name,
-    String? image,
+    dynamic image,
     dynamic dateOfBirth,
-    String? rangeAge,
-    String? gender,
+    dynamic rangeAge,
+    dynamic gender,
     dynamic hobby,
     List<String>? categories,
+    String? isPremium,
     String? token,
   }) =>
       ModelUser(
@@ -49,43 +62,37 @@ class ModelUser {
         gender: gender ?? this.gender,
         hobby: hobby ?? this.hobby,
         categories: categories ?? this.categories,
+        isPremium: isPremium ?? this.isPremium,
         token: token ?? this.token,
       );
 
   factory ModelUser.fromJson(Map<String, dynamic> json) => ModelUser(
-        id: json["id"] ?? 0,
-        uuid: json["uuid"],
-        email: json["email"],
-        name: json["name"],
-        image: json["image"] ?? "kosong",
-        dateOfBirth: json["dateOfBirth"] ?? "kosong",
-        rangeAge: json["rangeAge"] ?? "kosong",
-        gender: json["gender"] ?? "kosong",
-        hobby: json["hobby"] ?? "kosong",
-        categories: json["categories"] == null
-            ? []
-            : List<String>.from(
-                (json["categories"] as List<dynamic>).map(
-                  (x) {
-                    x as String;
-                    return x;
-                  },
-                ).toList(),
-              ),
-        token: json["token"],
-      );
+    id: json["id"],
+    uuid: json["uuid"],
+    email: json["email"],
+    name: json["name"],
+    image: json["image"] ?? "Kosong",
+    dateOfBirth: json["dateOfBirth"] ?? "Kosong",
+    rangeAge: json["rangeAge"],
+    gender: json["gender"],
+    hobby: json["hobby"] ?? "Kosong",
+    categories: List<String>.from(json["categories"].map((x) => x)),
+    isPremium: json["isPremium"],
+    token: json["token"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "uuid": uuid,
-        "email": email,
-        "name": name,
-        "image": image,
-        "dateOfBirth": dateOfBirth,
-        "rangeAge": rangeAge,
-        "gender": gender,
-        "hobby": hobby,
-        "categories": List<dynamic>.from(categories.map((x) => x)),
-        "token": token,
-      };
+    "id": id,
+    "uuid": uuid,
+    "email": email,
+    "name": name,
+    "image": image,
+    "dateOfBirth": dateOfBirth,
+    "rangeAge": rangeAge,
+    "gender": gender,
+    "hobby": hobby,
+    "categories": List<dynamic>.from(categories.map((x) => x)),
+    "isPremium": isPremium,
+    "token": token,
+  };
 }

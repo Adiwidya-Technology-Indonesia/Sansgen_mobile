@@ -7,6 +7,7 @@ import 'package:sansgen/model/user/response_get.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/error.dart';
+import '../model/user/logout.dart';
 import '../model/user/request_patch_user.dart';
 import '../services/prefs.dart';
 
@@ -34,26 +35,113 @@ class UserProvider extends GetConnect {
     }
   }
 
-  Future patchUserCurrent(ModelRequestPatchUser request) async {
+  Future patchOnBoarding(ModelRequestPatchUser request) async {
+    try {
+      const String patchUserCurrent = KeysApi.users + KeysApi.current;
+      log(baseURL, name: "data baseURL");
+      log(patchUserCurrent, name: "data url patchUserCurrent");
+      log(request.toOnBoarding().toString(), name: "data request");
+      final response = await patch(
+        patchUserCurrent,
+        request.toOnBoarding(),
+      );
+      if (response.status.hasError) {
+        log(response.toString(), name: 'data error patchUserCurrent');
+        if (response.statusCode == 401) {
+          // Handle unauthorized error (misalnya, logout pengguna)
+          throw Exception('Unauthorized');
+        } else if (response.statusCode == 500) {
+          // Handle internal server error
+          throw Exception('Internal Server Error');
+        } else {
+          // Handle other error codes
+          throw Exception('Failed to update user: ${response.statusCode}');
+        }
+      } else {
+        return modelResponseUserFromJson(response.bodyString!);
+      }
+    } catch (error) {
+      log(error.toString(), name: "catch error patchUserCurrent");
+      rethrow;
+    }
+  }
+
+  Future patchInfoPribadi(ModelRequestPatchUser request) async {
     try {
       const String patchUserCurrent = KeysApi.users + KeysApi.current;
       log(baseURL, name: "data baseURL");
       log(patchUserCurrent, name: "data url patchUserCurrent");
       final response = await patch(
         patchUserCurrent,
-        // modelRequestPatchUserToJson(request),
-        request.toJson(),
+        request.toInfoPribadi(),
       );
       if (response.status.hasError) {
         log(response.toString(), name: 'data error patchUserCurrent');
-        // return Future.error(response);
-        return modelResponseErrorFromJson(response.bodyString!);
+        if (response.statusCode == 401) {
+          // Handle unauthorized error (misalnya, logout pengguna)
+          throw Exception('Unauthorized');
+        } else if (response.statusCode == 500) {
+          // Handle internal server error
+          throw Exception('Internal Server Error');
+        } else {
+          // Handle other error codes
+          throw Exception('Failed to update user: ${response.statusCode}');
+        }
       } else {
-        // log(response.bodyString!, name: 'data response');
         return modelResponseUserFromJson(response.bodyString!);
       }
     } catch (error) {
       log(error.toString(), name: "catch error patchUserCurrent");
+      rethrow;
+    }
+  }
+
+  Future patchReference(ModelRequestPatchUser request) async {
+    try {
+      const String patchUserCurrent = KeysApi.users + KeysApi.current;
+      log(baseURL, name: "data baseURL");
+      log(patchUserCurrent, name: "data url patchUserCurrent");
+      final response = await patch(
+        patchUserCurrent,
+        request.toReference(),
+      );
+      if (response.status.hasError) {
+        log(response.toString(), name: 'data error patchUserCurrent');
+        if (response.statusCode == 401) {
+          // Handle unauthorized error (misalnya, logout pengguna)
+          throw Exception('Unauthorized');
+        } else if (response.statusCode == 500) {
+          // Handle internal server error
+          throw Exception('Internal Server Error');
+        } else {
+          // Handle other error codes
+          throw Exception('Failed to update user: ${response.statusCode}');
+        }
+      } else {
+        return modelResponseUserFromJson(response.bodyString!);
+      }
+    } catch (error) {
+      log(error.toString(), name: "catch error patchUserCurrent");
+      rethrow;
+    }
+  }
+
+
+  Future logOut() async {
+    try {
+      final response = await post(
+        KeysApi.users + KeysApi.logout,
+        {},
+      );
+      if (response.status.hasError) {
+        log(response.body.toString(), name: 'login error');
+        throw Exception('Failed to login');
+        // return modelResponseErrorFromJson(response.bodyString!);
+      } else {
+        return modelResponsePostLogOutFromJson(response.bodyString!);
+      }
+    } catch (error) {
+      log(error.toString(), name: "auth regis error");
       rethrow;
     }
   }

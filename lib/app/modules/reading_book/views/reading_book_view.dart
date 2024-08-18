@@ -4,6 +4,7 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
 import 'package:get/get.dart';
 import 'package:hidable/hidable.dart';
@@ -12,6 +13,7 @@ import 'package:sansgen/model/chapter/response_get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/image_book.dart';
 
+import '../../../../services/common.dart';
 import '../controllers/reading_book_controller.dart';
 
 class ReadingBookView extends GetView<ReadingBookController> {
@@ -46,9 +48,18 @@ class ReadingBookView extends GetView<ReadingBookController> {
                   context: context,
                   duration: controller.initDuration,
                   controllerTimer: controller.controllerTimer,
-                  onStart: controller.onStartTimer,
-                  onPause: controller.onPauseTimer,
-                  onResume: controller.onResumeTimer,
+                  onStart: () {
+                    controller.onStartTimer();
+                    controller.audioPlayer.play();
+                  },
+                  onPause: () {
+                    controller.onPauseTimer();
+                    controller.audioPlayer.pause();
+                  },
+                  onResume: () {
+                    controller.onResumeTimer();
+                    controller.audioPlayer.play();
+                  },
                   onRestart: () =>
                       controller.onRestartTimer(controller.initDuration),
                 ),
@@ -82,7 +93,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
           borderRadius: BorderRadius.circular(30),
         ),
         child: Obx(
-          () => (controller.stateMusic.isTrue)
+          () => (controller.stateMusic.isFalse)
               ? SvgPicture.asset(KeysAssetsIcons.musicOn)
               : Padding(
                   padding: const EdgeInsets.only(right: 4),
@@ -116,7 +127,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
     required void Function()? onRestart,
   }) {
     return SizedBox(
-      height: 320,
+      height: 360,
       width: 300,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -169,6 +180,13 @@ class ReadingBookView extends GetView<ReadingBookController> {
             },
           ),
           const Gap(40),
+          StreamBuilder(
+            stream: controller.audioPlayer.positionalDataStream,
+            builder: (context, snapshot) {
+              final positionalData = snapshot.data;
+              return progressWidget(positionalData);
+            },
+          ),
           Card(
             color: context.colorScheme.onPrimary,
             child: Row(
@@ -193,6 +211,22 @@ class ReadingBookView extends GetView<ReadingBookController> {
           ),
         ],
       ),
+    );
+  }
+
+  ProgressBar progressWidget(PositionData? positionalData) {
+    return ProgressBar(
+      barHeight: 10,
+      baseBarColor: Colors.grey,
+      bufferedBarColor: Colors.blueGrey,
+      progressBarColor: Colors.red,
+      thumbColor: Colors.red,
+      timeLabelTextStyle:
+          const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+      progress: positionalData?.position ?? Duration.zero,
+      buffered: positionalData?.bufferedPosition ?? Duration.zero,
+      total: positionalData?.duration ?? Duration.zero,
+      onSeek: controller.audioPlayer.jumToDuration,
     );
   }
 

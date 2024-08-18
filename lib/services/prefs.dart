@@ -19,6 +19,17 @@ class PrefService {
   }
 
   /// for getting string from box
+  bool? get getOnBoarding {
+    return _prefs?.getBool(KeysPref.onBoarding);
+  }
+
+  /// for storingtCustomer to app
+  Future<void> putOnBoarding (bool on) async {
+    await _prefs?.setBool(KeysPref.onBoarding, on);
+  }
+
+
+  /// for getting string from box
   String? get getUserToken {
     return _prefs?.getString(KeysPref.userToken);
   }

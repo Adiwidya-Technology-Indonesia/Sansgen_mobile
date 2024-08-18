@@ -10,7 +10,7 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = 'e7be7303-22e8-4976-8910-8967b4b9d704'
+token = '103d59ea-5395-4433-88a1-4d5a1e2e1cf1'
 
 [body]
 type = 'JSON'
@@ -19,8 +19,8 @@ raw = '''
 //  "name": "rahmat",
 //  "image" : "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
 //  "dateOfBirth": null,
-  "rangeAge": "18-24",
-  "gender": "Laki-laki",
+//  "rangeAge": "18-24",
+//  "gender": "Laki-laki",
 //  "hobby": null,
   "idCategory":[1,2,3,4,5,6]
 }'''

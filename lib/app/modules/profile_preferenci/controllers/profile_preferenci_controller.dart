@@ -31,7 +31,7 @@ class ProfilePreferenciController extends GetxController with StateMixin<ModelUs
       final request = ModelRequestPatchUser(
           idCategory: categorySelesai
       );
-      userProvider.patchUserCurrent(request).then((v) async {
+      userProvider.patchReference(request).then((v) async {
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Update Data berhasil');
         log(v.toJson().toString());
