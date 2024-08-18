@@ -3,17 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/book/book.dart';
 
+import '../../../../model/chapter/response_get.dart';
+
 class ReadingBookController extends GetxController {
   final ScrollController scrollController = ScrollController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var book = Get.arguments['book'] as DataBook;
   var chapter = Get.arguments['chapter'] as int;
+  var listChapter = Get.arguments['listChapter'] as List<DataChapter>;
+
   final Rx<int> currentChapter = 0.obs;
+  final Rx<String> currentContentChapter = "".obs;
   final Rx<bool> stateMusic = false.obs;
 
   int initDuration = 10;
 
   final CountDownController controllerTimer = CountDownController();
+
+  @override
+  void onInit() {
+    currentChapter.value = chapter;
+    currentContentChapter.value =
+        listChapter.where((v) => v.number == chapter.toString()).first.content;
+    super.onInit();
+  }
 
   void openTimer(Widget widget) {
     Get.defaultDialog(
@@ -22,7 +35,7 @@ class ReadingBookController extends GetxController {
     );
   }
 
-  void onMusic()=> stateMusic.value = !stateMusic.value;
+  void onMusic() => stateMusic.value = !stateMusic.value;
 
   void onStartTimer() => controllerTimer.start();
 
@@ -41,31 +54,32 @@ class ReadingBookController extends GetxController {
     scaffoldKey.currentState?.openEndDrawer();
   }
 
-  void setCurrentChapter(int chapter) {
-    currentChapter.value = chapter;
+  void setCurrentChapter(String value) {
+    currentChapter.value = int.parse(value);
+    setCurrentContent(int.parse(value));
     Get.back();
   }
 
+  void setCurrentContent(int value) {
+    currentContentChapter.value =
+        listChapter.where((v) => v.number == value.toString()).first.content;
+  }
+
   void previousChapter() {
-    if (chapter == 1) {
+    if (currentChapter.value == 1) {
       Get.snackbar('info', 'Chapter 1 is the first chapter');
     } else {
-      chapter--;
+      currentChapter.value--;
+      setCurrentContent(currentChapter.value);
     }
   }
 
   void nextChapter() {
-    if (chapter == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].length) {
-      Get.snackbar(
-          'info', 'Chapter ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].length} is the last chapter');
+    if (currentChapter.value == listChapter.length) {
+      Get.snackbar('info', 'Chapter ${listChapter.length} is the last chapter');
     } else {
-      chapter++;
+      currentChapter.value++;
+      setCurrentContent(currentChapter.value);
     }
-  }
-
-  @override
-  void onInit() {
-    currentChapter.value = chapter;
-    super.onInit();
   }
 }

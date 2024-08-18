@@ -8,10 +8,10 @@ import '../../../../model/book/book.dart';
 import 'card_chapter.dart';
 
 Container contentBottomSheetChapter(
-    BuildContext context,
-    List<DataChapter> listChapter,
-    DataBook dataBook,
-    ) {
+  BuildContext context,
+  List<DataChapter> listChapter,
+  DataBook dataBook,
+) {
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.only(
@@ -36,16 +36,17 @@ Container contentBottomSheetChapter(
         ...listChapter
             .map(
               (e) => cardChapter(
-            context: context,
-            value: e,
-            onTap: () {
-              Get.toNamed(Routes.READING_BOOK, arguments: {
-                'book': dataBook,
-                'chapter': e,
-              });
-            },
-          ),
-        )
+                context: context,
+                value: e,
+                onTap: () {
+                  Get.toNamed(Routes.READING_BOOK, arguments: {
+                    'book': dataBook,
+                    'chapter': int.parse(e.number),
+                    'listChapter': listChapter,
+                  });
+                },
+              ),
+            )
             .toList(),
       ],
     ),
