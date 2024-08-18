@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:sansgen/app/modules/audio_bok/bindings/audio_book_bindings.dart';
+import 'package:sansgen/app/modules/audio_bok/views/audio_book_view.dart';
 
 import '../modules/authentication/login/bindings/login_binding.dart';
 import '../modules/authentication/login/views/login_view.dart';
@@ -118,6 +120,16 @@ class AppPages {
       name: _Paths.PAYMENT_BUY,
       page: () => const PaymentBuyView(),
       binding: PaymentBuyBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_BUY,
+      page: () => const PaymentBuyView(),
+      binding: PaymentBuyBinding(),
+    ),
+    GetPage(
+      name: _Paths.AUDIO_BOOK,
+      page: () => const AudioBookView(),
+      binding: AudioBookBindings(),
     ),
   ];
 }

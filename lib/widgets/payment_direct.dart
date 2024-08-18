@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sansgen/app/routes/app_pages.dart';
 
-GestureDetector paymentDirect({required String img}){
+GestureDetector paymentDirect({required Function()? onTap }) {
   return GestureDetector(
-    onTap: (){
-      Get.toNamed(Routes.PAYMENT_DETAILS);
-    },
+    onTap: onTap,
     child: Container(
       width: double.infinity,
       height: 50,
@@ -15,12 +11,8 @@ GestureDetector paymentDirect({required String img}){
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding:const EdgeInsets.only(left: 10,right:10 ),
-        child: Row(
-          children: [
-            Image.asset(img,width: 100,),
-          ],
-        ),
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child:Text('Bayar')
       ),
     ),
   );

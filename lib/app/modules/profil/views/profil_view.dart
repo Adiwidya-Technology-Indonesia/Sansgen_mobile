@@ -130,35 +130,43 @@ class ProfilView extends GetView<ProfilController> {
     );
   }
 
-  GestureDetector profilCard(
-      {required String title,
-      required BuildContext context,
-      required String iconCom,
-      required void Function()? onTap}) {
+  GestureDetector profilCard({
+    required String title,
+    required BuildContext context,
+    required String iconCom,
+    required void Function()? onTap,
+    double? width,
+    double? gapIcon,
+    double? height,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
         height: 50,
         width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Row(
-            children: [
-              SvgPicture.asset(
-                iconCom,
-                width: 24,
-                colorFilter: ColorFilter.mode(
-                  context.colorScheme.surface,
-                  BlendMode.srcIn,
+        child: Row(
+          children: [
+            Row(
+              children: [
+                Gap(gapIcon ?? 12),
+                SvgPicture.asset(
+                  alignment: Alignment.center,
+                  iconCom,
+                  width: width,
+                  height: height,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.surface,
+                    BlendMode.srcIn,
+                  ),
                 ),
-              ),
-              const Gap(20),
-              Text(
-                title,
-                style: context.titleMedium,
-              )
-            ],
-          ),
+              ],
+            ),
+            const Gap(20.0),
+            Text(
+              title,
+              style: context.titleMedium,
+            )
+          ],
         ),
       ),
     );
