@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/app/modules/profile_update/views/wrapper_up_profile.dart';
 import 'package:sansgen/app/routes/app_pages.dart';
 import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/utils/ext_context.dart';
@@ -50,7 +49,7 @@ class ProfileUpdateController extends GetxController {
     return false;
   }
 
-  String _validateName(String value) {
+  String validateName(String value) {
     if (nullValidation(value)) {
       return isNameMessage.value = 'Nama harap di isi';
     } else {
@@ -58,14 +57,14 @@ class ProfileUpdateController extends GetxController {
     }
   }
 
-  String _validateJkel(String value) {
+  String validateJkel(String value) {
     if (nullValidation(value)) {
       return isjkelMessage.value = 'Jenis Kelamin harap di isi';
     }
     return isjkelMessage.value = '';
   }
 
-  String _validateTglLahir(String value) {
+  String validateTglLahir(String value) {
     if (nullValidation(value)) {
       return istglLahirMessage.value = 'Tanggal Lahir harap di isi';
     }
