@@ -49,7 +49,7 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
           resultBestForYou.status == true &&
           resultInfoUser.data != ModelUser.fromJson({})) {
         final populerList = resultPopuler.data;
-        final infoUser = resultInfoUser as ModelResponseUser;
+        final infoUser = resultInfoUser;
         final bestForYouList = resultBestForYou.data;
 
         // log(populerList.toString(), name: 'populerList');
@@ -59,7 +59,7 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
           ModelDataHome(
             populer: populerList,
             bestForYou: bestForYouList,
-            profil: infoUser.data, // Ganti dengan data profil yang sesuai
+            profil: infoUser.data!, // Ganti dengan data profil yang sesuai
             focus: {}, // Ganti dengandata focus yang sesuai
           ),
           status: RxStatus.success(),

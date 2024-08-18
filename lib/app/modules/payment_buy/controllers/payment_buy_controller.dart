@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
+import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/payment_direct.dart';
 
-class PaymentBuyController extends GetxController {
+import '../../../../provider/user.dart';
+
+class PaymentBuyController extends GetxController with StateMixin<ModelUser>{
+
+final UserProvider userProvider;
+
+  PaymentBuyController({required this.userProvider});
+
   void payment(BuildContext context) {
     Get.bottomSheet(
       ignoreSafeArea: false,
@@ -62,5 +70,23 @@ class PaymentBuyController extends GetxController {
         ),
       ),
     );
+  }
+
+  @override
+  void onInit() async {
+    await fetchDataProfil();
+    super.onInit();
+  }
+
+  Future<void> fetchDataProfil() async {
+    await userProvider.fetchUserId().then((v) async {
+      if (v.data == null) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(v.data, status: RxStatus.success());
+      }
+    }).onError((e, st) {
+      change(null, status: RxStatus.error(e.toString()));
+    });
   }
 }

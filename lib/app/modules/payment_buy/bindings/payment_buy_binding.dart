@@ -6,7 +6,7 @@ class PaymentBuyBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<PaymentBuyController>(
-      () => PaymentBuyController(),
+      () => PaymentBuyController(userProvider: Get.find()),
     );
   }
 }

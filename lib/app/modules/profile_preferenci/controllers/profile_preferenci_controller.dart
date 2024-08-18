@@ -1,18 +1,18 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
+
 import 'package:sansgen/model/user/request_patch_user.dart';
+import 'package:sansgen/model/user/user.dart';
 
 import '../../../../model/error.dart';
 import '../../../../model/on_boarding/referency.dart';
 import '../../../../provider/user.dart';
 import '../../../routes/app_pages.dart';
 
-class ProfilePreferenciController extends GetxController {
+class ProfilePreferenciController extends GetxController with StateMixin<ModelUser>{
   final UserProvider userProvider;
   ProfilePreferenciController({required this.userProvider});
   final listPreferences = <ModelPreferenci>[
@@ -29,7 +29,7 @@ class ProfilePreferenciController extends GetxController {
     try {
       // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
       final request = ModelRequestPatchUser(
-        category: listPreferences.first.title,
+        category: listPreferences.toList().toString()
       );
       userProvider.patchUserCurrent(request).then((v) async {
         EasyLoading.dismiss();
@@ -51,5 +51,22 @@ class ProfilePreferenciController extends GetxController {
         content: Text('Error: $e'),
       );
     }
+  }
+  @override
+  void onInit() async {
+    await fetchDataProfil();
+    super.onInit();
+  }
+
+  Future<void> fetchDataProfil() async {
+    await userProvider.fetchUserId().then((v) async {
+      if (v.data == null) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(v.data, status: RxStatus.success());
+      }
+    }).onError((e, st) {
+      change(null, status: RxStatus.error(e.toString()));
+    });
   }
 }

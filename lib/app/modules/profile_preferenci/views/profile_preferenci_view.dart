@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/avatar_widget.dart';
 
 import '../../../../widgets/card_preference.dart';
 import '../controllers/profile_preferenci_controller.dart';
@@ -12,22 +13,22 @@ class ProfilePreferenciView extends GetView<ProfilePreferenciController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return controller.obx((state) => Scaffold(
         appBar: AppBar(
-          leading: Row(
-            children: [
-              const Gap(16),
-              GestureDetector(
-                  onTap: Get.back,
-                  child: CircleAvatar(
-                    child: Image.asset('assets/images/male_gender.png'),
-                  )),
-            ],
-          ),
+          automaticallyImplyLeading: false,
           backgroundColor: context.colorScheme.primary,
-          title: const Text(
-            'Referensi Kamu',
-            style: TextStyle(fontSize: 24),
+          title: Row(
+            children: [
+              
+               GestureDetector(
+                  onTap: Get.back,
+                  child: AvatarWidget(image: state!.image ,height: 50.0,)),
+              Gap(40),
+              const Text(
+                'Referensi Kamu',
+                style: TextStyle(fontSize: 24),
+              ),
+            ],
           ),
           centerTitle: true,
         ),
@@ -89,6 +90,6 @@ class ProfilePreferenciView extends GetView<ProfilePreferenciController> {
           ),
         ),
       ),
-        );
+     ) );
   }
 }

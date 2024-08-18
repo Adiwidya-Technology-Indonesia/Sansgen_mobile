@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sansgen/utils/ext_context.dart';
-
-import '../keys/assets_icons.dart';
+import 'package:sansgen/utils/ext_string.dart';
 
 class AvatarWidget extends StatelessWidget {
   const AvatarWidget({
@@ -27,7 +26,7 @@ class AvatarWidget extends StatelessWidget {
       width: width,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius!),
-        child: image != null && image != ''
+        child: (image!.isUrl) 
             ? Image.network(
                 image!,
                 height: height,

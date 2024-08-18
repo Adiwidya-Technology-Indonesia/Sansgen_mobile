@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
@@ -13,54 +12,79 @@ class PaymentDetailsView extends GetView<PaymentDetailsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.colorScheme.primary,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: const Text('Payment Details'),
         centerTitle: true,
       ),
       body: Stack(alignment: Alignment.topCenter, children: [
-        receipt(context),
-        const CircleAvatar(
-          radius: 42,
-          child: Icon(
-            Icons.check,
-            color: Colors.white,
-            size: 50,
+        Padding(
+          padding: const EdgeInsets.only(top: 70, bottom: 100, right: 32, left: 32),
+          child: receipt(context),
+        ),
+        const Positioned(
+          top: 20,
+          child: CircleAvatar(
+            radius: 42,
+            child: Icon(
+              Icons.check,
+              color: Colors.white,
+              size: 50,
+            ),
           ),
         )
       ]),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Gap(30),
-          Container(
-            width: 300,
-            height: 50,
-            child: ElevatedButton(onPressed: () {}, child: const Text('Selesai')),
-          ),
-        ],
-      ),
+      // floatingActionButton: Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: [
+      //     const Gap(30),
+      //     SizedBox(
+      //       width: 300,
+      //       height: 50,
+      //       child:
+      //           ElevatedButton(onPressed: () {}, child: const Text('Selesai')),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
-  Padding receipt(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
+  Container receipt(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: context.colorScheme.secondary,
+            offset: const Offset(
+              0.0,
+              5.0,
+            ),
+            blurRadius: 20.0,
+            spreadRadius: 0.5,
+            blurStyle: BlurStyle.normal,
+          )
+        ],
+      ),
+      // padding: const EdgeInsets.only(top: 70, bottom: 100,),
       child: SKSTicketView(
-        backgroundPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+        backgroundPadding:
+            const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         backgroundColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(vertical: 100, horizontal: 0),
+        // contentPadding:
+        //     const EdgeInsets.only(top: 70, bottom: 100, right: 0, left: 0),
         drawArc: false,
         triangleAxis: Axis.vertical,
         borderRadius: 6,
         drawDivider: true,
         trianglePos: .5,
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
+                const Gap(65),
                 Text('Payment Total',
                     style: context.titleSmall
                         .copyWith(color: context.colorScheme.secondary)),
@@ -69,25 +93,45 @@ class PaymentDetailsView extends GetView<PaymentDetailsController> {
                   style: context.titleLargeBold,
                 ),
                 const Gap(20),
-               txtReceipt(context: context, label: 'Date', content: '12 May 2024'),
+                txtReceipt(
+                    context: context, label: 'Date', content: '12 May 2024'),
                 const Gap(20),
-               txtReceipt(context: context, label: 'Details', content: 'Premium Sansgen'),
+                txtReceipt(
+                    context: context,
+                    label: 'Details',
+                    content: 'Premium Sansgen'),
                 const Gap(20),
-               txtReceipt(context: context, label: 'Reference num', content: 'A06453826151'),
+                txtReceipt(
+                    context: context,
+                    label: 'Reference num',
+                    content: 'A06453826151'),
                 const Gap(20),
-               txtReceipt(context: context, label: 'Account', content: 'Rahmat Hidayat'),
-               const Gap(100),
-               txtReceipt(context: context, label: 'Total Payment', content: '\$11.00'),
-               const Gap(20),
-               txtReceipt(context: context, label: 'Admin fee', content: '\$1.00'),
-               const Gap(20),
-               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Total',style: context.titleSmall.copyWith(color: context.colorScheme.secondary),),
-                  Text('\$12.00',style: context.titleSmallBold.copyWith(color: context.colorScheme.surface))
-                ],
-              )
+                txtReceipt(
+                    context: context,
+                    label: 'Account',
+                    content: 'Rahmat Hidayat'),
+                const Gap(100),
+                txtReceipt(
+                    context: context,
+                    label: 'Total Payment',
+                    content: '\$11.00'),
+                const Gap(20),
+                txtReceipt(
+                    context: context, label: 'Admin fee', content: '\$1.00'),
+                const Gap(20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total',
+                      style: context.titleSmall
+                          .copyWith(color: context.colorScheme.secondary),
+                    ),
+                    Text('\$12.00',
+                        style: context.titleSmallBold
+                            .copyWith(color: context.colorScheme.surface))
+                  ],
+                )
               ],
             ),
           ),
@@ -96,13 +140,23 @@ class PaymentDetailsView extends GetView<PaymentDetailsController> {
     );
   }
 
-  Row txtReceipt({required BuildContext context,required String label,required String content}) {
+  Row txtReceipt(
+      {required BuildContext context,
+      required String label,
+      required String content}) {
     return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(label,style: context.titleSmall.copyWith(color: context.colorScheme.secondary),),
-                  Text(content,style: context.titleSmall,)
-                ],
-              );
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style:
+              context.titleSmall.copyWith(color: context.colorScheme.secondary),
+        ),
+        Text(
+          content,
+          style: context.titleSmall,
+        )
+      ],
+    );
   }
 }

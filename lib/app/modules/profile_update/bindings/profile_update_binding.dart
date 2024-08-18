@@ -7,7 +7,7 @@ class ProfileUpdateBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<ProfileUpdateController>(
-      () => ProfileUpdateController(),
+      () => ProfileUpdateController(userProvider: Get.find()),
     );
     Get.lazyPut<ImageUpdateController>(
       () => ImageUpdateController(),

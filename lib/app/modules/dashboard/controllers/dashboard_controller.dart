@@ -41,7 +41,11 @@ class DashboardController extends GetxController {
 
   @override
   void onInit() {
-    setCurrentIndex(0);
+    if (Get.arguments == null) {
+      setCurrentIndex(0);
+    } else {
+      setCurrentIndex(Get.arguments);
+    }
     super.onInit();
   }
 }

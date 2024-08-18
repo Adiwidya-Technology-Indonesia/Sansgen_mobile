@@ -4,7 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/avatar_widget.dart';
 
+import '../../../../state/empty.dart';
+import '../../../../state/error.dart';
+import '../../../../state/loading.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/profil_controller.dart';
 
@@ -13,28 +17,28 @@ class ProfilView extends GetView<ProfilController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarCustom(context),
-      body: ListView(
-        children: [
-          const Gap(40),
-          profilCard(
-            title: 'Informasi Pribadi',
-            context: context,
-            iconCom: KeysAssetsIcons.user,
-            onTap: () {
-              Get.toNamed(Routes.PROFILE_UPDATE);
-            },
-          ),
-          profilCard(
-            title: 'Kategori favorit',
-            context: context,
-            iconCom: KeysAssetsIcons.category,
-            onTap: () {
-              Get.toNamed(Routes.PROFILE_PREFERENCI);
-            },
-          ),
-          profilCard(
+    return controller.obx((state) =>Scaffold(
+        appBar: appBarCustom(context: context, name: state!.name!, image: state.image),
+       
+        body: ListView(
+          children: [
+            profilCard(
+              title: 'Informasi Pribadi',
+              context: context,
+              iconCom: KeysAssetsIcons.user,
+              onTap: () {
+                Get.offAllNamed(Routes.PROFILE_UPDATE, arguments: state);
+              },
+            ),
+            profilCard(
+              title: 'Kategori favorit',
+              context: context,
+              iconCom: KeysAssetsIcons.category,
+              onTap: () {
+                Get.toNamed(Routes.PROFILE_PREFERENCI);
+              },
+            ),
+            profilCard(
               title: 'Payment',
               context: context,
               iconCom: KeysAssetsIcons.payment,
@@ -53,11 +57,19 @@ class ProfilView extends GetView<ProfilController> {
               onTap: () => controller.logOutButton(context),
             ),
           ],
-        ));
+        ),
+        ),
+         onLoading: const LoadingState(),
+        onError: (error) => ErrorState(error: error.toString()),
+        onEmpty: const EmptyState(),);
 
   }
 
-  AppBar appBarCustom(BuildContext context) {
+  AppBar appBarCustom({
+    required BuildContext context,
+    required String name,
+    required String image,
+  }) {
     return AppBar(
       toolbarHeight: 300,
       backgroundColor: context.colorScheme.primary,
@@ -88,23 +100,17 @@ class ProfilView extends GetView<ProfilController> {
                   onTap: () {
                     Get.back();
                   },
-                  child: Image.asset('assets/images/male_gender.png'),
+                  child: AvatarWidget(image: image,),
                 ),
               );
             },
-            child: SizedBox(
-              height: 150,
-              width: 150,
-              child: CircleAvatar(
-                child: Image.asset('assets/images/male_gender.png'),
-              ),
-            ),
+            child: AvatarWidget(image: image, height: 150,width: 150,)
           ),
           const SizedBox(
             height: 20,
           ),
           Text(
-            "Muh Wais",
+          name,
             style: context.titleLargeBold.copyWith(
               color: context.colorScheme.primary,
             ),

@@ -40,7 +40,9 @@ class DashboardBinding extends Bindings {
       () => RiwayatController(),
     );
     Get.lazyPut<ProfilController>(
-      () => ProfilController(),
+      () => ProfilController(
+        userProvider: Get.find(),
+      ),
     );
   }
 }

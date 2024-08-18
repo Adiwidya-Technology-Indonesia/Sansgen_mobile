@@ -4,19 +4,44 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/app/modules/profile_update/views/wrapper_up_profile.dart';
+import 'package:sansgen/app/routes/app_pages.dart';
+import 'package:sansgen/model/user/user.dart';
+import 'package:sansgen/utils/ext_context.dart';
+
+import '../../../../model/error.dart';
+import '../../../../model/user/request_patch_user.dart';
+import '../../../../provider/user.dart';
+import 'image_profil_controller.dart';
 
 class ProfileUpdateController extends GetxController {
   // final AuthProvider authProvider;
   // final PrefService prefService;
-  // ProfileUpdateController({required this.authProvider, required this.prefService});
-
+  ProfileUpdateController({required this.userProvider});
+  final UserProvider userProvider;
+  DateTime selectedDate = DateTime.now();
   final nameController = TextEditingController();
   final jkelController = TextEditingController();
   final tglLahirController = TextEditingController();
- 
+  DateTime? picked;
+
   var isNameMessage = ''.obs;
   var isjkelMessage = ''.obs;
   var istglLahirMessage = ''.obs;
+  late ModelUser user;
+
+  @override
+  void onInit() {
+    if (Get.arguments != null) {
+      user = Get.arguments;
+      nameController.text = user.name ?? 'Nama';
+      jkelController.text = user.gender ?? 'Jenis kelamin';
+      tglLahirController.text = user.dateOfBirth;
+    } else {
+      user = ModelUser.fromJson({});
+    }
+    super.onInit();
+  }
 
   bool nullValidation(String? value) {
     if (value == null || value.trim().isEmpty) {
@@ -49,33 +74,73 @@ class ProfileUpdateController extends GetxController {
 
   Future profilUpdateButton() async {
     try {
-      _validateName(nameController.text);
-      _validateJkel(jkelController.text);
-      _validateTglLahir(tglLahirController.text);
-
-      // Cek apakah ada pesan kesalahan
-      if (isNameMessage.value.isEmpty &&
-          isjkelMessage.value.isEmpty &&
-          istglLahirMessage.value.isEmpty) {
-        log(
-          '${nameController.text} ${jkelController.text} ${tglLahirController.text}',
-          name: 'form value',
-        );
-        EasyLoading.show(status: 'loading...');
-
-        const oneSec = Duration(seconds: 3);
-        Timer.periodic(oneSec, (time) {
-          formCLear();
-          EasyLoading.dismiss();
-          time.cancel();
-        });
+      String imageName = '';
+      final imageController = Get.find<ImageUpdateController>();
+      // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
+      if (imageController.imageFileList.isNotEmpty) {
+        imageName = imageController.imageFileList.first.name;
+      } else {
+        imageName = '';
       }
+      log(imageName, name: 'imageName');
+      final request = ModelRequestPatchUser(
+        name: nameController.text,
+        gender: jkelController.text,
+        dateOfBirth: picked ?? DateTime.now(),
+        image: imageName,
+      );
+      userProvider.patchUserCurrent(request).then((v) async {
+        EasyLoading.dismiss();
+        EasyLoading.showSuccess('Update Data berhasil');
+        log(v.toJson().toString());
+        Get.offAllNamed(Routes.DASHBOARD,arguments: 3);
+        return;
+      }).onError((e, st) {
+        EasyLoading.dismiss();
+        final errors = Errors(message: ['$e', '$st']);
+        final dataError = ModelResponseError(errors: errors);
+        log(dataError.toJson().toString());
+        EasyLoading.showError('Update Data Gagal');
+        return;
+      });
     } catch (e) {
-      log(e.toString(), name: 'register error');
       Get.defaultDialog(
         title: 'Error',
         content: Text('Error: $e'),
       );
+    }
+  }
+
+  Future datePick({
+    required BuildContext context,
+    // required DateTime selectedDate,
+  }) async {
+    picked = await showDatePicker(
+      builder: (ctx,child){
+        return Theme(
+          data: Theme.of(ctx).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: ctx.colorScheme.surface, // header background color
+              onPrimary: ctx.colorScheme.primary, // header text color
+              onSurface: ctx.colorScheme.surface, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red, // button text color
+              ),
+            ),
+          ), child: child!);
+      },
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2500),
+    );
+
+    if (picked != null) {
+      tglLahirController.text = "${picked?.toLocal()}".split(' ')[0];
+      log(tglLahirController.text, name: 'selectedDate');
+      log(picked.toString(), name: 'selectedDate');
     }
   }
 

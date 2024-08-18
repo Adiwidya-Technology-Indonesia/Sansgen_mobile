@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:sansgen/app/routes/app_pages.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/update_profil_form_validate.dart';
 
@@ -14,7 +15,7 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colorScheme.secondary.withOpacity(0.1),
+      backgroundColor: Colors.grey[200],
       appBar: appBarProUpdate(context),
       body: SingleChildScrollView(
         child: Padding(
@@ -39,11 +40,17 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                   controller: controller.jkelController,
                   info: controller.isjkelMessage.value,
                 ),
-                UpdateProfilFormValidate(
-                  hintText: 'Tanggal Lahir',
-                  controller: controller.tglLahirController,
-                  info: controller.istglLahirMessage.value,
-                ),
+                GestureDetector(
+                  onTap: ()=>controller.datePick(context: context ),
+                  child: AbsorbPointer(
+                    child: UpdateProfilFormValidate(
+                      hintText: 'Tanggal Lahir',
+                      controller: controller.tglLahirController,
+                      info: controller.istglLahirMessage.value,
+                      readOnly: true,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -73,7 +80,7 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
   AppBar appBarProUpdate(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        onPressed: () => Get.back(),
+        onPressed: () => Get.offAllNamed(Routes.DASHBOARD,arguments: 3),
         icon: Icon(
           Icons.arrow_back_ios_new,
           color: context.colorScheme.primary,
@@ -120,27 +127,6 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
               image:
                   'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//94/MTA-75108153/no-brand_buku-jangan-mulai-bisnis-sebelum-baca-buku-ini-cara-sederhana-tapi-am_full01.jpg',
             ),
-            // Stack(
-            //   alignment: Alignment.bottomRight,
-            //   children: [
-            //     GestureDetector(
-            //       onTap:(){},
-            //       child: CircleAvatar(
-            //         radius: 80,
-            //         child: SvgPicture.asset(
-            //           KeysAssetsIcons.user,
-            //           width: 50,
-            //           height: 50,
-            //         ),
-            //       ),
-            //     ),
-            //     CircleAvatar(
-            //       backgroundColor: context.colorScheme.onSecondary,
-            //       child: SvgPicture.asset(KeysAssetsIcons.camera,
-            //           width: 20, height: 20),
-            //     )
-            //   ],
-            // ),
             const Gap(50)
           ],
         ),

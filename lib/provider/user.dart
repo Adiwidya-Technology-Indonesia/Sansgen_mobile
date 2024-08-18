@@ -37,9 +37,11 @@ class UserProvider extends GetConnect {
   Future patchUserCurrent(ModelRequestPatchUser request) async {
     try {
       const String patchUserCurrent = KeysApi.users + KeysApi.current;
-      log(patchUserCurrent, name: "data url Product");
+      log(patchUserCurrent, name: "data patchUserCurrent");
+      log(baseURL, name: "data baseURL");
       final response = await patch(
         patchUserCurrent,
+        // modelRequestPatchUserToJson(request),
         request.toJson(),
       );
       if (response.status.hasError) {
@@ -55,6 +57,7 @@ class UserProvider extends GetConnect {
       rethrow;
     }
   }
+
   @override
   void onInit() {
     _prefService.prefInit();

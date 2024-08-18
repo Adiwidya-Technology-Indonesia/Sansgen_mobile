@@ -65,7 +65,7 @@ class ModelRequestPatchUser {
     "email": email,
     "name": name,
     "image": image,
-    "dateOfBirth": dateOfBirth,
+    "dateOfBirth": dateOfBirth.toString(),
     "rangeAge": rangeAge,
     "gender": gender,
     "category": category,

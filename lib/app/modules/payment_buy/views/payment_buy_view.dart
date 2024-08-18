@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/avatar_widget.dart';
 
 import '../controllers/payment_buy_controller.dart';
 
@@ -12,8 +13,8 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
   const PaymentBuyView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: appBar(context),
+    return controller.obx((state) => Scaffold(
+        appBar: appBar(context:context,image: state!.image),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -55,25 +56,24 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
               )
             ],
           ),
-        ));
+        )));
   }
 
-  AppBar appBar(BuildContext context) {
+  AppBar appBar({required BuildContext context, required String image}) {
     return AppBar(
-      leading: Row(
-        children: [
-          const Gap(16),
-          GestureDetector(
-              onTap: Get.back,
-              child: CircleAvatar(
-                child: Image.asset('assets/images/male_gender.png'),
-              )),
-        ],
-      ),
+      automaticallyImplyLeading: false,
       backgroundColor: context.colorScheme.primary,
-      title: const Text(
-        'Premium',
-        style: TextStyle(fontSize: 24),
+      title: Row(
+        children: [
+           GestureDetector(
+              onTap: Get.back,
+              child: AvatarWidget(image: image,height: 50.0,)),
+          const Gap(73),
+          const Text(
+            'Premium',
+            style: TextStyle(fontSize: 24),
+          ),
+        ],
       ),
       centerTitle: true,
     );
