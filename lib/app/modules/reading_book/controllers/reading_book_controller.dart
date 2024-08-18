@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/services/audio.dart';
 

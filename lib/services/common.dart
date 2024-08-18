@@ -182,3 +182,35 @@ void showSliderDialog({
 }
 
 // T? ambiguate<T>(T? value) => value;
+
+class Failure {
+  final int code;
+  final String message;
+
+  const Failure({
+    required this.code,
+    required this.message,
+  });
+
+  factory Failure.fromJson(Map<String, dynamic> json) => Failure(
+    code: json["code"],
+    message: json["message"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "code": code,
+    "message": message,
+  };
+
+  List<Object> get props => [code, message];
+}
+
+class ServerFailure extends Failure {
+  final dynamic data;
+
+  const ServerFailure({
+    required this.data,
+    required super.code,
+    required super.message,
+  });
+}

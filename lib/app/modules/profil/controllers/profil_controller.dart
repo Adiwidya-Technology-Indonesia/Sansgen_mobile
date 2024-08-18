@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/provider/auth.dart';
 import 'package:sansgen/services/prefs.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import '../../../../model/user/user.dart';

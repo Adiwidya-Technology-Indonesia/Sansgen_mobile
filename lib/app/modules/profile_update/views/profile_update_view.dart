@@ -41,7 +41,7 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                   info: controller.isjkelMessage.value,
                 ),
                 GestureDetector(
-                  onTap: ()=>controller.datePick(context: context ),
+                  onTap: () => controller.datePick(context: context),
                   child: AbsorbPointer(
                     child: UpdateProfilFormValidate(
                       hintText: 'Tanggal Lahir',
@@ -80,7 +80,7 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
   AppBar appBarProUpdate(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        onPressed: () => Get.offAllNamed(Routes.DASHBOARD,arguments: 3),
+        onPressed: () => Get.offAllNamed(Routes.DASHBOARD, arguments: 3),
         icon: Icon(
           Icons.arrow_back_ios_new,
           color: context.colorScheme.primary,
@@ -123,9 +123,8 @@ class ProfileUpdateView extends GetView<ProfileUpdateController> {
                 style: context.titleLarge
                     .copyWith(color: context.colorScheme.primary)),
             const Gap(20),
-            const WrapperImageUpdateProfil(
-              image:
-                  'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//94/MTA-75108153/no-brand_buku-jangan-mulai-bisnis-sebelum-baca-buku-ini-cara-sederhana-tapi-am_full01.jpg',
+            WrapperImageUpdateProfil(
+              image: controller.user.image,
             ),
             const Gap(50)
           ],

@@ -34,8 +34,8 @@ class ProfileUpdateController extends GetxController {
     if (Get.arguments != null) {
       user = Get.arguments;
       nameController.text = user.name;
-      hobbyController.text = user.gender ?? 'Jenis kelamin';
-      tglLahirController.text = user.dateOfBirth;
+      hobbyController.text = user.hobby ?? "";
+      tglLahirController.text = user.dateOfBirth?? '';
     } else {
       user = ModelUser.fromJson({});
     }
@@ -73,6 +73,7 @@ class ProfileUpdateController extends GetxController {
 
   Future profilUpdateButton() async {
     try {
+      EasyLoading.show(status: "Loading");
       String imageName = '';
       final imageController = Get.find<ImageUpdateController>();
       // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
@@ -84,8 +85,8 @@ class ProfileUpdateController extends GetxController {
       log(imageName, name: 'imageName');
       final request = ModelRequestPatchUser(
         name: nameController.text,
-        gender: hobbyController.text,
-        dateOfBirth: picked ?? DateTime.now(),
+        hobby: hobbyController.text,
+        dateOfBirth: picked.toString(),
         image: imageName,
       );
       userProvider.patchInfoPribadi(request).then((v) async {

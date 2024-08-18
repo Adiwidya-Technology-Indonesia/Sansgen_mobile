@@ -16,12 +16,12 @@ token = '103d59ea-5395-4433-88a1-4d5a1e2e1cf1'
 type = 'JSON'
 raw = '''
 {
-//  "name": "rahmat",
-//  "image" : "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
-//  "dateOfBirth": null,
+  "name": "rahmat",
+  "image" : "360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg",
+  "dateOfBirth": "2024-08-31 00:00:00.000",
 //  "rangeAge": "18-24",
 //  "gender": "Laki-laki",
-//  "hobby": null,
-  "idCategory":[1,2,3,4,5,6]
+  "hobby": "hh",
+//  "idCategory":[1,2,3,4,5,6]
 }'''
 ```

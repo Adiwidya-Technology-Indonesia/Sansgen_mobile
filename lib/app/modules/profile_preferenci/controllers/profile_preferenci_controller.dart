@@ -12,9 +12,12 @@ import '../../../../model/on_boarding/referency.dart';
 import '../../../../provider/user.dart';
 import '../../../routes/app_pages.dart';
 
-class ProfilePreferenciController extends GetxController with StateMixin<ModelUser>{
+class ProfilePreferenciController extends GetxController
+    with StateMixin<ModelUser> {
   final UserProvider userProvider;
+
   ProfilePreferenciController({required this.userProvider});
+
   final listPreferences = <ModelPreferenci>[
     ModelPreferenci(id: 1, title: 'Bisnis', isSelected: false.obs),
     ModelPreferenci(id: 2, title: 'Pengembangan diri', isSelected: false.obs),
@@ -25,13 +28,27 @@ class ProfilePreferenciController extends GetxController with StateMixin<ModelUs
     ModelPreferenci(id: 7, title: 'Politik', isSelected: false.obs),
     ModelPreferenci(id: 8, title: 'Sejarah', isSelected: false.obs),
   ];
-  void simpan() {
+
+  Future simpan() async {
     try {
-      final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).map((v)=>v.id).toList();
-      final request = ModelRequestPatchUser(
-          idCategory: categorySelesai
-      );
-      userProvider.patchReference(request).then((v) async {
+      EasyLoading.show(status: "Loading");
+      final categorySelesai = listPreferences
+          .where((e) => e.isSelected.value == true)
+          .map((v) => v.id)
+          .toList();
+      if (categorySelesai.length < 3) {
+        return Get.snackbar(
+          'Info',
+          'Silakan pilih setidaknya 3 kategori buku',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.grey,
+          colorText: Colors.white,
+        );
+      }
+
+      final request = ModelRequestPatchUser(idCategory: categorySelesai);
+
+      return userProvider.patchReference(request).then((v) async {
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Update Data berhasil');
         log(v.toJson().toString());
@@ -52,6 +69,7 @@ class ProfilePreferenciController extends GetxController with StateMixin<ModelUs
       );
     }
   }
+
   @override
   void onInit() async {
     await fetchDataProfil();

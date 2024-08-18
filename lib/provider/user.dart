@@ -6,7 +6,6 @@ import 'package:sansgen/model/user/response_get.dart';
 
 import '../keys/api.dart';
 import '../keys/env.dart';
-import '../model/error.dart';
 import '../model/user/logout.dart';
 import '../model/user/request_patch_user.dart';
 import '../services/prefs.dart';
@@ -76,7 +75,7 @@ class UserProvider extends GetConnect {
         request.toInfoPribadi(),
       );
       if (response.status.hasError) {
-        log(response.toString(), name: 'data error patchUserCurrent');
+        log(response.bodyString.toString(), name: 'data error patchUserCurrent');
         if (response.statusCode == 401) {
           // Handle unauthorized error (misalnya, logout pengguna)
           throw Exception('Unauthorized');

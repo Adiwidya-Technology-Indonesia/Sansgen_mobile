@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:gap/gap.dart';
-
 import 'package:get/get.dart';
 
 import 'package:sansgen/utils/ext_context.dart';
@@ -17,7 +15,7 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
   Widget build(BuildContext context) {
     return controller.obx(
       (state) => Scaffold(
-        appBar: appBar(context: context, image: state!.image),
+        appBar: appBar(context: context, image: state!.image!),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(

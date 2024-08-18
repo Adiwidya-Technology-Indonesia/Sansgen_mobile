@@ -20,9 +20,10 @@ class ProfilView extends GetView<ProfilController> {
     return controller.obx(
       (state) => Scaffold(
         appBar: appBarCustom(
-            context: context, name: state!.name, image: state.image),
+            context: context, name: state!.name, image: state.image!),
         body: ListView(
           children: [
+            const Gap(20),
             profilCard(
               title: 'Informasi Pribadi',
               context: context,

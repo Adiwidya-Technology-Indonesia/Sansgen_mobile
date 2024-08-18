@@ -13,11 +13,11 @@ class ModelUser {
   final String uuid;
   final String email;
   final String name;
-  final dynamic image;
-  final dynamic dateOfBirth;
-  final dynamic rangeAge;
-  final dynamic gender;
-  final dynamic hobby;
+  final String? image;
+  final String? dateOfBirth;
+  final String? rangeAge;
+  final String? gender;
+  final String? hobby;
   final List<String> categories;
   final String isPremium;
   final String token;
@@ -42,11 +42,11 @@ class ModelUser {
     String? uuid,
     String? email,
     String? name,
-    dynamic image,
-    dynamic dateOfBirth,
-    dynamic rangeAge,
-    dynamic gender,
-    dynamic hobby,
+    String? image,
+    String? dateOfBirth,
+    String? rangeAge,
+    String? gender,
+    String? hobby,
     List<String>? categories,
     String? isPremium,
     String? token,
@@ -72,10 +72,10 @@ class ModelUser {
     email: json["email"],
     name: json["name"],
     image: json["image"] ?? "Kosong",
-    dateOfBirth: json["dateOfBirth"] ?? "Kosong",
+    dateOfBirth: json["dateOfBirth"] ?? "",
     rangeAge: json["rangeAge"],
     gender: json["gender"],
-    hobby: json["hobby"] ?? "Kosong",
+    hobby: json["hobby"] ?? "",
     categories: List<String>.from(json["categories"].map((x) => x)),
     isPremium: json["isPremium"],
     token: json["token"],
