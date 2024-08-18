@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/book/book.dart';
+import 'package:sansgen/services/audio.dart';
 
 import '../../../../model/chapter/response_get.dart';
 
 class ReadingBookController extends GetxController {
+  final audioPlayer = AudioService();
+
   final ScrollController scrollController = ScrollController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var book = Get.arguments['book'] as DataBook;
@@ -21,11 +26,18 @@ class ReadingBookController extends GetxController {
   final CountDownController controllerTimer = CountDownController();
 
   @override
-  void onInit() {
+  void onInit() async {
+    await audioPlayer.playAssets('assets/music/tess.mp3');
     currentChapter.value = chapter;
     currentContentChapter.value =
         listChapter.where((v) => v.number == chapter.toString()).first.content;
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    audioPlayer.dispose();
+    super.onClose();
   }
 
   void openTimer(Widget widget) {
@@ -35,7 +47,18 @@ class ReadingBookController extends GetxController {
     );
   }
 
-  void onMusic() => stateMusic.value = !stateMusic.value;
+  void onMusic() {
+    log(stateMusic.value.toString(), name: "stateMusic.value");
+    if (stateMusic.isFalse) {
+      audioPlayer.play();
+      audioPlayer.setVolume(5);
+      stateMusic.value = !stateMusic.value;
+    } else {
+      audioPlayer.stop();
+      audioPlayer.setVolume(0);
+      stateMusic.value = !stateMusic.value;
+    }
+  }
 
   void onStartTimer() => controllerTimer.start();
 

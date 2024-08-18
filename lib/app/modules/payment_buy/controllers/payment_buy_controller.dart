@@ -1,91 +1,64 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'dart:developer';
+
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/user/user.dart';
-import 'package:sansgen/utils/ext_context.dart';
-import 'package:sansgen/widgets/payment_direct.dart';
+import 'package:sansgen/provider/payment.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../../../provider/user.dart';
+import '../../../../model/payment/request_post.dart';
 
-class PaymentBuyController extends GetxController with StateMixin<ModelUser>{
+class PaymentBuyController extends GetxController with StateMixin<ModelUser> {
+  final PaymentProvider paymentProvider;
 
-final UserProvider userProvider;
-
-  PaymentBuyController({required this.userProvider});
-
-  void payment(BuildContext context) {
-    Get.bottomSheet(
-      ignoreSafeArea: false,
-      isScrollControlled: true,
-      Container(
-        height: 450,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-        ),
-        child: Column(
-          children: [
-            const Gap(10),
-            Container(
-              width: 80,
-              height: 5,
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10)),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total',
-                        style: context.titleLargeBold,
-                      ),
-                      const Text('Rp100.000',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),)
-                    ],
-                  ),
-                  const Gap(10),
-                  Container(
-                    height: 1,
-                    width: double.infinity,
-                    color: context.colorScheme.secondary,
-                  ),
-                  const Gap(20),
-                  Text('Pilih Metode Pembayaran',style: context.titleLargeBold.copyWith(color: context.colorScheme.secondary),),
-                  const Gap(20),
-                  paymentDirect(img: 'assets/images/Dana.png'),
-                  const Gap(20),
-                  paymentDirect(img: 'assets/images/Gopay.png'),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  PaymentBuyController({required this.paymentProvider});
 
   @override
-  void onInit() async {
-    await fetchDataProfil();
+  void onInit() {
+    fetchDataProfil();
     super.onInit();
   }
 
-  Future<void> fetchDataProfil() async {
-    await userProvider.fetchUserId().then((v) async {
-      if (v.data == null) {
-        change(null, status: RxStatus.empty());
+  Future launchURL(String url) async => await canLaunchUrlString(url)
+      ? await launchUrlString(url)
+      : log('Could not launch $url');
+
+  Future postPayment() async {
+    EasyLoading.show(status: 'Loading');
+    final request = ModelRequestPostPayment(
+      account: "Dana",
+      details: "Pembayaran untuk update akun premiun",
+      referenceNum: "INV-20231207-001", // no.ref dari midtrans
+      price: 10000,
+      adminFee: 500,
+      totalPrice: 10500,
+    );
+    paymentProvider.postRedirect(request).then((v) async {
+      if (v.redirectUrl != null) {
+        EasyLoading.dismiss();
+        launchURL(v.redirectUrl!);
       } else {
-        change(v.data, status: RxStatus.success());
+        EasyLoading.dismiss();
+        EasyLoading.showError('Token Kosong');
+        return;
       }
     }).onError((e, st) {
-      change(null, status: RxStatus.error(e.toString()));
+      EasyLoading.dismiss();
+      log(e.toString());
+      EasyLoading.showError('Pembayaran Gagal');
+      return;
     });
+  }
+
+  void fetchDataProfil() {
+    try {
+      if (Get.arguments == null) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(Get.arguments as ModelUser, status: RxStatus.success());
+      }
+    } catch (e) {
+      change(null, status: RxStatus.error(e.toString()));
+    }
   }
 }

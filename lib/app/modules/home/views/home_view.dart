@@ -124,7 +124,7 @@ class HomeView extends GetView<HomeController> {
                       size: 16,
                     ),
                     Text(
-                      book.manyRatings.toString(),
+                      book.averageRate.toString(),
                       style: context.labelSmall.copyWith(
                         color: context.colorScheme.secondary,
                       ),

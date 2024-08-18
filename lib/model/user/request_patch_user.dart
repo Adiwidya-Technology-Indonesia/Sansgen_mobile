@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-ModelRequestPatchUser modelRequestPatchUserFromJson(String str) => ModelRequestPatchUser.fromJson(json.decode(str));
+ModelRequestPatchUser modelRequestPatchUserFromJson(String str) =>
+    ModelRequestPatchUser.fromJson(json.decode(str));
 
-String modelRequestPatchUserToJson(ModelRequestPatchUser data) => json.encode(data.toJson());
+String modelRequestPatchUserToJson(ModelRequestPatchUser data) =>
+    json.encode(data.toJson());
 
 class ModelRequestPatchUser {
   final String? name;
@@ -42,23 +44,48 @@ class ModelRequestPatchUser {
         idCategory: idCategory ?? this.idCategory,
       );
 
-  factory ModelRequestPatchUser.fromJson(Map<String, dynamic> json) => ModelRequestPatchUser(
-    name: json["name"],
-    image: json["image"],
-    dateOfBirth: json["dateOfBirth"],
-    rangeAge: json["rangeAge"],
-    gender: json["gender"],
-    hobby: json["hobby"],
-    idCategory: json["idCategory"] == null ? [] : List<int>.from(json["idCategory"]!.map((x) => x)),
-  );
+  factory ModelRequestPatchUser.fromJson(Map<String, dynamic> json) =>
+      ModelRequestPatchUser(
+        name: json["name"],
+        image: json["image"],
+        dateOfBirth: json["dateOfBirth"],
+        rangeAge: json["rangeAge"],
+        gender: json["gender"],
+        hobby: json["hobby"],
+        idCategory: json["idCategory"] == null
+            ? []
+            : List<int>.from(json["idCategory"]!.map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "image": image,
-    "dateOfBirth": dateOfBirth.toString(),
-    "rangeAge": rangeAge,
-    "gender": gender,
-    "hobby": hobby,
-    "idCategory": idCategory == null ? [] : List<dynamic>.from(idCategory!.map((x) => x)),
-  };
+        "name": name,
+        "image": image,
+        "dateOfBirth": dateOfBirth.toString(),
+        "rangeAge": rangeAge,
+        "gender": gender,
+        "hobby": hobby,
+        "idCategory": idCategory == null
+            ? []
+            : List.generate(idCategory!.length, (v) => v).toList(),
+        // List<dynamic>.from(idCategory!.map((x) => x)),
+      };
+
+  Map<String, dynamic> toReference() => {
+        "idCategory": idCategory,
+        // List<dynamic>.from(idCategory!.map((x) => x)),
+      };
+
+  Map<String, dynamic> toOnBoarding() => {
+        "rangeAge": rangeAge,
+        "gender": gender,
+        "idCategory": idCategory,
+        // List<dynamic>.from(idCategory!.map((x) => x)),
+      };
+
+  Map<String, dynamic> toInfoPribadi() => {
+        "name": name,
+        "image": image,
+        "dateOfBirth": dateOfBirth.toString(),
+        // "hobby": hobby,
+      };
 }

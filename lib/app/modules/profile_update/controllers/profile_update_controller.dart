@@ -20,7 +20,7 @@ class ProfileUpdateController extends GetxController {
   final UserProvider userProvider;
   DateTime selectedDate = DateTime.now();
   final nameController = TextEditingController();
-  final jkelController = TextEditingController();
+  final hobbyController = TextEditingController();
   final tglLahirController = TextEditingController();
   DateTime? picked;
 
@@ -34,8 +34,8 @@ class ProfileUpdateController extends GetxController {
     if (Get.arguments != null) {
       user = Get.arguments;
       nameController.text = user.name;
-      jkelController.text = user.gender ?? 'Jenis kelamin';
-      tglLahirController.text = user.dateOfBirth;
+      hobbyController.text = user.hobby ?? "";
+      tglLahirController.text = user.dateOfBirth?? '';
     } else {
       user = ModelUser.fromJson({});
     }
@@ -73,6 +73,7 @@ class ProfileUpdateController extends GetxController {
 
   Future profilUpdateButton() async {
     try {
+      EasyLoading.show(status: "Loading");
       String imageName = '';
       final imageController = Get.find<ImageUpdateController>();
       // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
@@ -84,11 +85,11 @@ class ProfileUpdateController extends GetxController {
       log(imageName, name: 'imageName');
       final request = ModelRequestPatchUser(
         name: nameController.text,
-        gender: jkelController.text,
-        dateOfBirth: picked ?? DateTime.now(),
+        hobby: hobbyController.text,
+        dateOfBirth: picked.toString(),
         image: imageName,
       );
-      userProvider.patchUserCurrent(request).then((v) async {
+      userProvider.patchInfoPribadi(request).then((v) async {
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Update Data berhasil');
         log(v.toJson().toString());
@@ -145,7 +146,7 @@ class ProfileUpdateController extends GetxController {
 
   void formCLear() {
     nameController.clear();
-    jkelController.clear();
+    hobbyController.clear();
     tglLahirController.clear();
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:sansgen/keys/assets_images.dart';
 
 class ErrorState extends StatelessWidget {
   const ErrorState({
@@ -11,8 +14,16 @@ class ErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        "message : $error",
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            KeysAssetsImages.serverError,
+            width: 240,
+          ),
+          const Gap(20),
+          const Text('Server down'),
+        ],
       ),
     );
   }

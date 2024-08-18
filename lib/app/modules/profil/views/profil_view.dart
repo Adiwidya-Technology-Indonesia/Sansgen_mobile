@@ -17,10 +17,13 @@ class ProfilView extends GetView<ProfilController> {
 
   @override
   Widget build(BuildContext context) {
-    return controller.obx((state) =>Scaffold(
-        appBar: appBarCustom(context: context, name: state!.name, image: state.image),
+    return controller.obx(
+      (state) => Scaffold(
+        appBar: appBarCustom(
+            context: context, name: state!.name, image: state.image!),
         body: ListView(
           children: [
+            const Gap(20),
             profilCard(
               title: 'Informasi Pribadi',
               context: context,
@@ -34,21 +37,24 @@ class ProfilView extends GetView<ProfilController> {
               context: context,
               iconCom: KeysAssetsIcons.category,
               onTap: () {
-                Get.toNamed(Routes.PROFILE_PREFERENCI);
+                Get.offAllNamed(
+                  Routes.PROFILE_PREFERENCI,
+                );
               },
             ),
             profilCard(
               title: 'Payment',
               context: context,
               iconCom: KeysAssetsIcons.payment,
-              onTap: () => Get.toNamed(Routes.PAYMENT_BUY)
+              onTap: () =>
+                  Get.offAllNamed(Routes.PAYMENT_BUY, arguments: state),
             ),
-            profilCard(
-              title: 'Tentang Sansgen',
-              context: context,
-              iconCom: KeysAssetsIcons.info,
-              onTap: () {},
-            ),
+            // profilCard(
+            //   title: 'Tentang Sansgen',
+            //   context: context,
+            //   iconCom: KeysAssetsIcons.info,
+            //   onTap: () {},
+            // ),
             profilCard(
               title: 'Keluar',
               context: context,
@@ -57,11 +63,11 @@ class ProfilView extends GetView<ProfilController> {
             ),
           ],
         ),
-        ),
-         onLoading: const LoadingState(),
-        onError: (error) => ErrorState(error: error.toString()),
-        onEmpty: const EmptyState(),);
-
+      ),
+      onLoading: const LoadingState(),
+      onError: (error) => ErrorState(error: error.toString()),
+      onEmpty: const EmptyState(),
+    );
   }
 
   AppBar appBarCustom({
@@ -93,23 +99,28 @@ class ProfilView extends GetView<ProfilController> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: () {
-              Get.dialog(
-                GestureDetector(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: AvatarWidget(image: image,),
-                ),
-              );
-            },
-            child: AvatarWidget(image: image, height: 150,width: 150,)
-          ),
+              onTap: () {
+                Get.dialog(
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: AvatarWidget(
+                      image: image,
+                    ),
+                  ),
+                );
+              },
+              child: AvatarWidget(
+                image: image,
+                height: 150,
+                width: 150,
+              )),
           const SizedBox(
             height: 20,
           ),
           Text(
-          name,
+            name,
             style: context.titleLargeBold.copyWith(
               color: context.colorScheme.primary,
             ),
