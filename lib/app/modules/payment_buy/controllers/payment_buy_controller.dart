@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:midtrans_sdk/midtrans_sdk.dart';
-import 'package:sansgen/keys/pref.dart';
 import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/provider/payment.dart';
 import 'package:url_launcher/url_launcher_string.dart';
