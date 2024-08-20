@@ -12,12 +12,12 @@ class AudioBookView extends GetView<AudioBookController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            body: SafeArea(
-                child: Column(
-          children: [
-            content(context)
-          ],
-        )));
+      body: SafeArea(
+        child: Column(
+          children: [content(context)],
+        ),
+      ),
+    );
   }
 
   Container content(BuildContext ctx) {
@@ -58,7 +58,7 @@ class AudioBookView extends GetView<AudioBookController> {
               ),
               const Gap(50),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: controller.onAudio,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),

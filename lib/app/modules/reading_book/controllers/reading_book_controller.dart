@@ -27,7 +27,7 @@ class ReadingBookController extends GetxController {
 
   @override
   void onInit() async {
-    await audioPlayer.playAssets('assets/music/tess.mp3');
+    await audioPlayer.playUrl('file:///home/yayat/Unduhan/Death%20Grips%20-%20Get%20Got.mp3');
     currentChapter.value = chapter;
     currentContentChapter.value =
         listChapter.where((v) => v.number == chapter.toString()).first.content;

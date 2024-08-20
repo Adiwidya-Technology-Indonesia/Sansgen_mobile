@@ -1,96 +1,42 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:get/get.dart';
-import 'package:sansgen/app/modules/audio_bok/views/audio_book_view.dart';
-import 'package:sansgen/utils/ext_context.dart';
+
+import '../../../../services/audio.dart';
 
 
 class AudioBookController extends GetxController {
-  Container content(BuildContext ctx) {
-    return Container(
-      height: 600,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [ctx.colorScheme.surface, ctx.colorScheme.primary]),
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40))),
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              appbar(ctx.titleMedium),
-              const Gap(20),
-              Column(
-                children: [
-                  Container(
-                    height: 300,
-                    width: 200,
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                  Gap(40),
-                  judul(
-                      judul: 'Lorem Ipsum',
-                      author: 'David Goudreault',
-                      ctx: ctx),
-                ],
-              ),
-              const Gap(50),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  minimumSize: const Size(200, 50),
-                ),
-                child: const Text('Lihat Teks'),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+  final audioPlayer = AudioService();
+
+  final Rx<bool> stateAudio = false.obs;
+
+
+  @override
+  void onInit() async {
+    const fileUri = 'https://teknodipani.com/storage/music-file/Y2meta.app%20-%20merindukanmu%20(cover)%20(128%20kbps).mp3';
+
+    await audioPlayer.playUrl(fileUri);
+    // await audioPlayer.playUrl('file:///home/yayat/Unduhan/Death%20Grips%20-%20Get%20Got.mp3');
+    super.onInit();
   }
 
-  Padding appbar(TextStyle style) {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-          Text(
-            'Agama Dan Peradaban',
-            style: style,
-          ),
-          Text(
-            'Bab 1',
-            style: style,
-          )
-        ],
-      ),
-    );
+  @override
+  void onClose() {
+    audioPlayer.dispose();
+    super.onClose();
   }
 
-  Column judul(
-      {required String judul,
-      required String author,
-      required BuildContext ctx}) {
-    return Column(
-      children: [
-        Text(judul, style: ctx.titleLargeBold),
-        const Text('di Publis Oleh'),
-        Text(author)
-      ],
-    );
+  void onAudio() {
+    log(stateAudio.value.toString(), name: "stateAudio.value");
+    if (stateAudio.isFalse) {
+      audioPlayer.play();
+      audioPlayer.setVolume(100);
+      stateAudio.value = !stateAudio.value;
+    } else {
+      audioPlayer.stop();
+      audioPlayer.setVolume(0);
+      stateAudio.value = !stateAudio.value;
+    }
   }
 }
