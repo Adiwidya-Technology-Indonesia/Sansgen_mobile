@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/services/audio.dart';
 
-import '../../../../model/chapter/response_get.dart';
+import '../../../../model/chapter/data_chapter.dart';
+
 
 class ReadingBookController extends GetxController {
   final audioPlayer = AudioService();

@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/model/chapter/response_get.dart';
 
 import '../../../../app/data/books.dart';
+import '../../../../model/chapter/data_chapter.dart';
 import '../../../../model/comment/request_post.dart';
 import '../../../../model/ratings/request_post.dart';
 import '../../../../provider/comment.dart';

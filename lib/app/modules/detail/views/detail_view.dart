@@ -21,7 +21,14 @@ class DetailView extends GetView<DetailController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: context.colorScheme.primary,
-        title: const Text('DetailView'),
+        title:  Text(controller.dataBook.title),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: context.colorScheme.primary,
+          ),
+        ),
       ),
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
@@ -34,7 +41,7 @@ class DetailView extends GetView<DetailController> {
             context: context,
             title: controller.dataBook.title,
             image: controller.dataBook.image,
-            rating: controller.dataBook.manyRatings.toDouble(),
+            rating: controller.dataBook.averageRate,
             like: controller.dataBook.manyLikes,
             comment: controller.dataBook.manyComments,
             sinopsis: controller.dataBook.synopsis,

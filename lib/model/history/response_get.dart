@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:sansgen/model/book/book.dart';
+
 ModelResponseGetHistory modelResponseGetHistoryFromJson(String str) => ModelResponseGetHistory.fromJson(json.decode(str));
 
 String modelResponseGetHistoryToJson(ModelResponseGetHistory data) => json.encode(data.toJson());
@@ -44,15 +46,15 @@ class DataHistory {
   final String uuid;
   final String isFinished;
   final String lastChapter;
-  final String idBook;
-  final List<Chapter> chapters;
+  final DataBook book;
+  final List<ChapterHistory> chapters;
 
   DataHistory({
     required this.id,
     required this.uuid,
     required this.isFinished,
     required this.lastChapter,
-    required this.idBook,
+    required this.book,
     required this.chapters,
   });
 
@@ -61,15 +63,15 @@ class DataHistory {
     String? uuid,
     String? isFinished,
     String? lastChapter,
-    String? idBook,
-    List<Chapter>? chapters,
+    DataBook? book,
+    List<ChapterHistory>? chapters,
   }) =>
       DataHistory(
         id: id ?? this.id,
         uuid: uuid ?? this.uuid,
         isFinished: isFinished ?? this.isFinished,
         lastChapter: lastChapter ?? this.lastChapter,
-        idBook: idBook ?? this.idBook,
+        book: book ?? this.book,
         chapters: chapters ?? this.chapters,
       );
 
@@ -78,8 +80,8 @@ class DataHistory {
     uuid: json["uuid"],
     isFinished: json["isFinished"],
     lastChapter: json["lastChapter"],
-    idBook: json["idBook"],
-    chapters: List<Chapter>.from(json["chapters"].map((x) => Chapter.fromJson(x))),
+    book: DataBook.fromJson(json["book"]),
+    chapters: List<ChapterHistory>.from(json["chapters"].map((x) => ChapterHistory.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -87,30 +89,30 @@ class DataHistory {
     "uuid": uuid,
     "isFinished": isFinished,
     "lastChapter": lastChapter,
-    "idBook": idBook,
+    "book": book.toJson(),
     "chapters": List<dynamic>.from(chapters.map((x) => x.toJson())),
   };
 }
 
-class Chapter {
+class ChapterHistory {
   final int id;
   final String number;
 
-  Chapter({
+  ChapterHistory({
     required this.id,
     required this.number,
   });
 
-  Chapter copyWith({
+  ChapterHistory copyWith({
     int? id,
     String? number,
   }) =>
-      Chapter(
+      ChapterHistory(
         id: id ?? this.id,
         number: number ?? this.number,
       );
 
-  factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
+  factory ChapterHistory.fromJson(Map<String, dynamic> json) => ChapterHistory(
     id: json["id"],
     number: json["number"],
   );

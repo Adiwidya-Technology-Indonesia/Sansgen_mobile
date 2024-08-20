@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
-import '../../../../model/chapter/response_get.dart';
+import '../../../../model/chapter/data_chapter.dart';
 
 GestureDetector cardChapter({
   required BuildContext context,

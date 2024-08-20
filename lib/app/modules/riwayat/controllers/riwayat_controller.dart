@@ -58,20 +58,15 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
         );
         change(dataEmpty, status: RxStatus.empty());
       }
+
       final bookSelesai =
-          event.data.where((e) => e.isFinished == 'true').map((v) async {
-        final book = await bookProvider.fetchIdBooks(v.idBook);
-        return book.data;
-      }).toList();
+          event.data.where((e) => e.isFinished == '1').map((v)=> v.book).toList();
 
       final bookBelumSelesai =
-          event.data.where((e) => e.isFinished == 'false').map((v) async {
-        final book = await bookProvider.fetchIdBooks(v.idBook);
-        return book.data;
-      }).toList();
+          event.data.where((e) => e.isFinished == '0').map((v)=> v.book).toList();
 
-      listBookFinish.value = await Future.wait(bookSelesai);
-      listBookNotFinish.value = await Future.wait(bookBelumSelesai);
+      listBookFinish.value = bookSelesai;
+      listBookNotFinish.value = bookBelumSelesai;
 
       final dataState = ModelHistory(
         listBookFinish: listBookFinish,

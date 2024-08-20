@@ -1,23 +1,36 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:sansgen/app/data/books.dart';
+import 'package:sansgen/model/book/book.dart';
+import 'package:sansgen/provider/chapter.dart';
 
+import '../../../../model/chapter/data_chapter.dart';
 import '../../../../services/audio.dart';
 
+class AudioBookController extends GetxController
+    with StateMixin<ModelDataAudioPage> {
+  final ChapterProvider chapterProvider;
 
-class AudioBookController extends GetxController {
+  AudioBookController({
+    required this.chapterProvider,
+  });
+
   final audioPlayer = AudioService();
 
   final Rx<bool> stateAudio = false.obs;
 
-
   @override
   void onInit() async {
-    const fileUri = 'https://teknodipani.com/storage/music-file/Y2meta.app%20-%20merindukanmu%20(cover)%20(128%20kbps).mp3';
+    const fileUri =
+        'https://teknodipani.com/storage/music-file/Y2meta.app%20-%20merindukanmu%20(cover)%20(128%20kbps).mp3';
 
     await audioPlayer.playUrl(fileUri);
-    // await audioPlayer.playUrl('file:///home/yayat/Unduhan/Death%20Grips%20-%20Get%20Got.mp3');
+
+    // audioPlayer.play();
+    // audioPlayer.setVolume(100);
+
+    await getIdChapter();
     super.onInit();
   }
 
@@ -39,4 +52,24 @@ class AudioBookController extends GetxController {
       stateAudio.value = !stateAudio.value;
     }
   }
+
+  Future getIdChapter() async {
+    chapterProvider
+        .fetchIdChapter(
+            idBook: '7093883d-88c6-4a3c-a6bd-8e3734897eba', idChapter: '1')
+        .then((v) {
+          log(v.data.toString(), name: 'Data Chapter');
+      final dataPage = ModelDataAudioPage(dataBook: book, dataChapter: v.data);
+      change(dataPage, status: RxStatus.success());
+    }).onError((e, st) {
+      change(null, status: RxStatus.error(e.toString()));
+    });
+  }
+}
+
+class ModelDataAudioPage {
+  final DataBook dataBook;
+  final DataChapter dataChapter;
+
+  ModelDataAudioPage({required this.dataBook, required this.dataChapter});
 }

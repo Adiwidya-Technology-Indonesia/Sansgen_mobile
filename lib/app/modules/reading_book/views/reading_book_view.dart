@@ -9,10 +9,10 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:get/get.dart';
 import 'package:hidable/hidable.dart';
 import 'package:sansgen/keys/assets_icons.dart';
-import 'package:sansgen/model/chapter/response_get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/image_book.dart';
 
+import '../../../../model/chapter/data_chapter.dart';
 import '../../../../services/common.dart';
 import '../controllers/reading_book_controller.dart';
 

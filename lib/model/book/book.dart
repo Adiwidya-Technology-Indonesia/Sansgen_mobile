@@ -99,10 +99,10 @@ class DataBook {
     writer: json["writer"],
     publisher: json["publisher"],
     createdAt: DateTime.parse(json["created_at"]),
-    manyLikes: json["manyLikes"],
-    manyRatings: json["manyRatings"],
-    manyChapters: json["manyChapters"],
-    manyComments: json["manyComments"],
+    manyLikes: json["manyLikes"] ?? 0,
+    manyRatings: json["manyRatings"] ?? 0,
+    manyChapters: json["manyChapters"] ?? 0,
+    manyComments: json["manyComments"] ?? 0,
     averageRate: json["average_rate"] ?? 0.0,
   );
 

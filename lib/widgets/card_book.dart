@@ -8,7 +8,7 @@ import 'image_book.dart';
 GestureDetector cardBook({
   required DataBook book,
   required BuildContext context,
-  required Function() onTap,
+  required Function()? onTap,
 }) {
   return GestureDetector(
     onTap: onTap,
