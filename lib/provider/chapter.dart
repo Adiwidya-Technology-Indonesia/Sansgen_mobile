@@ -29,7 +29,7 @@ class ChapterProvider extends GetConnect {
         // } else if (response.statusCode == 404) {
         //   return modelDataEmptyFromJson(response.bodyString!);
       } else {
-        log(response.bodyString!, name: 'data response Chapter');
+        // log(response.bodyString!, name: 'data response Chapter');
         return modelResponseGetIdChapterFromJson(response.bodyString!);
       }
     } catch (error) {
@@ -67,7 +67,8 @@ class ChapterProvider extends GetConnect {
       request.headers['Authorization'] = "Bearer $token";
       return request;
     });
-    httpClient.baseUrl = baseURL;
+    httpClient.baseUrl = baseURL + KeysApi.api;
+    log(httpClient.baseUrl!, name: "baseURL");
     super.onInit();
   }
 }

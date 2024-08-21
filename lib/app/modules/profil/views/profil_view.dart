@@ -136,7 +136,7 @@ class ProfilView extends GetView<ProfilController> {
     required String iconCom,
     required void Function()? onTap,
     double? width,
-    double? gapIcon,
+    // double? gapIcon,
     double? height,
   }) {
     return GestureDetector(
@@ -148,7 +148,7 @@ class ProfilView extends GetView<ProfilController> {
           children: [
             Row(
               children: [
-                Gap(gapIcon ?? 12),
+                // Gap(gapIcon ?? 12),
                 SvgPicture.asset(
                   alignment: Alignment.center,
                   iconCom,

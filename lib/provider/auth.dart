@@ -58,6 +58,6 @@ class AuthProvider extends GetConnect {
   @override
   void onInit() {
     log(baseURL, name: 'baseURL');
-    httpClient.baseUrl = baseURL;
+    httpClient.baseUrl = baseURL + KeysApi.api;
   }
 }

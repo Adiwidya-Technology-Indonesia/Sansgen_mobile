@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class KeysApi {
   const KeysApi._();
 
+  static const String api = '/api';
+  static const String storage = '/storage';
   static const String register = '/register';
   static const String login = '/login';
   static const String logout = '/logout';

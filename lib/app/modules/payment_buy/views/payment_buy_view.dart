@@ -6,7 +6,6 @@ import 'package:sansgen/app/routes/app_pages.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/avatar_widget.dart';
 
-import '../../../routes/app_pages.dart';
 import '../controllers/payment_buy_controller.dart';
 
 class PaymentBuyView extends GetView<PaymentBuyController> {

@@ -68,7 +68,7 @@ class BookProvider extends GetConnect {
 
   @override
   void onInit() {
-    httpClient.baseUrl = baseURL;
+    httpClient.baseUrl = baseURL + KeysApi.api;
     super.onInit();
   }
 }

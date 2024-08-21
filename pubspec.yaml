@@ -36,6 +36,7 @@ dependencies:
   just_audio_mpv: ^0.1.7
   audio_session: ^0.1.21
   url_launcher: ^6.3.0
+  scroll_loop_auto_scroll: ^0.0.5
 
 dev_dependencies:
   flutter_test:

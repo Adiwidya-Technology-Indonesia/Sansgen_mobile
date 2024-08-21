@@ -7,7 +7,6 @@ import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/avatar_widget.dart';
 
 import '../../../../widgets/card_preference.dart';
-import '../../../routes/app_pages.dart';
 import '../controllers/profile_preferenci_controller.dart';
 
 class ProfilePreferenciView extends GetView<ProfilePreferenciController> {

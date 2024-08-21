@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+DataChapter dataChapterFromJson(String str) => DataChapter.fromJson(json.decode(str));
+
+String dataChapterToJson(DataChapter data) => json.encode(data.toJson());
 
 class DataChapter {
   final int id;
@@ -5,6 +10,7 @@ class DataChapter {
   final String number;
   final String title;
   final String content;
+  final String audio;
   final DateTime createdAt;
 
   DataChapter({
@@ -13,6 +19,7 @@ class DataChapter {
     required this.number,
     required this.title,
     required this.content,
+    required this.audio,
     required this.createdAt,
   });
 
@@ -22,6 +29,7 @@ class DataChapter {
     String? number,
     String? title,
     String? content,
+    String? audio,
     DateTime? createdAt,
   }) =>
       DataChapter(
@@ -30,6 +38,7 @@ class DataChapter {
         number: number ?? this.number,
         title: title ?? this.title,
         content: content ?? this.content,
+        audio: audio ?? this.audio,
         createdAt: createdAt ?? this.createdAt,
       );
 
@@ -39,6 +48,7 @@ class DataChapter {
     number: json["number"],
     title: json["title"],
     content: json["content"],
+    audio: json["audio"],
     createdAt: DateTime.parse(json["created_at"]),
   );
 
@@ -48,6 +58,7 @@ class DataChapter {
     "number": number,
     "title": title,
     "content": content,
+    "audio": audio,
     "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
   };
 }

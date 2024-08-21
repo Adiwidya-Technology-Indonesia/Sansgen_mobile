@@ -42,7 +42,7 @@ class HistoryProvider extends GetConnect {
       request.headers['Authorization'] = "Bearer $token";
       return request;
     });
-    httpClient.baseUrl = baseURL;
+    httpClient.baseUrl = baseURL + KeysApi.api;
     super.onInit();
   }
 }
