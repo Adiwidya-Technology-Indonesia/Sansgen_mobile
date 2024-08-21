@@ -41,32 +41,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
               onPressed: () => Get.back(),
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () => controller.openTimer(
-                alertTimer(
-                  context: context,
-                  duration: controller.initDuration,
-                  controllerTimer: controller.controllerTimer,
-                  onStart: () {
-                    controller.onStartTimer();
-                    controller.audioPlayer.play();
-                  },
-                  onPause: () {
-                    controller.onPauseTimer();
-                    controller.audioPlayer.pause();
-                  },
-                  onResume: () {
-                    controller.onResumeTimer();
-                    controller.audioPlayer.play();
-                  },
-                  onRestart: () =>
-                      controller.onRestartTimer(controller.initDuration),
-                ),
-              ),
-              icon: SvgPicture.asset(KeysAssetsIcons.timer),
-            ),
-          ],
+          // actions: actions(context),
           // centerTitle: true,
         ),
       ),
@@ -87,20 +62,22 @@ class ReadingBookView extends GetView<ReadingBookController> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: controller.onMusic,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Obx(
-          () => (controller.stateMusic.isFalse)
-              ? SvgPicture.asset(KeysAssetsIcons.musicOn)
-              : Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: SvgPicture.asset(KeysAssetsIcons.musicOff),
-                ),
-        ),
-      ),
+      floatingActionButton: controller.isViewMusic.isFalse
+          ? null
+          : FloatingActionButton(
+              onPressed: controller.onMusic,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Obx(
+                () => (controller.stateMusic.isFalse)
+                    ? SvgPicture.asset(KeysAssetsIcons.musicOn)
+                    : Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: SvgPicture.asset(KeysAssetsIcons.musicOff),
+                      ),
+              ),
+            ),
       bottomNavigationBar: Hidable(
         controller: controller.scrollController,
         enableOpacityAnimation: true, // optional, defaults to `true`.
@@ -181,7 +158,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
           ),
           const Gap(40),
           StreamBuilder(
-            stream: controller.audioPlayer.positionalDataStream,
+            stream: controller.musicPlayer.positionalDataStream,
             builder: (context, snapshot) {
               final positionalData = snapshot.data;
               return progressWidget(positionalData);
@@ -226,7 +203,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
       progress: positionalData?.position ?? Duration.zero,
       buffered: positionalData?.bufferedPosition ?? Duration.zero,
       total: positionalData?.duration ?? Duration.zero,
-      onSeek: controller.audioPlayer.jumToDuration,
+      onSeek: controller.musicPlayer.jumToDuration,
     );
   }
 
@@ -260,14 +237,14 @@ class ReadingBookView extends GetView<ReadingBookController> {
         children: [
           const Gap(20),
           imageBook(
-            image: controller.book.image,
+            image: controller.dataBook!.image,
             height: 200,
             width: 140,
             radius: 8,
           ),
           const Gap(8),
           Text(
-            controller.book.title,
+            controller.dataBook!.title,
             style: context.titleLargeBold,
           ),
           Align(
@@ -367,4 +344,32 @@ class ReadingBookView extends GetView<ReadingBookController> {
       ),
     );
   }
+  //
+  // List<Widget> actions(BuildContext context) {
+  //   return [
+  //     IconButton(
+  //       onPressed: () => controller.openTimer(
+  //         alertTimer(
+  //           context: context,
+  //           duration: controller.initDuration,
+  //           controllerTimer: controller.controllerTimer,
+  //           onStart: () {
+  //             controller.onStartTimer();
+  //             controller.musicPlayer.play();
+  //           },
+  //           onPause: () {
+  //             controller.onPauseTimer();
+  //             controller.musicPlayer.pause();
+  //           },
+  //           onResume: () {
+  //             controller.onResumeTimer();
+  //             controller.musicPlayer.play();
+  //           },
+  //           onRestart: () => controller.onRestartTimer(controller.initDuration),
+  //         ),
+  //       ),
+  //       icon: SvgPicture.asset(KeysAssetsIcons.timer),
+  //     ),
+  //   ];
+  // }
 }

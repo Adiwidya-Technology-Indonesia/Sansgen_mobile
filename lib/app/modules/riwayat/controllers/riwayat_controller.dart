@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:sansgen/app/modules/riwayat/views/belum_baca.dart';
@@ -59,14 +60,20 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
         change(dataEmpty, status: RxStatus.empty());
       }
 
-      final bookSelesai =
-          event.data.where((e) => e.isFinished == '1').map((v)=> v.book).toList();
+      final bookSelesai = event.data
+          .where((e) => e.isFinished == '1')
+          .map((v) => v.book)
+          .toList();
 
-      final bookBelumSelesai =
-          event.data.where((e) => e.isFinished == '0').map((v)=> v.book).toList();
+      final bookBelumSelesai = event.data
+          .where((e) => e.isFinished == '0')
+          .map((v) => v.book)
+          .toList();
 
       listBookFinish.value = bookSelesai;
       listBookNotFinish.value = bookBelumSelesai;
+      log(bookSelesai.toString(), name: 'bookSelesai');
+      log(bookBelumSelesai.toString(), name: 'bookBelumSelesai');
 
       final dataState = ModelHistory(
         listBookFinish: listBookFinish,
@@ -88,4 +95,3 @@ class ModelHistory {
     required this.listBookNotFinish,
   });
 }
-

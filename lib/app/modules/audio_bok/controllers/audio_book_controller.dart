@@ -10,6 +10,7 @@ import 'package:sansgen/provider/chapter.dart';
 import '../../../../keys/env.dart';
 import '../../../../model/chapter/data_chapter.dart';
 import '../../../../services/audio.dart';
+import '../../../../services/common.dart';
 
 class AudioBookController extends GetxController
     with StateMixin<ModelDataAudioPage> {
@@ -26,6 +27,7 @@ class AudioBookController extends GetxController
 
   final Rx<bool> stateAudio = false.obs;
   final Rx<bool> isViewListing = false.obs;
+  PositionData? isPositionData;
 
   void stateViewListing() => isViewListing.value = !isViewListing.value;
 
@@ -41,11 +43,13 @@ class AudioBookController extends GetxController
     super.onClose();
   }
 
-  void playAudioIfUrlsAvailable() {
+  void playAudioIfUrlsAvailable() async {
     urlStorage = baseURL + KeysApi.storage;
     if (urlStorage != null && urlAudio != null) {
       log(urlAudio!, name: 'url audio isNotEmpty');
       audioPlayer.playUrl(urlAudio!); // Tidak perlu await di sini
+      isPositionData = await audioPlayer.positionalDataStream.single;
+      log(isPositionData.toString(), name: "isPositionData");
     } else {
       log('kosong', name: 'url audio isEmpty');
     }
@@ -74,9 +78,12 @@ class AudioBookController extends GetxController
           dataBook: book,
           dataChapter: v.data.copyWith(audio: formattedAudioUrl));
       urlAudio = dataPage.dataChapter.audio;
+
       log(urlAudio!, name: 'Data urlAudio');
       change(dataPage, status: RxStatus.success());
-      playAudioIfUrlsAvailable(); // Coba putar audio setelah urlAudio tersedia
+      if (urlAudio!.isURL) {
+        playAudioIfUrlsAvailable(); // Coba putar music setelah urlAudio tersedia
+      }
     }).onError((e, st) {
       change(null, status: RxStatus.error(e.toString()));
     });

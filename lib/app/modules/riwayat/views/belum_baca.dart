@@ -14,7 +14,7 @@ class BelumSelesaiDiBaca extends GetView<RiwayatController> {
   @override
   Widget build(BuildContext context) {
     return controller.obx(
-      (state) => (state!.listBookFinish.isEmpty)
+      (state) => (state!.listBookNotFinish.isEmpty)
           ? Expanded(
             child: Column(
               children: [

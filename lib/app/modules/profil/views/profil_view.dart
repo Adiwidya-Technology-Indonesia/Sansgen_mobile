@@ -21,47 +21,50 @@ class ProfilView extends GetView<ProfilController> {
       (state) => Scaffold(
         appBar: appBarCustom(
             context: context, name: state!.name, image: state.image!),
-        body: ListView(
-          children: [
-            const Gap(20),
-            profilCard(
-              title: 'Informasi Pribadi',
-              context: context,
-              iconCom: KeysAssetsIcons.user,
-              onTap: () {
-                Get.offAllNamed(Routes.PROFILE_UPDATE, arguments: state);
-              },
-            ),
-            profilCard(
-              title: 'Kategori favorit',
-              context: context,
-              iconCom: KeysAssetsIcons.category,
-              onTap: () {
-                Get.offAllNamed(
-                  Routes.PROFILE_PREFERENCI,
-                );
-              },
-            ),
-            profilCard(
-              title: 'Payment',
-              context: context,
-              iconCom: KeysAssetsIcons.payment,
-              onTap: () =>
-                  Get.offAllNamed(Routes.PAYMENT_BUY, arguments: state),
-            ),
-            // profilCard(
-            //   title: 'Tentang Sansgen',
-            //   context: context,
-            //   iconCom: KeysAssetsIcons.info,
-            //   onTap: () {},
-            // ),
-            profilCard(
-              title: 'Keluar',
-              context: context,
-              iconCom: KeysAssetsIcons.logOut,
-              onTap: () => controller.logOutButton(context),
-            ),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ListView(
+            children: [
+              const Gap(20),
+              profilCard(
+                title: 'Informasi Pribadi',
+                context: context,
+                iconCom: KeysAssetsIcons.user,
+                onTap: () {
+                  Get.offAllNamed(Routes.PROFILE_UPDATE, arguments: state);
+                },
+              ),
+              profilCard(
+                title: 'Kategori favorit',
+                context: context,
+                iconCom: KeysAssetsIcons.category,
+                onTap: () {
+                  Get.offAllNamed(
+                    Routes.PROFILE_PREFERENCI,
+                  );
+                },
+              ),
+              profilCard(
+                title: 'Payment',
+                context: context,
+                iconCom: KeysAssetsIcons.payment,
+                onTap: () =>
+                    Get.offAllNamed(Routes.PAYMENT_BUY, arguments: state),
+              ),
+              // profilCard(
+              //   title: 'Tentang Sansgen',
+              //   context: context,
+              //   iconCom: KeysAssetsIcons.info,
+              //   onTap: () {},
+              // ),
+              profilCard(
+                title: 'Keluar',
+                context: context,
+                iconCom: KeysAssetsIcons.logOut,
+                onTap: () => controller.logOutButton(context),
+              ),
+            ],
+          ),
         ),
       ),
       onLoading: const LoadingState(),
@@ -149,14 +152,20 @@ class ProfilView extends GetView<ProfilController> {
             Row(
               children: [
                 // Gap(gapIcon ?? 12),
-                SvgPicture.asset(
-                  alignment: Alignment.center,
-                  iconCom,
-                  width: width,
-                  height: height,
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.surface,
-                    BlendMode.srcIn,
+                SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: Center(
+                    child: SvgPicture.asset(
+                      alignment: Alignment.center,
+                      iconCom,
+                      width: width,
+                      height: height,
+                      colorFilter: ColorFilter.mode(
+                        context.colorScheme.surface,
+                        BlendMode.srcIn,
+                      ),
+                    ),
                   ),
                 ),
               ],

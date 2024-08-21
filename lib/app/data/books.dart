@@ -18,8 +18,9 @@ final DataBook book = DataBook(
   manyLikes: 100,
   manyComments: 12,
   manyChapters: 100,
-  averageRate: 4.5,
-  createdAt: DateTime.now(),
+  averageRate: '4.5',
+  music: '',
+  // createdAt: DateTime.now(),
   // createdAt: DateTime.now(),
   // listChapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 );

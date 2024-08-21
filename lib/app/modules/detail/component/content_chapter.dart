@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
@@ -39,10 +41,11 @@ Container contentBottomSheetChapter(
                 context: context,
                 value: e,
                 onTap: () {
+                  log(int.parse(e.number).toString(), name: 'number');
                   Get.toNamed(Routes.READING_BOOK, arguments: {
                     'book': dataBook,
-                    'chapter': int.parse(e.number),
-                    'listChapter': listChapter,
+                    'chapter': e,
+                    'listChapter' : listChapter,
                   });
                 },
               ),

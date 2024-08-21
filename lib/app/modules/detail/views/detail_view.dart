@@ -21,12 +21,23 @@ class DetailView extends GetView<DetailController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: context.colorScheme.primary,
-        title:  Text(controller.dataBook.title),
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: context.colorScheme.primary,
+        title: Text(controller.dataBook.title),
+        leading: GestureDetector(
+          onTap: Get.back,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Card(
+              color: context.colorScheme.primary.withOpacity(0.6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Icon(
+                  Icons.arrow_back_ios_new_outlined,
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -41,7 +52,7 @@ class DetailView extends GetView<DetailController> {
             context: context,
             title: controller.dataBook.title,
             image: controller.dataBook.image,
-            rating: controller.dataBook.averageRate,
+            rating: double.parse(controller.dataBook.averageRate),
             like: controller.dataBook.manyLikes,
             comment: controller.dataBook.manyComments,
             sinopsis: controller.dataBook.synopsis,

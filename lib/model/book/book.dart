@@ -20,12 +20,13 @@ class DataBook {
   final String category;
   final String writer;
   final String publisher;
-  final DateTime createdAt;
+  // final DateTime? createdAt;
+  final String? music;
   final int manyLikes;
   final int manyRatings;
   final int manyChapters;
   final int manyComments;
-  final dynamic averageRate;
+  final String averageRate;
 
   DataBook({
     required this.id,
@@ -39,7 +40,8 @@ class DataBook {
     required this.category,
     required this.writer,
     required this.publisher,
-    required this.createdAt,
+    // required this.createdAt,
+    required this.music,
     required this.manyLikes,
     required this.manyRatings,
     required this.manyChapters,
@@ -59,12 +61,13 @@ class DataBook {
     String? category,
     String? writer,
     String? publisher,
-    DateTime? createdAt,
+    // DateTime? createdAt,
+    String? music,
     int? manyLikes,
     int? manyRatings,
     int? manyChapters,
     int? manyComments,
-    dynamic averageRate,
+    String? averageRate,
   }) =>
       DataBook(
         id: id ?? this.id,
@@ -78,7 +81,8 @@ class DataBook {
         category: category ?? this.category,
         writer: writer ?? this.writer,
         publisher: publisher ?? this.publisher,
-        createdAt: createdAt ?? this.createdAt,
+        // createdAt: createdAt ?? this.createdAt,
+        music: music ?? this.music,
         manyLikes: manyLikes ?? this.manyLikes,
         manyRatings: manyRatings ?? this.manyRatings,
         manyChapters: manyChapters ?? this.manyChapters,
@@ -98,12 +102,13 @@ class DataBook {
     category: json["category"],
     writer: json["writer"],
     publisher: json["publisher"],
-    createdAt: DateTime.parse(json["created_at"]),
-    manyLikes: json["manyLikes"] ?? 0,
-    manyRatings: json["manyRatings"] ?? 0,
-    manyChapters: json["manyChapters"] ?? 0,
-    manyComments: json["manyComments"] ?? 0,
-    averageRate: json["average_rate"] ?? 0.0,
+    // createdAt: DateTime.parse(json["created_at"]),
+    music: json["music"] ?? "",
+    manyLikes: json["manyLikes"],
+    manyRatings: json["manyRatings"],
+    manyChapters: json["manyChapters"],
+    manyComments: json["manyComments"],
+    averageRate: json["average_rate"] ?? '0.0',
   );
 
   Map<String, dynamic> toJson() => {
@@ -118,7 +123,8 @@ class DataBook {
     "category": category,
     "writer": writer,
     "publisher": publisher,
-    "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
+    // "created_at": "${createdAt!.year.toString().padLeft(4, '0')}-${createdAt!.month.toString().padLeft(2, '0')}-${createdAt!.day.toString().padLeft(2, '0')}",
+    "music": music,
     "manyLikes": manyLikes,
     "manyRatings": manyRatings,
     "manyChapters": manyChapters,

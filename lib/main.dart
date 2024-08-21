@@ -20,7 +20,7 @@ Future main() async {
   log(isToken, name: 'token login');
 
   String onBoarding =
-      isOnBoarding == false ? Routes.ON_BOARDING : Routes.AUDIO_BOOK;
+      isOnBoarding == false ? Routes.ON_BOARDING : Routes.DASHBOARD;
   String initialRoutes = isToken == '' ? Routes.LOGIN : onBoarding;
   // String initialRoutes = Routes.DETAIL;
   runApp(MyApp(initialRoutes));

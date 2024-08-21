@@ -46,46 +46,44 @@ class AudioBookView extends GetView<AudioBookController> {
         Stack(
           clipBehavior: Clip.none,
           children: [
-            Obx(
-              () => Container(
-                height: Get.height * 0.6,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        ctx.colorScheme.primaryContainer,
-                        ctx.colorScheme.primaryContainer.withOpacity(0.2),
-                      ]),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(40),
-                    bottomRight: Radius.circular(40),
-                  ),
-                ),
-                child: imageAudio(ctx: ctx, data: data),
-              ),
-            ),
-            Positioned(
-              bottom: -25,
-              left: 100,
-              right: 100,
-              child: ElevatedButton(
-                onPressed: controller.stateViewListing,
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  minimumSize: const Size(200, 50),
-                ),
-                child: Obx(
-                  () => Text(
-                    controller.isViewListing.isTrue
-                        ? 'Tutup Teks'
-                        : 'Lihat Teks',
-                  ),
+            Container(
+              height: Get.height * 0.6,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      ctx.colorScheme.primaryContainer,
+                      ctx.colorScheme.primaryContainer.withOpacity(0.2),
+                    ]),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(40),
+                  bottomRight: Radius.circular(40),
                 ),
               ),
+              child: imageAudio(ctx: ctx, data: data),
             ),
+            // Positioned(
+            //   bottom: -25,
+            //   left: 100,
+            //   right: 100,
+            //   child: ElevatedButton(
+            //     onPressed: controller.stateViewListing,
+            //     style: ElevatedButton.styleFrom(
+            //       shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(12)),
+            //       minimumSize: const Size(200, 50),
+            //     ),
+            //     child: Obx(
+            //       () => Text(
+            //         controller.isViewListing.isTrue
+            //             ? 'Tutup Teks'
+            //             : 'Lihat Teks',
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         const Gap(40),
@@ -150,35 +148,29 @@ class AudioBookView extends GetView<AudioBookController> {
     required BuildContext ctx,
     required ModelDataAudioPage data,
   }) {
-    return StreamBuilder(
-      stream: controller.audioPlayer.positionalDataStream,
-      builder: (context, snapshot) {
-        final positionalData = snapshot.data;
-        return ScrollLoopAutoScroll(
-          scrollDirection: Axis.vertical,
-          //required
-          delay: const Duration(seconds: 1),
-          duration: positionalData?.duration ?? Duration.zero,
-          gap: 25,
-          reverseScroll: false,
-          // duplicateChild: 25,
-          enableScrollInput: true,
-          delayAfterScrollInput: const Duration(seconds: 1),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Text(
-                    data.dataChapter.content,
-                    style: ctx.titleMediumBold,
-                  ),
-                ],
+    return ScrollLoopAutoScroll(
+      scrollDirection: Axis.vertical,
+      //required
+      delay: const Duration(seconds: 1),
+      duration: controller.isPositionData?.duration ?? Duration.zero,
+      gap: 25,
+      // reverseScroll: false,
+      // duplicateChild: 25,
+      enableScrollInput: true,
+      delayAfterScrollInput: const Duration(seconds: 1),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              Text(
+                data.dataChapter.content,
+                style: ctx.titleMediumBold,
               ),
-            ),
-          ), //required
-        );
-      },
+            ],
+          ),
+        ),
+      ), //required
     );
   }
 
@@ -222,7 +214,7 @@ class AudioBookView extends GetView<AudioBookController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: Get.back,
               child: Card(
                 color: ctx.colorScheme.primary.withOpacity(0.6),
                 shape: RoundedRectangleBorder(
