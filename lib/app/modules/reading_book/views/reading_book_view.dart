@@ -22,73 +22,75 @@ class ReadingBookView extends GetView<ReadingBookController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: controller.scaffoldKey,
-      drawer: contentDrawer(context),
-      appBar: Hidable(
-        controller: controller.scrollController,
-        enableOpacityAnimation: true, // optional, defaults to `true`.
-        preferredWidgetSize: const Size.fromHeight(100),
-        child: AppBar(
-          elevation: 40,
-          toolbarHeight: 44,
-          title: const Text('ReadingBookView'),
-          backgroundColor: context.colorScheme.primary,
-          leadingWidth: 80,
-          leading: CircleAvatar(
-            backgroundColor: context.colorScheme.secondaryContainer,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Get.back(),
+    return Obx(
+      () => Scaffold(
+        key: controller.scaffoldKey,
+        drawer: contentDrawer(context),
+        appBar: Hidable(
+          controller: controller.scrollController,
+          enableOpacityAnimation: true, // optional, defaults to `true`.
+          preferredWidgetSize: Size.fromHeight(
+            controller.isAppBarVisible.value ? 100 : 0,
+          ),
+          child: AppBar(
+            elevation: 40,
+            toolbarHeight: controller.isAppBarVisible.value ? 44 : 0,
+            title: const Text('ReadingBookView'),
+            backgroundColor: context.colorScheme.primary,
+            leadingWidth: 80,
+            leading: CircleAvatar(
+              backgroundColor: context.colorScheme.secondaryContainer,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => Get.back(),
+              ),
+            ),
+            // actions: actions(context),
+            // centerTitle: true,
+          ),
+        ),
+        body: SingleChildScrollView(
+          controller: controller.scrollController,
+          physics: controller.isAutoScrolling.value
+              ? const NeverScrollableScrollPhysics()
+              : null,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Obx(
+                  () => dataContent(context),
+                ),
+              ],
             ),
           ),
-          // actions: actions(context),
-          // centerTitle: true,
         ),
-      ),
-      body: SingleChildScrollView(
-        controller: controller.scrollController,
-        physics: controller.isAutoScrolling.value
-            ? const NeverScrollableScrollPhysics()
-            : null,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Obx(
-                () => dataContent(context),
-              ),
-            ],
-          ),
-        ),
-      ),
-      resizeToAvoidBottomInset: false,
-      floatingActionButton: Obx(
-        () => FloatingActionButton(
+        resizeToAvoidBottomInset: false,
+        floatingActionButton: FloatingActionButton(
           onPressed: controller.isViewMusic.isFalse ? null : controller.onMusic,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Obx(
-            () => (controller.stateMusic.isFalse)
-                ? SvgPicture.asset(KeysAssetsIcons.musicOn)
-                : Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: SvgPicture.asset(KeysAssetsIcons.musicOff),
-                  ),
-          ),
+          child: (controller.stateMusic.isFalse)
+              ? SvgPicture.asset(KeysAssetsIcons.musicOn)
+              : Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: SvgPicture.asset(KeysAssetsIcons.musicOff),
+                ),
         ),
-      ),
-      bottomNavigationBar: Hidable(
-        controller: controller.scrollController,
-        enableOpacityAnimation: true, // optional, defaults to `true`.
-        child: Obx(
-          () => bottomNavBarReading(
-            context: context,
-            chapter: controller.currentChapter.value.toString(),
-            onTapPrevious: controller.previousChapter,
-            onTapNext: controller.nextChapter,
-            onTapDrawerChapter: controller.openDrawer,
+        bottomNavigationBar: Visibility(
+          visible: controller.isBottomBarVisible.value,
+          child: Hidable(
+            controller: controller.scrollController,
+            enableOpacityAnimation: true,
+            // optional, defaults to `true`.
+            child: bottomNavBarReading(
+              context: context,
+              chapter: controller.currentChapter.value.toString(),
+              onTapPrevious: controller.previousChapter,
+              onTapNext: controller.nextChapter,
+              onTapDrawerChapter: controller.openDrawer,
+            ),
           ),
         ),
       ),

@@ -38,8 +38,10 @@ class ReadingBookController extends GetxController
   final stopwatchFocus = Stopwatch();
 
   final ScrollController scrollController = ScrollController();
-  double scrollSpeed = 7.0; // Kecepatan scroll dalam piksel per detik
+  double scrollSpeed = 20.0; // Kecepatan scroll dalam piksel per detik
   final isAutoScrolling = false.obs;
+  final isAppBarVisible = true.obs;
+  final isBottomBarVisible = true.obs;
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -84,6 +86,8 @@ class ReadingBookController extends GetxController
     final maxScrollExtent = scrollController.position.maxScrollExtent;
     final duration = Duration(milliseconds: (maxScrollExtent / scrollSpeed * 1000).toInt());
     isAutoScrolling.value = true;
+    isAppBarVisible.value = false;
+    isBottomBarVisible.value = false;
     scrollController.animateTo(
       maxScrollExtent,
       duration: duration,
@@ -93,6 +97,8 @@ class ReadingBookController extends GetxController
 
   void stopAutoScroll() {
     isAutoScrolling.value = false;
+    isAppBarVisible.value = true;
+    isBottomBarVisible.value = true;
     scrollController.jumpTo(scrollController.offset); // Menghentikan animasi scroll
   }
 
