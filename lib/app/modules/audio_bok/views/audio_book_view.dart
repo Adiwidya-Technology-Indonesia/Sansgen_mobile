@@ -122,9 +122,12 @@ class AudioBookView extends GetView<AudioBookController> {
             const Spacer(flex: 3),
             GestureDetector(
               onTap: controller.previousChapter,
-              child: SvgPicture.asset(KeysAssetsIcons.skipPrevious),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(KeysAssetsIcons.skipPrevious),
+              ),
             ),
-            const Gap(8),
+            const Gap(16),
             GestureDetector(
               onTap: controller.onAudio,
               child: Card(
@@ -142,10 +145,13 @@ class AudioBookView extends GetView<AudioBookController> {
                 ),
               ),
             ),
-            const Gap(8),
+            const Gap(16),
             GestureDetector(
               onTap: controller.nextChapter,
-              child: SvgPicture.asset(KeysAssetsIcons.skipNext),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(KeysAssetsIcons.skipNext),
+              ),
             ),
             const Spacer(flex: 3),
           ],

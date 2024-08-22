@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/app/modules/riwayat/views/belum_baca.dart';
 import 'package:sansgen/app/modules/riwayat/views/sudah_baca.dart';
+import 'package:sansgen/utils/ext_string.dart';
 
+import '../../../../keys/env.dart';
 import '../../../../model/book/book.dart';
 import '../../../../provider/history.dart';
 import '../../../../provider/book.dart';
@@ -18,6 +21,8 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
     required this.historyProvider,
     required this.bookProvider,
   });
+
+  final String baseURL = dotenv.get(KeysEnv.baseUrl);
 
   final currentIndex = 0.obs;
 
@@ -69,15 +74,14 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
         change(dataEmpty, status: RxStatus.empty());
       }
 
-      final bookSelesai = event.data
-          .where((e) => e.isFinished == '1')
-          .map((v) => v.book)
-          .toList();
+      final bookSelesai = event.data.where((e) => e.isFinished == '1').map((v) {
+        return v.book.copyWith(image: v.book.image!.formattedUrl);
+      }).toList();
 
-      final bookBelumSelesai = event.data
-          .where((e) => e.isFinished == '0')
-          .map((v) => v.book)
-          .toList();
+      final bookBelumSelesai =
+          event.data.where((e) => e.isFinished == '0').map((v) {
+        return v.book.copyWith(image: v.book.image!.formattedUrl);
+      }).toList();
 
       listBookFinish.value = bookSelesai;
       listBookNotFinish.value = bookBelumSelesai;

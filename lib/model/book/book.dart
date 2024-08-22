@@ -4,11 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import '../../keys/api.dart';
-import '../../keys/env.dart';
-
 DataBook dataBookFromJson(String str) => DataBook.fromJson(json.decode(str));
 
 String dataBookToJson(DataBook data) => json.encode(data.toJson());
@@ -97,15 +92,11 @@ class DataBook {
       );
 
   factory DataBook.fromJson(Map<String, dynamic> json) {
-    final String baseURL = dotenv.get(KeysEnv.baseUrl);
-
-    final formattedAudioUrl = "$baseURL${KeysApi.storage}/${json["image"]}";
-
     return DataBook(
       id: json["id"],
       uuid: json["uuid"],
       title: json["title"],
-      image: json["image"] != null ? formattedAudioUrl : 'empty',
+      image: json["image"],
       synopsis: json["synopsis"],
       language: json["language"],
       gender: json["gender"],

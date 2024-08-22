@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/app/data/books.dart';
 import 'package:sansgen/keys/api.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/provider/chapter.dart';
@@ -90,7 +89,7 @@ class AudioBookController extends GetxController
   void startAutoScroll() {
     final maxScrollExtent = scrollController.position.maxScrollExtent;
     final duration = Duration(
-      milliseconds: (maxScrollExtent / scrollSpeed.value * 10000).toInt(),
+      milliseconds: (maxScrollExtent / scrollSpeed.value * 1000).toInt(),
     );
     isAutoScrolling.value = true;
     scrollController.animateTo(
@@ -196,7 +195,7 @@ class AudioBookController extends GetxController
         .then((v) {
       final formattedAudioUrl = "$baseURL${KeysApi.storage}/${v.data.audio}";
       final dataPage = ModelDataAudioPage(
-          dataBook: book,
+          dataBook: dataBook!,
           dataChapter: v.data.copyWith(audio: formattedAudioUrl));
       urlAudio = dataPage.dataChapter.audio;
       setCurrentContent(dataPage.dataChapter.content);

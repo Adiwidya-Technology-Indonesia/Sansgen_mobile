@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
 import 'package:sansgen/provider/book.dart';
 import 'package:sansgen/provider/focus.dart';
+import 'package:sansgen/utils/ext_string.dart';
 
+import '../../../../keys/env.dart';
 import '../../../../model/book/book.dart';
 import '../../../../model/focus/data_focus.dart';
 import '../../../../model/user/user.dart';
@@ -24,6 +27,8 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
     required this.userProvider,
     required this.focusProvider,
   });
+
+  final String baseURL = dotenv.get(KeysEnv.baseUrl);
 
   // final List<DataBook> bookList = List.generate(7, (index) => book);
   List<DataBook> bookList = <DataBook>[];
@@ -63,14 +68,18 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
         populerList = [];
         log('Permintaan buku populer gagal', name: 'data kosong');
       } else {
-        populerList = resultPopuler.data;
-        log(populerList.map((e) => e.toJson()).toString(), name: 'populerList');
+        populerList = resultPopuler.data.map((e) {
+          return e.copyWith(image: e.image!.formattedUrl);
+        }).toList();
+        // log(populerList.map((e) => e.toJson()).toString(), name: 'populerList');
       }
       if (resultBestForYou.status != true) {
         bestForYouList = [];
         log('Permintaan buku terbaik untuk Anda gagal', name: 'data kosong');
       } else {
-        bestForYouList = resultBestForYou.data;
+        bestForYouList = resultBestForYou.data.map((e) {
+          return e.copyWith(image: e.image!.formattedUrl);
+        }).toList();
         log(
           bestForYouList.map((e) => e.toJson()).toString(),
           name: 'bestForYouList',
@@ -81,7 +90,7 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
         log('Permintaan informasi pengguna gagal', name: 'data kosong');
       } else {
         infoUser = resultInfoUser.data!;
-        log(infoUser.toJson().toString(), name: 'infoUser');
+        // log(infoUser.toJson().toString(), name: 'infoUser');
       }
       if (resultFocus.data == null) {
         infoFocus = DataFocus.fromJson({});

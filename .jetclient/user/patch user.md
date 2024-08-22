@@ -17,11 +17,11 @@ type = 'JSON'
 raw = '''
 {
 //  "name": "rahmat",
-//  "image" : "360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg",
-//  "dateOfBirth": "2024-08-31 00:00:00.000",
+  "image" : "3https://image.popbela.com/content-images/post/20220923/60d517e15ca1ecf2a5257c2873630379.png?width=640&format=webp&w=640",
+  "dateOfBirth": "2024-08-31",
 ////  "rangeAge": "18-24",
 ////  "gender": "Laki-laki",
 //  "hobby": "hh",
-//  "idCategory":[1,2,3,4,5,6]
+  "idCategory":[1,2,]
 }'''
 ```

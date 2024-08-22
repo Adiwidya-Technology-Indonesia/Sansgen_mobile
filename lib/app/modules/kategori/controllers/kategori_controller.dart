@@ -1,8 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/utils/ext_string.dart';
 
+import '../../../../keys/env.dart';
 import '../../../../model/book/book.dart';
 import '../../../../provider/book.dart';
 import '../../../routes/app_pages.dart';
@@ -12,6 +15,9 @@ class KategoriController extends GetxController
   final BookProvider bookProvider;
 
   KategoriController({required this.bookProvider});
+
+  final String baseURL = dotenv.get(KeysEnv.baseUrl);
+
 
   final List<String> kategoriList = [
     'All',
@@ -76,7 +82,9 @@ class KategoriController extends GetxController
     bookProvider.fetchBooks().then((result) {
       if (result.status == true) {
         log(result.toString(), name: 'data model');
-        bookList = result.data;
+        bookList = result.data.map((e) {
+         return e.copyWith(image: e.image!.formattedUrl);
+        }).toList();
         change(bookList, status: RxStatus.success());
       } else {
         change([], status: RxStatus.empty());
