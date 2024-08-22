@@ -37,6 +37,7 @@ dependencies:
   audio_session: ^0.1.21
   url_launcher: ^6.3.0
   scroll_loop_auto_scroll: ^0.0.5
+  flutter_html: ^3.0.0-beta.2
 
 dev_dependencies:
   flutter_test:

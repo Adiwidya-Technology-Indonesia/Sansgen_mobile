@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
@@ -47,15 +48,15 @@ class ReadingBookView extends GetView<ReadingBookController> {
       ),
       body: SingleChildScrollView(
         controller: controller.scrollController,
+        physics: controller.isAutoScrolling.value
+            ? const NeverScrollableScrollPhysics()
+            : null,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Obx(
-                () => Text(
-                  controller.currentContentChapter.value,
-                  style: context.titleMedium,
-                ),
+                () => dataContent(context),
               ),
             ],
           ),
@@ -92,6 +93,15 @@ class ReadingBookView extends GetView<ReadingBookController> {
         ),
       ),
     );
+  }
+
+  Widget dataContent(BuildContext ctx) {
+    return Html(data: controller.currentContentChapter.value, style: {
+      "div": Style(
+        fontSize: FontSize.large,
+        fontStyle: FontStyle.normal,
+      )
+    });
   }
 
   SizedBox alertTimer({
@@ -344,6 +354,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
       ),
     );
   }
+}
 //
 // List<Widget> actions(BuildContext context) {
 //   return [
@@ -372,4 +383,4 @@ class ReadingBookView extends GetView<ReadingBookController> {
 //     ),
 //   ];
 // }
-}
+// }

@@ -6,7 +6,6 @@ import 'package:sansgen/model/focus/response_get.dart';
 
 import '../keys/api.dart';
 import '../keys/env.dart';
-import '../model/error.dart';
 import '../model/focus/request_put.dart';
 import '../services/prefs.dart';
 

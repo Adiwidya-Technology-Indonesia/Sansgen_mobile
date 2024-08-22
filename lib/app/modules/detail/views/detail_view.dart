@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -167,14 +168,28 @@ class DetailView extends GetView<DetailController> {
         const Gap(12),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            sinopsis,
-            textAlign: TextAlign.center,
-            maxLines: 10,
-          ),
+          child: dataSinopsis(context, sinopsis),
+          // Text(
+          //   sinopsis,
+          //   textAlign: TextAlign.center,
+          //   maxLines: 10,
+          // ),
         ),
       ],
     );
+  }
+
+  Widget dataSinopsis(BuildContext ctx, String sinopsis) {
+    return Html(data: sinopsis, style: {
+      "div": Style(
+        fontSize: FontSize.medium,
+        fontStyle: FontStyle.normal,
+        alignment: Alignment.center,
+        textAlign: TextAlign.center,
+        maxLines: 7,
+        textOverflow: TextOverflow.ellipsis,
+      )
+    });
   }
 
   SizedBox contentHeader({

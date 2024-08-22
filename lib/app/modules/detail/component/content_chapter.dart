@@ -9,11 +9,12 @@ import '../../../routes/app_pages.dart';
 import '../../../../model/book/book.dart';
 import 'card_chapter.dart';
 
-Container contentBottomSheetChapter(
-  BuildContext context,
-  List<DataChapter> listChapter,
-  DataBook dataBook,
-) {
+Container contentBottomSheetChapter({
+  required BuildContext context,
+  required List<DataChapter> listChapter,
+  required bool isPremium,
+  required DataBook dataBook,
+}) {
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.only(
@@ -41,15 +42,29 @@ Container contentBottomSheetChapter(
                 context: context,
                 value: e,
                 onToReading: () {
+                  final numberChapter = int.parse(e.number);
                   log(int.parse(e.number).toString(), name: 'number');
+                  if (isPremium == false && numberChapter > 3) {
+                    return Get.snackbar(
+                      'info',
+                      'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
+                    );
+                  }
                   Get.toNamed(Routes.READING_BOOK, arguments: {
                     'book': dataBook,
                     'chapter': e,
-                    'listChapter' : listChapter,
+                    'listChapter': listChapter,
                   });
                 },
                 onToAudio: () {
-                  log(int.parse(e.number).toString(), name: 'number');
+                  final numberChapter = int.parse(e.number);
+
+                  if (isPremium == false && numberChapter > 3) {
+                    return Get.snackbar(
+                      'info',
+                      'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
+                    );
+                  }
                   Get.toNamed(Routes.AUDIO_BOOK, arguments: {
                     'book': dataBook,
                     'chapter': e,

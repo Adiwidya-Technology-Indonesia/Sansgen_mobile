@@ -6,7 +6,6 @@ import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/provider/payment.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../../../model/payment/request_post.dart';
 
 class PaymentBuyController extends GetxController with StateMixin<ModelUser> {
   final PaymentProvider paymentProvider;

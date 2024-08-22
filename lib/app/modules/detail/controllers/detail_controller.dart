@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/model/history/request_post.dart';
+import 'package:sansgen/provider/user.dart';
 
 import '../../../../app/data/books.dart';
 import '../../../../model/chapter/data_chapter.dart';
@@ -16,7 +18,6 @@ import '../../../../model/comment/user_comment.dart';
 import '../../../../model/like/data_like.dart';
 import '../../../../provider/rate.dart';
 import '../../../../provider/chapter.dart';
-import '../../../routes/app_pages.dart';
 import '../component/content_chapter.dart';
 import '../component/content_comment.dart';
 
@@ -25,15 +26,19 @@ class DetailController extends GetxController {
   final LikeProvider likeProvider;
   final RatingProvider ratingProvider;
   final ChapterProvider chapterProvider;
+  final UserProvider userProvider;
 
   DetailController({
     required this.commentProvider,
     required this.likeProvider,
     required this.ratingProvider,
     required this.chapterProvider,
+    required this.userProvider,
   });
 
   final prefServices = PrefService();
+
+  final isPremium = false.obs;
 
   late DataBook dataBook;
   final scrollController = ScrollController();
@@ -66,6 +71,7 @@ class DetailController extends GetxController {
       await getAllLike();
       await getAllRating();
       await getAllChapter();
+      await getUserLogin();
       await prefServices.prefInit();
       log(dataBook.uuid, name: 'idBook');
     } else {
@@ -78,9 +84,16 @@ class DetailController extends GetxController {
   void tapViewBottomSheetChapter(
       List<DataChapter> listChapter, BuildContext context) {
     Get.bottomSheet(
-      contentBottomSheetChapter(context, listChapter, dataBook),
+      contentBottomSheetChapter(
+        context: context,
+        listChapter: listChapter,
+        isPremium: isPremium.value,
+        dataBook: dataBook,
+      ),
     );
   }
+
+
 
   void tapViewRating() {
     Get.defaultDialog(
@@ -240,6 +253,20 @@ class DetailController extends GetxController {
       }
     }).onError((e, st) {
       listLike.value = [];
+    });
+  }
+
+  Future getUserLogin() async {
+    await userProvider.fetchUserId().then((v) {
+      if (v.data != null && v.data!.isPremium == '1') {
+        log('kosong', name: 'data isPremium');
+        isPremium.value = true;
+      } else {
+        log('ada', name: 'data isPremium');
+        isPremium.value = false;
+      }
+    }).onError((e, st) {
+      isPremium.value = false;
     });
   }
 }

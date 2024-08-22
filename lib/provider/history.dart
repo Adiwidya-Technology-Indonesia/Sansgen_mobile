@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/model/history/request_post.dart';
 import 'package:sansgen/model/history/response_get.dart';
 
 import '../keys/api.dart';
@@ -22,8 +23,35 @@ class HistoryProvider extends GetConnect {
       if (response.status.hasError) {
         log(response.bodyString.toString(), name: 'response History error');
         return Future.error(response);
-      // } else if (response.statusCode == 404) {
-      //   return modelDataEmptyFromJson(response.bodyString!);
+        // } else if (response.statusCode == 404) {
+        //   return modelDataEmptyFromJson(response.bodyString!);
+      } else {
+        log(response.bodyString!, name: 'data response History');
+        return modelResponseGetHistoryFromJson(response.bodyString!);
+      }
+    } catch (error) {
+      log(error.toString(), name: "catch error History");
+      rethrow;
+    }
+  }
+
+  Future postHistory({
+    required String uuidBook,
+    required String idChapter,
+    required ModelRequestPostHistory request,
+  }) async {
+    try {
+      final String urlPostHistory =
+          '${KeysApi.history}${KeysApi.books}/$uuidBook${KeysApi.chapters}/$idChapter';
+      log(urlPostHistory, name: "data url Post History");
+      final response = await post(
+        urlPostHistory,
+        request.toJson(),
+      );
+      log(response.statusCode.toString(), name: 'response status code Post History');
+      if (response.status.hasError) {
+        log(response.bodyString.toString(), name: 'response History error');
+        return Future.error(response);
       } else {
         log(response.bodyString!, name: 'data response History');
         return modelResponseGetHistoryFromJson(response.bodyString!);

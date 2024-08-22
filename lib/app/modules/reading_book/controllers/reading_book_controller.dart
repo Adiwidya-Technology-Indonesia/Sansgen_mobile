@@ -12,18 +12,25 @@ import 'package:sansgen/utils/ext_int.dart';
 import '../../../../keys/api.dart';
 import '../../../../keys/env.dart';
 import '../../../../model/chapter/data_chapter.dart';
+import '../../../../model/history/request_post.dart';
 import '../../../../provider/chapter.dart';
 import '../../../../provider/focus.dart';
+import '../../../../provider/history.dart';
+import '../../../../provider/user.dart';
 import '../../../../services/audio.dart';
 
 class ReadingBookController extends GetxController
     with StateMixin<ModelDataReadingPage> {
   final ChapterProvider chapterProvider;
   final FocusProvider focusProvider;
+  final HistoryProvider historyProvider;
+  final UserProvider userProvider;
 
   ReadingBookController({
     required this.chapterProvider,
     required this.focusProvider,
+    required this.historyProvider,
+    required this.userProvider,
   });
 
   final musicPlayer = AudioService();
@@ -31,17 +38,23 @@ class ReadingBookController extends GetxController
   final stopwatchFocus = Stopwatch();
 
   final ScrollController scrollController = ScrollController();
+  double scrollSpeed = 7.0; // Kecepatan scroll dalam piksel per detik
+  final isAutoScrolling = false.obs;
+
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   DataBook? dataBook;
-  List listChapter = <DataChapter>[];
+  var listChapter = <DataChapter>[];
 
   final Rx<int> currentChapter = 0.obs;
+  final Rx<String> currentIdChapter = ''.obs;
   final Rx<String> currentContentChapter = "".obs;
   final Rx<bool> stateMusic = false.obs;
   final Rx<bool> isViewMusic = false.obs;
   String? urlStorage;
   String? urlMusic;
+
+  final isPremium = false.obs;
 
   // int initDuration = 10;
 
@@ -60,7 +73,37 @@ class ReadingBookController extends GetxController
   void onClose() async {
     musicPlayer.dispose();
     await sendDataFocus();
+    await sendHistory(
+      lastChapter: currentChapter.value,
+      idChapter: currentIdChapter.value,
+    );
     super.onClose();
+  }
+
+  void startAutoScroll() {
+    final maxScrollExtent = scrollController.position.maxScrollExtent;
+    final duration = Duration(milliseconds: (maxScrollExtent / scrollSpeed * 1000).toInt());
+    isAutoScrolling.value = true;
+    scrollController.animateTo(
+      maxScrollExtent,
+      duration: duration,
+      curve: Curves.linear,
+    );
+  }
+
+  void stopAutoScroll() {
+    isAutoScrolling.value = false;
+    scrollController.jumpTo(scrollController.offset); // Menghentikan animasi scroll
+  }
+
+  Future sendHistory({
+    required int lastChapter,
+    required String idChapter,
+  }) async {
+    final request =
+        ModelRequestPostHistory(isFinished: false, lastChapter: lastChapter);
+    historyProvider.postHistory(
+        uuidBook: dataBook!.uuid, idChapter: idChapter, request: request);
   }
 
   Future sendDataFocus() async {
@@ -71,7 +114,7 @@ class ReadingBookController extends GetxController
 
     final focus = stopwatchFocus.elapsedMilliseconds.toFormattedTime();
 
-    final manyBooks = 1;
+    const manyBooks = 1;
 
     log(readings, name: 'readings');
     log(focus, name: 'focus');
@@ -82,6 +125,8 @@ class ReadingBookController extends GetxController
       manyBooks: manyBooks,
       focus: focus,
     );
+
+    log(request.toJson().toString(), name: 'Send data');
 
     focusProvider.putFocusCurrent(request).then((v) {
       Get.snackbar('info', 'Berhasil memperbarui habbit');
@@ -104,11 +149,15 @@ class ReadingBookController extends GetxController
       musicPlayer.setVolume(100);
       stateMusic.value = !stateMusic.value;
       stopwatchFocus.start();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        startAutoScroll();
+      });
     } else {
       musicPlayer.stop();
       musicPlayer.setVolume(0);
       stateMusic.value = !stateMusic.value;
       stopwatchFocus.stop();
+      stopAutoScroll();
       final focus = stopwatchFocus.elapsedMilliseconds.toFormattedTime();
       log(focus, name: 'focus');
     }
@@ -141,6 +190,14 @@ class ReadingBookController extends GetxController
     currentContentChapter.value = value;
   }
 
+  void setCurrentIdChapterByNumber(String value) {
+    currentIdChapter.value = listChapter
+        .where((e) => e.number == value)
+        .map((v) => v.id.toString())
+        .toList()
+        .first;
+  }
+
   void previousChapter() {
     if (currentChapter.value == 1) {
       Get.snackbar('info', 'Chapter 1 is the first chapter');
@@ -151,7 +208,12 @@ class ReadingBookController extends GetxController
   }
 
   void nextChapter() {
-    if (currentChapter.value == dataBook!.manyChapters) {
+    if (isPremium.value == false && currentChapter.value >= 3) {
+      Get.snackbar(
+        'info',
+        'Anda belum bisa membuka chapter selanjutnya, karena akun anda belum premium',
+      );
+    } else if (currentChapter.value == dataBook!.manyChapters) {
       Get.snackbar(
           'info', 'Chapter ${dataBook!.manyChapters} is the last chapter');
     } else {
@@ -187,20 +249,23 @@ class ReadingBookController extends GetxController
       log(listChapter.toString(), name: "listChapter");
 
       currentChapter.value = int.parse(initDataChapter.number);
+      // currentIdChapter.value = initDataChapter.id.toString();
       dataBook = initDataBook;
       currentContentChapter.value = initDataChapter.content;
       await getChapter(currentChapter.value.toString());
+      await getUserLogin();
     } else {
       change(null, status: RxStatus.empty());
     }
   }
 
-  Future getChapter(String idChapter) async {
+  Future getChapter(String numberChapter) async {
     change(null, status: RxStatus.loading());
+    setCurrentIdChapterByNumber(numberChapter);
     chapterProvider
         .fetchIdChapter(
       idBook: dataBook!.uuid,
-      idChapter: idChapter,
+      idChapter: currentIdChapter.value,
     )
         .then((v) {
       final formattedAudioUrl = "$baseURL${KeysApi.storage}/${dataBook!.music}";
@@ -208,6 +273,7 @@ class ReadingBookController extends GetxController
           dataBook: dataBook!.copyWith(music: formattedAudioUrl),
           dataChapter: v.data);
       urlMusic = dataPage.dataBook.music;
+      setCurrentContent(dataPage.dataChapter.content);
       log(urlMusic!, name: 'Data urlMusic');
       change(dataPage, status: RxStatus.success());
       if (urlMusic != null || urlMusic != '') {
@@ -216,6 +282,20 @@ class ReadingBookController extends GetxController
       }
     }).onError((e, st) {
       change(null, status: RxStatus.error(e.toString()));
+    });
+  }
+
+  Future getUserLogin() async {
+    await userProvider.fetchUserId().then((v) {
+      if (v.data != null && v.data!.isPremium == '1') {
+        log('kosong', name: 'data isPremium');
+        isPremium.value = true;
+      } else {
+        log('ada', name: 'data isPremium');
+        isPremium.value = false;
+      }
+    }).onError((e, st) {
+      isPremium.value = false;
     });
   }
 }
