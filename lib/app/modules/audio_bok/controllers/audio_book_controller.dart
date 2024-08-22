@@ -70,10 +70,18 @@ class AudioBookController extends GetxController
       log(isPositionData.toString(), name: "isPositionData");
       // Hitung scrollSpeed berdasarkan durasi audio
       final totalDuration = isPositionData?.duration ?? Duration.zero;
+      log(totalDuration.inSeconds.toString(), name: 'totalDuration');
+
       final maxScrollExtent = scrollController.position.maxScrollExtent;
       log(maxScrollExtent.toString(), name: 'maxScrollExtent');
-      scrollSpeed.value = maxScrollExtent / totalDuration.inSeconds;
       log(scrollSpeed.value.toString(), name: 'scrollSpeed');
+
+      if (totalDuration.inSeconds > 0) {
+        scrollSpeed.value = maxScrollExtent / totalDuration.inSeconds;
+      } else {
+        // Atur scrollSpeed ke nilai default jika durasi nol
+        scrollSpeed.value = 1.0; // Misalnya, 1 piksel per detik
+      }
     } else {
       log('kosong', name: 'url audio isEmpty');
     }
@@ -82,7 +90,8 @@ class AudioBookController extends GetxController
   void startAutoScroll() {
     final maxScrollExtent = scrollController.position.maxScrollExtent;
     final duration = Duration(
-        milliseconds: (maxScrollExtent / scrollSpeed.value * 1000).toInt());
+      milliseconds: (maxScrollExtent / scrollSpeed.value * 10000).toInt(),
+    );
     isAutoScrolling.value = true;
     scrollController.animateTo(
       maxScrollExtent,
