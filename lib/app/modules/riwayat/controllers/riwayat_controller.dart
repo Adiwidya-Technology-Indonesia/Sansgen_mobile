@@ -36,7 +36,10 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
   void toDetails(DataBook dataBook) {
     Get.toNamed(
       Routes.DETAIL,
-      arguments: dataBook,
+      arguments: {
+        'dataBook': dataBook,
+        'indexDash': 2,
+      },
     );
   }
 
@@ -44,6 +47,12 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
   void onInit() async {
     getAllHistory();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    getAllHistory();
+    super.onReady();
   }
 
   Future getIdBook(String idBook) async {

@@ -186,7 +186,7 @@ class AudioBookView extends GetView<AudioBookController> {
           width: 200,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(data.dataBook.image),
+              image: NetworkImage(data.dataBook.image!),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(20),
@@ -208,6 +208,7 @@ class AudioBookView extends GetView<AudioBookController> {
   }) {
     return AppBar(
       backgroundColor: ctx.colorScheme.primaryContainer,
+      automaticallyImplyLeading: false,
       title: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(

@@ -98,7 +98,7 @@ class HomeView extends GetView<HomeController> {
         child: Row(
           children: [
             imageBook(
-              image: book.image,
+              image: book.image!,
               height: 87,
               width: 76,
               radius: 8,
@@ -148,7 +148,7 @@ class HomeView extends GetView<HomeController> {
       child: Container(
         margin: const EdgeInsets.only(left: 16),
         child: imageBook(
-          image: book.image,
+          image: book.image!,
           height: 196,
           width: 149,
           radius: 8,

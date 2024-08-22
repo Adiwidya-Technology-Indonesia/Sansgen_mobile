@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/payment/post_redirect.dart';
-import '../model/payment/request_post.dart';
 import '../services/prefs.dart';
 
 class PaymentProvider extends GetConnect {
@@ -14,11 +13,11 @@ class PaymentProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelResponsePostRedirectPayment> postRedirect(ModelRequestPostPayment request) async {
+  Future<ModelResponsePostRedirectPayment> postRedirect() async {
     try {
       const String urlPostPayment = KeysApi.payment ;
       log(urlPostPayment, name: "data url urlPostPayment");
-      final response = await post(urlPostPayment, request.toJson());
+      final response = await post(urlPostPayment, {});
       if (response.status.hasError) {
         log(response.bodyString.toString(), name: 'response error Payment');
         if (response.statusCode == 401) {

@@ -40,12 +40,19 @@ Container contentBottomSheetChapter(
               (e) => cardChapter(
                 context: context,
                 value: e,
-                onTap: () {
+                onToReading: () {
                   log(int.parse(e.number).toString(), name: 'number');
                   Get.toNamed(Routes.READING_BOOK, arguments: {
                     'book': dataBook,
                     'chapter': e,
                     'listChapter' : listChapter,
+                  });
+                },
+                onToAudio: () {
+                  log(int.parse(e.number).toString(), name: 'number');
+                  Get.toNamed(Routes.AUDIO_BOOK, arguments: {
+                    'book': dataBook,
+                    'chapter': e,
                   });
                 },
               ),

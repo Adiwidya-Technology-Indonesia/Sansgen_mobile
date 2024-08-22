@@ -4,6 +4,11 @@
 
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../../keys/api.dart';
+import '../../keys/env.dart';
+
 DataBook dataBookFromJson(String str) => DataBook.fromJson(json.decode(str));
 
 String dataBookToJson(DataBook data) => json.encode(data.toJson());
@@ -12,7 +17,7 @@ class DataBook {
   final int id;
   final String uuid;
   final String title;
-  final String image;
+  final String? image;
   final String synopsis;
   final String language;
   final String gender;
@@ -20,6 +25,7 @@ class DataBook {
   final String category;
   final String writer;
   final String publisher;
+
   // final DateTime? createdAt;
   final String? music;
   final int manyLikes;
@@ -90,45 +96,51 @@ class DataBook {
         averageRate: averageRate ?? this.averageRate,
       );
 
-  factory DataBook.fromJson(Map<String, dynamic> json) => DataBook(
-    id: json["id"],
-    uuid: json["uuid"],
-    title: json["title"],
-    image: json["image"],
-    synopsis: json["synopsis"],
-    language: json["language"],
-    gender: json["gender"],
-    rangeAge: json["rangeAge"],
-    category: json["category"],
-    writer: json["writer"],
-    publisher: json["publisher"],
-    // createdAt: DateTime.parse(json["created_at"]),
-    music: json["music"] ?? "",
-    manyLikes: json["manyLikes"],
-    manyRatings: json["manyRatings"],
-    manyChapters: json["manyChapters"],
-    manyComments: json["manyComments"],
-    averageRate: json["average_rate"] ?? '0.0',
-  );
+  factory DataBook.fromJson(Map<String, dynamic> json) {
+    final String baseURL = dotenv.get(KeysEnv.baseUrl);
+
+    final formattedAudioUrl = "$baseURL${KeysApi.storage}/${json["image"]}";
+
+    return DataBook(
+      id: json["id"],
+      uuid: json["uuid"],
+      title: json["title"],
+      image: json["image"] != null ? formattedAudioUrl : 'empty',
+      synopsis: json["synopsis"],
+      language: json["language"],
+      gender: json["gender"],
+      rangeAge: json["rangeAge"],
+      category: json["category"],
+      writer: json["writer"],
+      publisher: json["publisher"],
+      // createdAt: DateTime.parse(json["created_at"]),
+      music: json["music"] ?? "",
+      manyLikes: json["manyLikes"],
+      manyRatings: json["manyRatings"],
+      manyChapters: json["manyChapters"],
+      manyComments: json["manyComments"],
+      averageRate: json["average_rate"] ?? '0.0',
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "title": title,
-    "image": image,
-    "synopsis": synopsis,
-    "language": language,
-    "gender": gender,
-    "rangeAge": rangeAge,
-    "category": category,
-    "writer": writer,
-    "publisher": publisher,
-    // "created_at": "${createdAt!.year.toString().padLeft(4, '0')}-${createdAt!.month.toString().padLeft(2, '0')}-${createdAt!.day.toString().padLeft(2, '0')}",
-    "music": music,
-    "manyLikes": manyLikes,
-    "manyRatings": manyRatings,
-    "manyChapters": manyChapters,
-    "manyComments": manyComments,
-    "average_rate": averageRate,
-  };
+        "id": id,
+        "uuid": uuid,
+        "title": title,
+        "image": image,
+        "synopsis": synopsis,
+        "language": language,
+        "gender": gender,
+        "rangeAge": rangeAge,
+        "category": category,
+        "writer": writer,
+        "publisher": publisher,
+        // "created_at": "${createdAt!.year.toString().padLeft(4, '0')}-${createdAt!.month.toString().padLeft(2, '0')}-${createdAt!.day.toString().padLeft(2, '0')}",
+        "music": music,
+        "manyLikes": manyLikes,
+        "manyRatings": manyRatings,
+        "manyChapters": manyChapters,
+        "manyComments": manyComments,
+        "average_rate": averageRate,
+      };
 }

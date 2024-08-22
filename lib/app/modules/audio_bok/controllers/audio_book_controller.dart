@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -33,7 +34,7 @@ class AudioBookController extends GetxController
 
   @override
   void onInit() async {
-    await getIdChapter();
+    getArgument();
     super.onInit();
   }
 
@@ -68,10 +69,26 @@ class AudioBookController extends GetxController
     }
   }
 
-  Future getIdChapter() async {
+  Future getArgument() async {
+    if (Get.arguments != null) {
+      log("ada", name: 'arguments');
+      final dataBook = Get.arguments['book'] as DataBook;
+      final dataChapter = Get.arguments['chapter'] as DataChapter;
+      await getIdChapter(
+        uuidBook: dataBook.uuid,
+        idChapter: dataChapter.id.toString(),
+      );
+    } else {
+      log("kosong", name: 'arguments');
+    }
+  }
+
+  Future getIdChapter({
+    required String uuidBook,
+    required String idChapter,
+  }) async {
     chapterProvider
-        .fetchIdChapter(
-            idBook: '58170fdf-f77d-464f-a2e3-2eb6a4b069e4', idChapter: '1')
+        .fetchIdChapter(idBook: uuidBook, idChapter: idChapter)
         .then((v) {
       final formattedAudioUrl = "$baseURL${KeysApi.storage}/${v.data.audio}";
       final dataPage = ModelDataAudioPage(
@@ -81,7 +98,7 @@ class AudioBookController extends GetxController
 
       log(urlAudio!, name: 'Data urlAudio');
       change(dataPage, status: RxStatus.success());
-      if (urlAudio!.isURL) {
+      if (urlAudio != null || urlAudio != '') {
         playAudioIfUrlsAvailable(); // Coba putar music setelah urlAudio tersedia
       }
     }).onError((e, st) {

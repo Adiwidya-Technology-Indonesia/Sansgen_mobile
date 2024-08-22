@@ -25,15 +25,7 @@ class PaymentBuyController extends GetxController with StateMixin<ModelUser> {
 
   Future postPayment() async {
     EasyLoading.show(status: 'Loading');
-    final request = ModelRequestPostPayment(
-      account: "Dana",
-      details: "Pembayaran untuk update akun premiun",
-      referenceNum: "INV-20231207-001", // no.ref dari midtrans
-      price: 10000,
-      adminFee: 500,
-      totalPrice: 10500,
-    );
-    paymentProvider.postRedirect(request).then((v) async {
+    paymentProvider.postRedirect().then((v) async {
       if (v.redirectUrl != null) {
         EasyLoading.dismiss();
         launchURL(v.redirectUrl!);

@@ -16,6 +16,7 @@ import '../../../../model/comment/user_comment.dart';
 import '../../../../model/like/data_like.dart';
 import '../../../../provider/rate.dart';
 import '../../../../provider/chapter.dart';
+import '../../../routes/app_pages.dart';
 import '../component/content_chapter.dart';
 import '../component/content_comment.dart';
 
@@ -44,13 +45,23 @@ class DetailController extends GetxController {
   final listLike = <UserLike>[].obs;
   final listChapter = <DataChapter>[].obs;
   final averageRate = 0.0.obs;
+  final indexDashboard = 0.obs;
 
 // void likeState() => isLike.value = !isLike.value;
+  void backToDashboard() {
+    Get.back();
+    // Get.offAllNamed(
+    //   Routes.DASHBOARD,
+    //   arguments: indexDashboard.value,
+    // );
+  }
 
   @override
   void onInit() async {
     if (Get.arguments != null) {
-      dataBook = Get.arguments;
+      log('Get argument ada', name: 'onInit');
+      dataBook = Get.arguments['dataBook'];
+      indexDashboard.value = Get.arguments['indexDash'];
       await getAllComment();
       await getAllLike();
       await getAllRating();
@@ -59,11 +70,13 @@ class DetailController extends GetxController {
       log(dataBook.uuid, name: 'idBook');
     } else {
       dataBook = book;
+      log('Get argument kosong', name: 'onInit');
     }
     super.onInit();
   }
 
-  void tapViewBottomSheetChapter(List<DataChapter> listChapter, BuildContext context) {
+  void tapViewBottomSheetChapter(
+      List<DataChapter> listChapter, BuildContext context) {
     Get.bottomSheet(
       contentBottomSheetChapter(context, listChapter, dataBook),
     );
@@ -184,10 +197,10 @@ class DetailController extends GetxController {
   Future getAllLike() async {
     await likeProvider.fetchLikeByBookId(uuidBook: dataBook.uuid).then((v) {
       if (v.data == []) {
-        log('comment kosong', name: 'data like');
+        log('like kosong', name: 'data like');
         listLike.value = [];
       } else {
-        log('comment ada', name: 'data like');
+        log('like ada', name: 'data like');
         listLike.value = v.data;
         final idUser = prefServices.getUserUuid;
         final isLike = v.data.where((e) => e.user.uuid == idUser);

@@ -29,13 +29,22 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
   List<DataBook> bookList = <DataBook>[];
 
   void toDetails(DataBook book) {
-    Get.toNamed(Routes.DETAIL, arguments: book);
+    Get.toNamed(Routes.DETAIL, arguments: {
+      'dataBook': book,
+      'indexDash': 0,
+    });
   }
 
   @override
   void onInit() async {
     await fetchDataHome();
     super.onInit();
+  }
+
+  @override
+  void onReady() async {
+    await fetchDataHome();
+    super.onReady();
   }
 
   Future<void> fetchDataHome() async {

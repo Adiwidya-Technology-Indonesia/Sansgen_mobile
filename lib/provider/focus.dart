@@ -36,16 +36,18 @@ class FocusProvider extends GetConnect {
 
   Future putFocusCurrent(ModelRequestPutFocus request) async {
     try {
-      const String putFocusCurrent = KeysApi.users + KeysApi.current;
+      const String putFocusCurrent = KeysApi.focus;
       log(putFocusCurrent, name: "data url putFocusCurrent");
-      final response = await put(
+      final response = await post(
         putFocusCurrent,
         request.toJson(),
       );
+      log(request.toJson().toString(), name: "data url putFocusCurrent");
+
       if (response.status.hasError) {
         log(response.toString(), name: 'data error putFocusCurrent');
-        // return Future.error(response);
-        return modelResponseErrorFromJson(response.bodyString!);
+        return Future.error(response);
+        // return modelResponseErrorFromJson(response.bodyString!);
       } else {
         // log(response.bodyString!, name: 'data response');
         return modelResponseGetFocusFromJson(response.bodyString!);

@@ -50,8 +50,9 @@ class ProfilController extends GetxController with StateMixin<ModelUser> {
       } else {
         change(v.data, status: RxStatus.success());
       }
-    }).onError((e, st) {
-      logOut();
+    }).onError((e, st) async {
+      await prefService.clearAllData();
+      Get.offAllNamed(Routes.LOGIN);
       change(null, status: RxStatus.error(e.toString()));
     });
   }

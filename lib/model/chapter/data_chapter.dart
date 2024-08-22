@@ -10,7 +10,7 @@ class DataChapter {
   final String number;
   final String title;
   final String content;
-  final String audio;
+  final String? audio;
   final DateTime createdAt;
 
   DataChapter({

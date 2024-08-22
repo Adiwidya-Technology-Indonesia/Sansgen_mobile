@@ -48,6 +48,7 @@ class DashboardController extends GetxController {
     }
     super.onInit();
   }
+
 }
 
 class ModelPageDashboard {

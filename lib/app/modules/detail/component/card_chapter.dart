@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
 import '../../../../model/chapter/data_chapter.dart';
@@ -7,10 +9,11 @@ import '../../../../model/chapter/data_chapter.dart';
 GestureDetector cardChapter({
   required BuildContext context,
   required DataChapter value,
-  required Function() onTap,
+  required Function() onToReading,
+  required Function() onToAudio,
 }) {
   return GestureDetector(
-    onTap: onTap,
+    onTap: onToReading,
     child: Container(
       height: 35,
       margin: const EdgeInsets.only(bottom: 8),
@@ -25,10 +28,23 @@ GestureDetector cardChapter({
       //   ],
       // ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Bab ${value.number}", style: context.titleMediumBold,),
-          const Gap(12),
-          Text(value.title),
+          Row(
+            children: [
+              Text(
+                "Bab ${value.number}",
+                style: context.titleMediumBold,
+              ),
+              const Gap(12),
+              Text(value.title),
+            ],
+          ),
+          if (value.audio != null)
+            GestureDetector(
+              onTap: onToAudio,
+              child: SvgPicture.asset(KeysAssetsIcons.audio),
+            ),
         ],
       ),
     ),

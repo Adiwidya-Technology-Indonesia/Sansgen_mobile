@@ -23,7 +23,7 @@ GestureDetector cardBook({
       child: Row(
         children: [
           imageBook(
-            image: book.image,
+            image: book.image!,
             height: 160,
             width: 130,
             radius: 8,

@@ -40,7 +40,10 @@ class KategoriController extends GetxController
   void setGenre(String v) => genreCurrent.value = v;
 
   void toDetails(DataBook book) {
-    Get.toNamed(Routes.DETAIL, arguments: book);
+    Get.toNamed(Routes.DETAIL, arguments: {
+      'dataBook': book,
+      'indexDash': 1,
+    });
   }
 
   @override
@@ -54,6 +57,19 @@ class KategoriController extends GetxController
         .toList();
     filterListKategori[0].isSelected.value = true;
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    findBooks();
+    setGenre(genreList[0]);
+    filterListKategori.value = kategoriList
+        .map(
+          (e) => ModelFilter(title: e, isSelected: false.obs),
+    )
+        .toList();
+    filterListKategori[0].isSelected.value = true;
+    super.onReady();
   }
 
   Future findBooks() async {

@@ -23,7 +23,7 @@ class DetailView extends GetView<DetailController> {
         backgroundColor: context.colorScheme.primary,
         title: Text(controller.dataBook.title),
         leading: GestureDetector(
-          onTap: Get.back,
+          onTap: controller.backToDashboard,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: Card(
@@ -46,12 +46,12 @@ class DetailView extends GetView<DetailController> {
         children: [
           contentHeader(
             context: context,
-            image: controller.dataBook.image,
+            image: controller.dataBook.image!,
           ),
           contentDetail(
             context: context,
             title: controller.dataBook.title,
-            image: controller.dataBook.image,
+            image: controller.dataBook.image!,
             rating: double.parse(controller.dataBook.averageRate),
             like: controller.dataBook.manyLikes,
             comment: controller.dataBook.manyComments,
@@ -93,11 +93,14 @@ class DetailView extends GetView<DetailController> {
       mainAxisSize: MainAxisSize.max,
       children: [
         const Gap(80),
-        imageBook(
-          image: image,
-          width: 180,
-          height: 240,
-          radius: 8,
+        Card(
+          elevation: 8,
+          child: imageBook(
+            image: image,
+            width: 180,
+            height: 240,
+            radius: 8,
+          ),
         ),
         const Gap(20),
         Text(title, style: context.titleLargeBold),
@@ -174,17 +177,27 @@ class DetailView extends GetView<DetailController> {
     );
   }
 
-  BackdropFilter contentHeader({
+  SizedBox contentHeader({
     required BuildContext context,
     required String image,
   }) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-      child: imageBook(
-        image: image,
-        width: double.infinity,
-        height: 240,
-        radius: 0,
+    return SizedBox(
+      width: double.infinity,
+      height: 240,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          imageBook(
+            image: image,
+            width: double.infinity,
+            height: 240,
+            radius: 0,
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+            child: const SizedBox(),
+          ),
+        ],
       ),
     );
   }

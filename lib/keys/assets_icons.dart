@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class KeysAssetsIcons {
   const KeysAssetsIcons._();
 
+  static const String audio = 'assets/icons/audio.svg';
   static const String camera = 'assets/icons/camera.svg';
   static const String category = 'assets/icons/category.svg';
   static const String ceklis = 'assets/icons/ceklis.svg';
