@@ -1,5 +1,6 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
@@ -7,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:sansgen/app/modules/audio_bok/controllers/audio_book_controller.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
-import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
 
 import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
@@ -46,44 +46,48 @@ class AudioBookView extends GetView<AudioBookController> {
         Stack(
           clipBehavior: Clip.none,
           children: [
-            Container(
-              height: Get.height * 0.6,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      ctx.colorScheme.primaryContainer,
-                      ctx.colorScheme.primaryContainer.withOpacity(0.2),
-                    ]),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40),
+            Obx(
+              () => Container(
+                height: Get.height * 0.6,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        ctx.colorScheme.primaryContainer,
+                        ctx.colorScheme.primaryContainer.withOpacity(0.2),
+                      ]),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40),
+                  ),
+                ),
+                child: controller.isViewListing.isTrue
+                    ? listingAudio(ctx: ctx, data: data)
+                    : imageAudio(ctx: ctx, data: data),
+              ),
+            ),
+            Positioned(
+              bottom: -25,
+              left: 100,
+              right: 100,
+              child: ElevatedButton(
+                onPressed: controller.stateViewListing,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  minimumSize: const Size(200, 50),
+                ),
+                child: Obx(
+                  () => Text(
+                    controller.isViewListing.isTrue
+                        ? 'Tutup Teks'
+                        : 'Lihat Teks',
+                  ),
                 ),
               ),
-              child: imageAudio(ctx: ctx, data: data),
             ),
-            // Positioned(
-            //   bottom: -25,
-            //   left: 100,
-            //   right: 100,
-            //   child: ElevatedButton(
-            //     onPressed: controller.stateViewListing,
-            //     style: ElevatedButton.styleFrom(
-            //       shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(12)),
-            //       minimumSize: const Size(200, 50),
-            //     ),
-            //     child: Obx(
-            //       () => Text(
-            //         controller.isViewListing.isTrue
-            //             ? 'Tutup Teks'
-            //             : 'Lihat Teks',
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
         const Gap(40),
@@ -116,7 +120,10 @@ class AudioBookView extends GetView<AudioBookController> {
         Row(
           children: [
             const Spacer(flex: 3),
-            SvgPicture.asset(KeysAssetsIcons.skipPrevious),
+            GestureDetector(
+              onTap: controller.previousChapter,
+              child: SvgPicture.asset(KeysAssetsIcons.skipPrevious),
+            ),
             const Gap(8),
             GestureDetector(
               onTap: controller.onAudio,
@@ -136,7 +143,10 @@ class AudioBookView extends GetView<AudioBookController> {
               ),
             ),
             const Gap(8),
-            SvgPicture.asset(KeysAssetsIcons.skipNext),
+            GestureDetector(
+              onTap: controller.nextChapter,
+              child: SvgPicture.asset(KeysAssetsIcons.skipNext),
+            ),
             const Spacer(flex: 3),
           ],
         ),
@@ -148,29 +158,31 @@ class AudioBookView extends GetView<AudioBookController> {
     required BuildContext ctx,
     required ModelDataAudioPage data,
   }) {
-    return ScrollLoopAutoScroll(
-      scrollDirection: Axis.vertical,
-      //required
-      delay: const Duration(seconds: 1),
-      duration: controller.isPositionData?.duration ?? Duration.zero,
-      gap: 25,
-      // reverseScroll: false,
-      // duplicateChild: 25,
-      enableScrollInput: true,
-      delayAfterScrollInput: const Duration(seconds: 1),
-      child: SingleChildScrollView(
+    return Obx(
+      () => SingleChildScrollView(
+        controller: controller.scrollController,
+        physics: controller.isAutoScrolling.value
+            ? const NeverScrollableScrollPhysics()
+            : null,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             children: [
-              Text(
-                data.dataChapter.content,
-                style: ctx.titleMediumBold,
+              Obx(
+                () => Html(
+                  data: controller.currentContentChapter.value,
+                  style: {
+                    "div": Style(
+                      fontSize: FontSize.large,
+                      fontStyle: FontStyle.normal,
+                    )
+                  },
+                ),
               ),
             ],
           ),
         ),
-      ), //required
+      ),
     );
   }
 

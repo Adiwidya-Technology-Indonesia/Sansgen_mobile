@@ -68,6 +68,7 @@ Container contentBottomSheetChapter({
                   Get.toNamed(Routes.AUDIO_BOOK, arguments: {
                     'book': dataBook,
                     'chapter': e,
+                    'listChapter': listChapter,
                   });
                 },
               ),

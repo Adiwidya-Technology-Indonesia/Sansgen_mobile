@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:gap/gap.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
@@ -60,18 +61,28 @@ GestureDetector cardBook({
                     color: context.colorScheme.secondary,
                   ),
                 ),
-                const Gap(12),
+                // const Gap(12),
                 Text('Sinopsis :', style: context.labelSmallBold),
-                Text(
-                  book.synopsis,
-                  style: context.labelSmall.copyWith(
-                    color: context.colorScheme.secondary,
-                    inherit: true,
-                    overflow: TextOverflow.ellipsis,
+                Html(data: book.synopsis, style: {
+                  "div": Style(
+                    padding: HtmlPaddings.all(0),
+                    fontSize: FontSize.small,
+                    fontStyle: FontStyle.normal,
+                    maxLines: 2,
+                    lineHeight:const LineHeight(1.2),
+                    textOverflow: TextOverflow.ellipsis,
                   ),
-                  softWrap: true,
-                  maxLines: 3,
-                ),
+                }),
+                // Text(
+                //   book.synopsis,
+                //   style: context.labelSmall.copyWith(
+                //     color: context.colorScheme.secondary,
+                //     inherit: true,
+                //     overflow: TextOverflow.ellipsis,
+                //   ),
+                //   softWrap: true,
+                //   maxLines: 3,
+                // ),
               ],
             ),
           ),
