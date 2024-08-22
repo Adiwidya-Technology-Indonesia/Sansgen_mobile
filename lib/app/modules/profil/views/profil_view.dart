@@ -41,6 +41,7 @@ class ProfilView extends GetView<ProfilController> {
                 onTap: () {
                   Get.offAllNamed(
                     Routes.PROFILE_PREFERENCI,
+                    arguments: state,
                   );
                 },
               ),
@@ -48,8 +49,10 @@ class ProfilView extends GetView<ProfilController> {
                 title: 'Payment',
                 context: context,
                 iconCom: KeysAssetsIcons.payment,
-                onTap: () =>
-                    Get.offAllNamed(Routes.PAYMENT_BUY, arguments: state),
+                onTap: () => Get.offAllNamed(
+                  Routes.PAYMENT_BUY,
+                  arguments: state,
+                ),
               ),
               // profilCard(
               //   title: 'Tentang Sansgen',

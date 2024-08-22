@@ -18,6 +18,8 @@ class ProfilePreferenciController extends GetxController
 
   ProfilePreferenciController({required this.userProvider});
 
+  ModelUser? dataUser;
+
   final listPreferences = <ModelPreferenci>[
     ModelPreferenci(id: 1, title: 'Bisnis', isSelected: false.obs),
     ModelPreferenci(id: 2, title: 'Pengembangan diri', isSelected: false.obs),
@@ -28,6 +30,33 @@ class ProfilePreferenciController extends GetxController
     ModelPreferenci(id: 7, title: 'Politik', isSelected: false.obs),
     ModelPreferenci(id: 8, title: 'Sejarah', isSelected: false.obs),
   ];
+
+  @override
+  void onInit() async {
+    getArgument();
+    super.onInit();
+  }
+
+  Future getArgument() async {
+    try {
+      if (Get.arguments != null) {
+        dataUser = Get.arguments;
+        for (var pref in listPreferences) {
+          if (dataUser!.categories
+              .map((e) => e.toLowerCase())
+              .contains(pref.title.toLowerCase())) {
+            pref.isSelected.value = true;
+          }
+        }
+        change(dataUser, status: RxStatus.success());
+      } else {
+        dataUser = null;
+        change(dataUser, status: RxStatus.empty());
+      }
+    } catch (e) {
+      change(null, status: RxStatus.error(e.toString()));
+    }
+  }
 
   Future simpan() async {
     try {
@@ -68,23 +97,5 @@ class ProfilePreferenciController extends GetxController
         content: Text('Error: $e'),
       );
     }
-  }
-
-  @override
-  void onInit() async {
-    await fetchDataProfil();
-    super.onInit();
-  }
-
-  Future<void> fetchDataProfil() async {
-    await userProvider.fetchUserId().then((v) async {
-      if (v.data == null) {
-        change(null, status: RxStatus.empty());
-      } else {
-        change(v.data, status: RxStatus.success());
-      }
-    }).onError((e, st) {
-      change(null, status: RxStatus.error(e.toString()));
-    });
   }
 }

@@ -6,7 +6,7 @@ import '../controllers/profile_preferenci_controller.dart';
 class ProfilePreferenciBinding extends Bindings {
   @override
   void dependencies() {
-     Get.lazyPut<UserProvider>(
+    Get.lazyPut<UserProvider>(
       () => UserProvider(),
     );
     Get.lazyPut<ProfilePreferenciController>(

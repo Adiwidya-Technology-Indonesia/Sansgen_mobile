@@ -86,6 +86,6 @@ class ModelRequestPatchUser {
         "name": name,
         "image": image,
         "dateOfBirth": dateOfBirth.toString(),
-        // "hobby": hobby,
+        "hobby": hobby,
       };
 }

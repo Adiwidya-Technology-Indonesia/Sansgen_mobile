@@ -69,7 +69,7 @@ GestureDetector cardBook({
                     fontSize: FontSize.small,
                     fontStyle: FontStyle.normal,
                     maxLines: 2,
-                    lineHeight:const LineHeight(1.2),
+                    lineHeight: const LineHeight(1.2),
                     textOverflow: TextOverflow.ellipsis,
                   ),
                 }),
