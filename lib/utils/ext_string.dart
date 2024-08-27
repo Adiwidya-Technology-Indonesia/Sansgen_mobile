@@ -17,8 +17,8 @@ extension ExtString on String {
     final baseURL = dotenv.get(KeysEnv.baseUrl);
     log(baseURL, name: 'baseURL');
     log(KeysApi.storage, name: 'KeysApi.storage');
-    log("$baseURL${KeysApi.storage}//$this", name: 'formattedUrl');
-    return "$baseURL${KeysApi.storage}//$this";
+    log("$baseURL${KeysApi.storage}/$this", name: 'formattedUrl');
+    return "$baseURL${KeysApi.storage}/$this";
   }
 
   String formatDuration() {

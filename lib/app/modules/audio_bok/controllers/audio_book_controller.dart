@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:sansgen/keys/api.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/provider/chapter.dart';
+import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/env.dart';
 import '../../../../model/chapter/data_chapter.dart';
@@ -38,6 +39,8 @@ class AudioBookController extends GetxController
 
   final Rx<bool> stateAudio = false.obs;
   final Rx<bool> isViewListing = false.obs;
+  final Rx<bool> isViewAudio = false.obs;
+
   final isAutoScrolling = false.obs;
 
   final Rx<int> currentChapter = 0.obs;
@@ -174,7 +177,7 @@ class AudioBookController extends GetxController
       log(initDataChapter.toJson().toString(), name: "initDataChapter");
       log(listChapter.toString(), name: "listChapter");
 
-      currentChapter.value = int.parse(initDataChapter.number);
+      currentChapter.value = initDataChapter.id;
       // currentIdChapter.value = initDataChapter.id.toString();
       dataBook = initDataBook;
       currentContentChapter.value = initDataChapter.content;
@@ -193,15 +196,15 @@ class AudioBookController extends GetxController
         .fetchIdChapter(
             idBook: dataBook!.uuid, idChapter: currentIdChapter.value)
         .then((v) {
-      final formattedAudioUrl = "$baseURL${KeysApi.storage}/${v.data.audio}";
       final dataPage = ModelDataAudioPage(
-          dataBook: dataBook!,
-          dataChapter: v.data.copyWith(audio: formattedAudioUrl));
+          dataBook: dataBook!.copyWith(image: dataBook!.image!.formattedUrl),
+          dataChapter: v.data.copyWith(audio: v.data.audio!.formattedUrl));
       urlAudio = dataPage.dataChapter.audio;
       setCurrentContent(dataPage.dataChapter.content);
       log(urlAudio!, name: 'Data urlAudio');
       change(dataPage, status: RxStatus.success());
       if (urlAudio != null || urlAudio != '') {
+        isViewAudio.value = true;
         playAudioIfUrlsAvailable(); // Coba putar music setelah urlAudio tersedia
       }
     }).onError((e, st) {

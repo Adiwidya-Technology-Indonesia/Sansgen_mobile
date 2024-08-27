@@ -47,9 +47,13 @@ class FormValidate extends StatelessWidget {
             alignLabelWithHint: false,
             hintText: hint,
             suffixIcon: suffixIcon,
-            prefixIcon: SvgPicture.asset(
-              icon,
-              colorFilter: color,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: SvgPicture.asset(
+                icon,
+                colorFilter: color,
+              ),
             ),
             prefixIconConstraints: const BoxConstraints(
               minWidth: 16,

@@ -58,17 +58,18 @@ class LoginView extends GetView<LoginController> {
                     ),
                   ),
                 ),
-                // Align(
-                //   heightFactor: 0.2,
-                //   alignment: Alignment.centerRight,
-                //   child: InkWell(
-                //     onTap: controller.onTapLupaPass,
-                //     child: Text(
-                //       'Lupa Password?',
-                //       style: context.titleMediumBold,
-                //     ),
-                //   ),
-                // ),
+                const Gap(12),
+                Align(
+                  // heightFactor: 0.2,
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: controller.onTapLupaPass,
+                    child: Text(
+                      'Lupa Password?',
+                      style: context.titleMediumBold,
+                    ),
+                  ),
+                ),
                 const Gap(40),
                 ElevatedButton(
                   onPressed: controller.login,
@@ -97,7 +98,7 @@ class LoginView extends GetView<LoginController> {
                     const Text('Belum memiliki akun? '),
                     InkWell(
                       onTap: controller.onTapSignUp,
-                      child: Text('Sing Up', style: context.titleSmallBold),
+                      child: Text('Sign Up', style: context.titleSmallBold),
                     ),
                   ],
                 ),

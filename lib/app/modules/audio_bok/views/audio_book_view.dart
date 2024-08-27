@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:sansgen/app/modules/audio_bok/controllers/audio_book_controller.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
+import 'package:sansgen/widgets/image_book.dart';
 
 import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
@@ -199,17 +200,23 @@ class AudioBookView extends GetView<AudioBookController> {
     return Column(
       children: [
         const Gap(12),
-        Container(
+        imageBook(
+          image: data.dataBook.image!,
           height: Get.height * 0.37,
           width: 200,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(data.dataBook.image!),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
+          radius: 8,
         ),
+        // Container(
+        //   height: Get.height * 0.37,
+        //   width: 200,
+        //   decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //       image: NetworkImage(data.dataBook.image!),
+        //       fit: BoxFit.cover,
+        //     ),
+        //     borderRadius: BorderRadius.circular(20),
+        //   ),
+        // ),
         const Gap(20),
         judul(
           judul: data.dataChapter.title,

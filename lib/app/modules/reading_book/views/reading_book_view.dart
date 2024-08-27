@@ -66,8 +66,8 @@ class ReadingBookView extends GetView<ReadingBookController> {
           ),
         ),
         resizeToAvoidBottomInset: false,
-        floatingActionButton: FloatingActionButton(
-          onPressed: controller.isViewMusic.isFalse ? null : controller.onMusic,
+        floatingActionButton: controller.isViewMusic.isFalse ? null : FloatingActionButton(
+          onPressed:  controller.onMusic,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),

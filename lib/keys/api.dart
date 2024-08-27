@@ -22,4 +22,5 @@ class KeysApi {
   static const String focus = '/focus';
   static const String subscribe = '/subscribe';
   static const String payment = '/payment';
+  static const String lupaPas = '/lupa';
 }

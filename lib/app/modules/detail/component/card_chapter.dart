@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
@@ -37,7 +38,15 @@ GestureDetector cardChapter({
                 style: context.titleMediumBold,
               ),
               const Gap(12),
-              Text(value.title),
+              SizedBox(
+                width: Get.width * 0.6,
+                child: Text(
+                  value.title,
+                  style: context.labelLarge.copyWith(
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
             ],
           ),
           if (value.audio != null)

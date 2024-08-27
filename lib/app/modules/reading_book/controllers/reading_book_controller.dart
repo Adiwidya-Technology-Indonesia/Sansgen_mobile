@@ -109,7 +109,11 @@ class ReadingBookController extends GetxController
     final request =
         ModelRequestPostHistory(isFinished: false, lastChapter: lastChapter);
     historyProvider.postHistory(
-        uuidBook: dataBook!.uuid, idChapter: idChapter, request: request);
+        uuidBook: dataBook!.uuid, idChapter: idChapter, request: request).then((v) {
+      Get.snackbar('info', 'Berhasil memperbarui history');
+    }).onError((e, st) {
+      Get.snackbar('info', 'Gagal memperbarui history');
+    });
   }
 
   Future sendDataFocus() async {

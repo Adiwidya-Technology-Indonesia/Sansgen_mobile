@@ -62,21 +62,21 @@ class LoginController extends GetxController {
       errorMessage += 'Kata sandi minimal 8 karakter.\n';
     }
     // Berisi setidaknya satu huruf besar
-    if (!password.contains(RegExp(r'[A-Z]'))) {
-      errorMessage += '• Huruf besar tidak ada.\n';
-    }
+    // if (!password.contains(RegExp(r'[A-Z]'))) {
+    //   errorMessage += '• Huruf besar tidak ada.\n';
+    // }
     // Berisi setidaknya satu huruf kecil
-    if (!password.contains(RegExp(r'[a-z]'))) {
-      errorMessage += '• Huruf kecil tidak ada.\n';
-    }
+    // if (!password.contains(RegExp(r'[a-z]')) ) {
+    //   errorMessage += '• Huruf kecil tidak ada.\n';
+    // }
     // Berisi setidaknya satu digit
-    if (!password.contains(RegExp(r'[0-9]'))) {
-      errorMessage += '• Angka tidak ada.\n';
-    }
+    // if (!password.contains(RegExp(r'[0-9]'))) {
+    //   errorMessage += '• Angka tidak ada.\n';
+    // }
     // Berisi setidaknya satu karakter khusus
-    if (!password.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
-      errorMessage += '• Karakter khusus tidak ada.\n';
-    }
+    // if (!password.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
+    //   errorMessage += '• Karakter khusus tidak ada.\n';
+    // }
     // Jika tidak ada pesan kesalahan, kata sandi valid
     if (errorMessage.isEmpty) {
       return '';
