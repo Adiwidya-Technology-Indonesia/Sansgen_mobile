@@ -7,6 +7,7 @@ import 'package:sansgen/model/focus/response_get.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/focus/request_put.dart';
+import '../model/focus/response_post.dart';
 import '../services/prefs.dart';
 
 class FocusProvider extends GetConnect {
@@ -41,7 +42,7 @@ class FocusProvider extends GetConnect {
         putFocusCurrent,
         request.toJson(),
       );
-      log(request.toJson().toString(), name: "data url putFocusCurrent");
+      log(response.statusCode.toString(), name: "statusCode putFocusCurrent");
 
       if (response.status.hasError) {
         log(response.toString(), name: 'data error putFocusCurrent');
@@ -49,7 +50,7 @@ class FocusProvider extends GetConnect {
         // return modelResponseErrorFromJson(response.bodyString!);
       } else {
         // log(response.bodyString!, name: 'data response');
-        return modelResponseGetFocusFromJson(response.bodyString!);
+        return modelResponsePostFocusFromJson(response.bodyString!);
       }
     } catch (error) {
       log(error.toString(), name: "catch error putFocusCurrent");

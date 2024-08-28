@@ -66,18 +66,20 @@ class ReadingBookView extends GetView<ReadingBookController> {
           ),
         ),
         resizeToAvoidBottomInset: false,
-        floatingActionButton: controller.isViewMusic.isFalse ? null : FloatingActionButton(
-          onPressed:  controller.onMusic,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: (controller.stateMusic.isFalse)
-              ? SvgPicture.asset(KeysAssetsIcons.musicOn)
-              : Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: SvgPicture.asset(KeysAssetsIcons.musicOff),
+        floatingActionButton: controller.isViewMusic.isFalse
+            ? null
+            : FloatingActionButton(
+                onPressed: controller.onMusic,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
-        ),
+                child: (controller.stateMusic.isFalse)
+                    ? SvgPicture.asset(KeysAssetsIcons.musicOn)
+                    : Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: SvgPicture.asset(KeysAssetsIcons.musicOff),
+                      ),
+              ),
         bottomNavigationBar: Visibility(
           visible: controller.isBottomBarVisible.value,
           child: Hidable(
@@ -94,6 +96,24 @@ class ReadingBookView extends GetView<ReadingBookController> {
           ),
         ),
       ),
+    );
+  }
+
+  Future tampilkanDialogKonfirmasiKeluar(BuildContext context) async {
+    Get.defaultDialog(
+      title: 'Apakah Anda yakin?',
+      middleText: 'Apakah Anda yakin ingin meninggalkan halaman ini?',
+      textCancel: 'Keluar',
+      textConfirm: 'Batal',
+      cancelTextColor: Colors.black,
+      confirmTextColor: Colors.white,
+      buttonColor: context.colorScheme.surface,
+      onCancel: () {
+        Get.back(result: false); // Menutup dialog dan mengembalikan false
+      },
+      onConfirm: () {
+        Get.back(result: true); // Menutup dialog dan mengembalikan true
+      },
     );
   }
 

@@ -8,6 +8,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/model/focus/request_put.dart';
 import 'package:sansgen/utils/ext_int.dart';
+import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/api.dart';
 import '../../../../keys/env.dart';
@@ -20,7 +21,7 @@ import '../../../../provider/user.dart';
 import '../../../../services/audio.dart';
 
 class ReadingBookController extends GetxController
-    with StateMixin<ModelDataReadingPage>, WidgetsBindingObserver {
+    with StateMixin<ModelDataReadingPage> {
   final ChapterProvider chapterProvider;
   final FocusProvider focusProvider;
   final HistoryProvider historyProvider;
@@ -69,23 +70,25 @@ class ReadingBookController extends GetxController
     log('init Reading', name: 'on init');
     stopwatchReading.start();
     getArgument();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     super.onInit();
   }
 
   @override
-  void onClose() {
+  void onClose() async {
+    await sendDataFocus();
     musicPlayer.dispose();
     super.onClose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused) {
-      sendDataFocus();
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.inactive ||
+  //       state == AppLifecycleState.paused) {
+  //     sendDataFocus();
+  //   }
+  //   musicPlayer.dispose();
+  // }
 
   void startAutoScroll() {
     final maxScrollExtent = scrollController.position.maxScrollExtent;
@@ -113,8 +116,7 @@ class ReadingBookController extends GetxController
     required int lastChapter,
     required String idChapter,
   }) async {
-    final request =
-        ModelRequestPostHistory(isFinished: false, lastChapter: lastChapter);
+    final request = ModelRequestPostHistory(lastChapter: lastChapter);
     historyProvider.postHistory(
       uuidBook: dataBook!.uuid,
       idChapter: idChapter,
@@ -130,25 +132,21 @@ class ReadingBookController extends GetxController
 
     final focus = stopwatchFocus.elapsedMilliseconds.toFormattedTime();
 
-    // const manyBooks = 1;
+    const manyBooks = 1;
 
-    log(readings, name: 'readings');
-    log(focus, name: 'focus');
+    // log(readings, name: 'readings');
+    // log(focus, name: 'focus');
     // log(manyBooks.toString(), name: 'manyBooks');
 
     final request = ModelRequestPutFocus(
       readings: readings,
-      // manyBooks: manyBooks,
+      manyBooks: manyBooks,
       focus: focus,
     );
 
     log(request.toJson().toString(), name: 'Send data');
 
-    focusProvider.putFocusCurrent(request).then((v) {
-      Get.snackbar('info', 'Berhasil memperbarui habbit');
-    }).onError((e, st) {
-      Get.snackbar('info', 'Gagal memperbarui habbit');
-    });
+    focusProvider.putFocusCurrent(request);
   }
 
   void openTimer(Widget widget) {
@@ -288,15 +286,16 @@ class ReadingBookController extends GetxController
       idChapter: currentChapter.value.toString(),
     )
         .then((v) {
-      final formattedAudioUrl = "$baseURL${KeysApi.storage}/${dataBook!.music}";
       final dataPage = ModelDataReadingPage(
-          dataBook: dataBook!.copyWith(music: formattedAudioUrl),
+          dataBook: dataBook!.copyWith(music: dataBook!.music!.formattedUrl),
           dataChapter: v.data);
-      urlMusic = dataPage.dataBook.music;
+      urlMusic = dataBook!.music!;
       setCurrentContent(dataPage.dataChapter.content);
       log(urlMusic!, name: 'Data urlMusic');
       change(dataPage, status: RxStatus.success());
-      if (urlMusic != null || urlMusic != '') {
+      if (urlMusic == null || urlMusic == '') {
+        isViewMusic.value = false;
+      } else {
         isViewMusic.value = true;
         playAudioIfUrlsAvailable(); // Coba putar music setelah urlMusic tersedia
       }
