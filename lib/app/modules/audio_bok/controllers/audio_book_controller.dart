@@ -29,7 +29,7 @@ class AudioBookController extends GetxController
   var listChapter = <DataChapter>[];
 
   final ScrollController scrollController = ScrollController();
-  final scrollSpeed = 0.0.obs;
+  double scrollSpeed = 20.0; // Kecepatan scroll dalam piksel per detik
   final isPremium = false.obs;
 
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
@@ -44,7 +44,8 @@ class AudioBookController extends GetxController
   final isAutoScrolling = false.obs;
 
   final Rx<int> currentChapter = 0.obs;
-  final Rx<String> currentIdChapter = ''.obs;
+
+  // final Rx<String> currentIdChapter = ''.obs;
   final Rx<String> currentContentChapter = "".obs;
 
   PositionData? isPositionData;
@@ -71,19 +72,19 @@ class AudioBookController extends GetxController
       isPositionData = await audioPlayer.positionalDataStream.first;
       log(isPositionData.toString(), name: "isPositionData");
       // Hitung scrollSpeed berdasarkan durasi audio
-      final totalDuration = isPositionData?.duration ?? Duration.zero;
-      log(totalDuration.inSeconds.toString(), name: 'totalDuration');
-
-      final maxScrollExtent = scrollController.position.maxScrollExtent;
-      log(maxScrollExtent.toString(), name: 'maxScrollExtent');
-      log(scrollSpeed.value.toString(), name: 'scrollSpeed');
-
-      if (totalDuration.inSeconds > 0) {
-        scrollSpeed.value = maxScrollExtent / totalDuration.inSeconds;
-      } else {
-        // Atur scrollSpeed ke nilai default jika durasi nol
-        scrollSpeed.value = 1.0; // Misalnya, 1 piksel per detik
-      }
+      // final totalDuration = isPositionData?.duration ?? Duration.zero;
+      // log(totalDuration.inSeconds.toString(), name: 'totalDuration');
+      //
+      // final maxScrollExtent = scrollController.position.maxScrollExtent;
+      // log(maxScrollExtent.toString(), name: 'maxScrollExtent');
+      // log(scrollSpeed.value.toString(), name: 'scrollSpeed');
+      //
+      // if (totalDuration.inSeconds > 0) {
+      //   scrollSpeed.value = maxScrollExtent / totalDuration.inSeconds;
+      // } else {
+      //   // Atur scrollSpeed ke nilai default jika durasi nol
+      //   scrollSpeed.value = 1.0; // Misalnya, 1 piksel per detik
+      // }
     } else {
       log('kosong', name: 'url audio isEmpty');
     }
@@ -92,7 +93,7 @@ class AudioBookController extends GetxController
   void startAutoScroll() {
     final maxScrollExtent = scrollController.position.maxScrollExtent;
     final duration = Duration(
-      milliseconds: (maxScrollExtent / scrollSpeed.value * 1000).toInt(),
+      milliseconds: (maxScrollExtent / scrollSpeed * 3000).toInt(),
     );
     isAutoScrolling.value = true;
     scrollController.animateTo(
@@ -135,13 +136,13 @@ class AudioBookController extends GetxController
     currentContentChapter.value = value;
   }
 
-  void setCurrentIdChapterByNumber(String value) {
-    currentIdChapter.value = listChapter
-        .where((e) => e.number == value)
-        .map((v) => v.id.toString())
-        .toList()
-        .first;
-  }
+  // void setCurrentIdChapterByNumber(String value) {
+  //   currentIdChapter.value = listChapter
+  //       .where((e) => e.number == value)
+  //       .map((v) => v.id.toString())
+  //       .toList()
+  //       .first;
+  // }
 
   void previousChapter() async {
     if (currentChapter.value == 1) {
@@ -191,10 +192,12 @@ class AudioBookController extends GetxController
   Future getChapter(
     String numberChapter,
   ) async {
-    setCurrentIdChapterByNumber(numberChapter);
+    // setCurrentIdChapterByNumber(numberChapter);
     chapterProvider
         .fetchIdChapter(
-            idBook: dataBook!.uuid, idChapter: currentIdChapter.value)
+      idBook: dataBook!.uuid,
+      idChapter: currentChapter.value.toString(),
+    )
         .then((v) {
       final dataPage = ModelDataAudioPage(
           dataBook: dataBook!.copyWith(image: dataBook!.image!.formattedUrl),
@@ -203,7 +206,9 @@ class AudioBookController extends GetxController
       setCurrentContent(dataPage.dataChapter.content);
       log(urlAudio!, name: 'Data urlAudio');
       change(dataPage, status: RxStatus.success());
-      if (urlAudio != null || urlAudio != '') {
+      if (urlAudio == null || urlAudio == '') {
+        isViewAudio.value = false;
+      } else{
         isViewAudio.value = true;
         playAudioIfUrlsAvailable(); // Coba putar music setelah urlAudio tersedia
       }

@@ -14,5 +14,5 @@ token = 'a13f3abe-7a72-4ae2-ba2a-5a20179a61ca'
 
 [body]
 type = 'JSON'
-raw = '{readings: "00:00:24", manyBooks: 1, focus: "00:00:00"}'
+raw = '{readings: "00:02:24", manyBooks: 1, focus: "00:00:00"}'
 ```

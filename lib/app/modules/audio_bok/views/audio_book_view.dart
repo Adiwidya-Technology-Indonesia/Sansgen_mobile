@@ -118,45 +118,47 @@ class AudioBookView extends GetView<AudioBookController> {
           ),
         ),
         Gap(Get.height * 0.02),
-        Row(
-          children: [
-            const Spacer(flex: 3),
-            GestureDetector(
-              onTap: controller.previousChapter,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(KeysAssetsIcons.skipPrevious),
-              ),
-            ),
-            const Gap(16),
-            GestureDetector(
-              onTap: controller.onAudio,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Obx(
-                    () => Icon(
-                      controller.stateAudio.isTrue
-                          ? Icons.pause
-                          : Icons.play_arrow_rounded,
-                      color: ctx.colorScheme.primary,
-                      size: 32,
+        controller.isViewAudio.isTrue
+            ? Row(
+                children: [
+                  const Spacer(flex: 3),
+                  GestureDetector(
+                    onTap: controller.previousChapter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(KeysAssetsIcons.skipPrevious),
                     ),
                   ),
-                ),
-              ),
-            ),
-            const Gap(16),
-            GestureDetector(
-              onTap: controller.nextChapter,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(KeysAssetsIcons.skipNext),
-              ),
-            ),
-            const Spacer(flex: 3),
-          ],
-        ),
+                  const Gap(16),
+                  GestureDetector(
+                    onTap: controller.onAudio,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Obx(
+                          () => Icon(
+                            controller.stateAudio.isTrue
+                                ? Icons.pause
+                                : Icons.play_arrow_rounded,
+                            color: ctx.colorScheme.primary,
+                            size: 32,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Gap(16),
+                  GestureDetector(
+                    onTap: controller.nextChapter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(KeysAssetsIcons.skipNext),
+                    ),
+                  ),
+                  const Spacer(flex: 3),
+                ],
+              )
+            : const SizedBox(),
       ],
     );
   }
