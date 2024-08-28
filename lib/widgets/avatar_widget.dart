@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sansgen/keys/assets_icons.dart';
@@ -27,20 +28,41 @@ class AvatarWidget extends StatelessWidget {
       width: width,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius!),
-        child: (image!.isUrl) 
-            ? Image.network(
-                image!,
+        child: (image!.isUrl)
+            ? CachedNetworkImage(
+                imageUrl: image!,
                 height: height,
                 width: width,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  height: height,
+                  width: width,
+                  color: Colors.grey,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: context.colorScheme.secondary.withOpacity(0.2),
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    KeysAssetsIcons.user,
+                    width: width,
+                    height: height,
+                    colorFilter: ColorFilter.mode(
+                      context.colorScheme.onSecondary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
               )
             : Container(
                 color: context.colorScheme.secondary.withOpacity(0.2),
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
                   KeysAssetsIcons.user,
-                  width: 24,
-                  height: 24,
+                  width: width,
+                  height: height,
                   colorFilter: ColorFilter.mode(
                     context.colorScheme.onSecondary,
                     BlendMode.srcIn,
