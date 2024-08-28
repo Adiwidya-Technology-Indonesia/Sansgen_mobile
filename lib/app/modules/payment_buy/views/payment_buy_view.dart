@@ -37,7 +37,7 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
               ),
               txtMain(
                   txt:
-                      'Jangan lewatkan kesempatan untuk meningkatkan pengalaman membaca Anda! Berlangganan Akun Premium hanya dengan membayar \$12 di aplikasi baca buku Sansgen sekarang dan rasakan sendiri perbedaannya.',
+                      'Jangan lewatkan kesempatan untuk meningkatkan pengalaman membaca Anda! Berlangganan Akun Premium hanya dengan membayar Rp.10.000 di aplikasi baca buku Sansgen sekarang dan rasakan sendiri perbedaannya.',
                   context: context),
             ],
           ),

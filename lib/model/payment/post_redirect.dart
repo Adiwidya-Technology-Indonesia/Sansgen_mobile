@@ -9,30 +9,42 @@ ModelResponsePostRedirectPayment modelResponsePostRedirectPaymentFromJson(String
 String modelResponsePostRedirectPaymentToJson(ModelResponsePostRedirectPayment data) => json.encode(data.toJson());
 
 class ModelResponsePostRedirectPayment {
-  final String token;
-  final String? redirectUrl;
+  final bool status;
+  final String message;
+  final String? activeUntil;
+  final dynamic checkoutLink;
 
   ModelResponsePostRedirectPayment({
-    required this.token,
-    required this.redirectUrl,
+    required this.status,
+    required this.message,
+    required this.activeUntil,
+    required this.checkoutLink,
   });
 
   ModelResponsePostRedirectPayment copyWith({
-    String? token,
-    String? redirectUrl,
+    bool? status,
+    String? message,
+    String? activeUntil,
+    dynamic checkoutLink,
   }) =>
       ModelResponsePostRedirectPayment(
-        token: token ?? this.token,
-        redirectUrl: redirectUrl ?? this.redirectUrl,
+        status: status ?? this.status,
+        message: message ?? this.message,
+        activeUntil: activeUntil ?? this.activeUntil,
+        checkoutLink: checkoutLink ?? this.checkoutLink,
       );
 
   factory ModelResponsePostRedirectPayment.fromJson(Map<String, dynamic> json) => ModelResponsePostRedirectPayment(
-    token: json["token"],
-    redirectUrl: json["redirect_url"] ?? null,
+    status: json["status"],
+    message: json["message"],
+    activeUntil: json["active_until"] ?? "",
+    checkoutLink: json["checkout_link"],
   );
 
   Map<String, dynamic> toJson() => {
-    "token": token,
-    "redirect_url": redirectUrl,
+    "status": status,
+    "message": message,
+    "active_until": activeUntil,
+    "checkout_link": checkoutLink,
   };
 }

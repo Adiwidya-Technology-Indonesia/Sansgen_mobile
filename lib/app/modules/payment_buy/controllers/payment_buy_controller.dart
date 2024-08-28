@@ -1,11 +1,12 @@
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/provider/payment.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 
 class PaymentBuyController extends GetxController with StateMixin<ModelUser> {
   final PaymentProvider paymentProvider;
@@ -25,13 +26,19 @@ class PaymentBuyController extends GetxController with StateMixin<ModelUser> {
   Future postPayment() async {
     EasyLoading.show(status: 'Loading');
     paymentProvider.postRedirect().then((v) async {
-      if (v.redirectUrl != null) {
+      if (v.checkoutLink == null || v.checkoutLink == "") {
         EasyLoading.dismiss();
-        launchURL(v.redirectUrl!);
+        Get.defaultDialog(
+          title: "Info",
+          middleText:
+              "Akun anda sudah premium \n ${v.activeUntil ?? "Aktif hingga"}",
+          onConfirm: Get.back,
+          textConfirm: "OK",
+          buttonColor: Colors.greenAccent,
+        );
       } else {
         EasyLoading.dismiss();
-        EasyLoading.showError('Token Kosong');
-        return;
+        launchURL(v.checkoutLink!);
       }
     }).onError((e, st) {
       EasyLoading.dismiss();

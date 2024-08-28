@@ -18,6 +18,7 @@ class PaymentProvider extends GetConnect {
       const String urlPostPayment = KeysApi.payment ;
       log(urlPostPayment, name: "data url urlPostPayment");
       final response = await post(urlPostPayment, {});
+      log(response.statusCode.toString(), name: 'response statusCode Payment');
       if (response.status.hasError) {
         log(response.bodyString.toString(), name: 'response error Payment');
         if (response.statusCode == 401) {

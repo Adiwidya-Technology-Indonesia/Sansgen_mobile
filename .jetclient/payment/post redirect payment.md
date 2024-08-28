@@ -10,17 +10,11 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = '103d59ea-5395-4433-88a1-4d5a1e2e1cf1'
+token = 'a13f3abe-7a72-4ae2-ba2a-5a20179a61ca'
 
 [body]
 type = 'JSON'
 raw = '''
 {
-  "account": "Dana",
-  "details": "Pembayaran untuk update akun premiun",
-  "referenceNum": "INV-20231207-001", // no.ref dari midtrans
-  "price": 10000,
-  "adminFee": 500,
-  "totalPrice": 10500
 }'''
 ```

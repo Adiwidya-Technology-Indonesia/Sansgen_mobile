@@ -10,35 +10,35 @@ String modelRequestPutFocusToJson(ModelRequestPutFocus data) => json.encode(data
 
 class ModelRequestPutFocus {
   final String readings;
-  final int manyBooks;
+  // final int manyBooks;
   final String focus;
 
   ModelRequestPutFocus({
     required this.readings,
-    required this.manyBooks,
+    // required this.manyBooks,
     required this.focus,
   });
 
   ModelRequestPutFocus copyWith({
     String? readings,
-    int? manyBooks,
+    // int? manyBooks,
     String? focus,
   }) =>
       ModelRequestPutFocus(
         readings: readings ?? this.readings,
-        manyBooks: manyBooks ?? this.manyBooks,
+        // manyBooks: manyBooks ?? this.manyBooks,
         focus: focus ?? this.focus,
       );
 
   factory ModelRequestPutFocus.fromJson(Map<String, dynamic> json) => ModelRequestPutFocus(
     readings: json["readings"],
-    manyBooks: json["manyBooks"],
+    // manyBooks: json["manyBooks"],
     focus: json["focus"],
   );
 
   Map<String, dynamic> toJson() => {
     "readings": readings.toString(),
-    "manyBooks": manyBooks.toInt(),
+    // "manyBooks": manyBooks.toInt(),
     "focus": focus.toString(),
   };
 }

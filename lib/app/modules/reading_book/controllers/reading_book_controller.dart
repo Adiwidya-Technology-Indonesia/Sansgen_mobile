@@ -132,7 +132,7 @@ class ReadingBookController extends GetxController
 
     final focus = stopwatchFocus.elapsedMilliseconds.toFormattedTime();
 
-    const manyBooks = 1;
+    // const manyBooks = 1;
 
     // log(readings, name: 'readings');
     // log(focus, name: 'focus');
@@ -140,7 +140,7 @@ class ReadingBookController extends GetxController
 
     final request = ModelRequestPutFocus(
       readings: readings,
-      manyBooks: manyBooks,
+      // manyBooks: manyBooks,
       focus: focus,
     );
 
