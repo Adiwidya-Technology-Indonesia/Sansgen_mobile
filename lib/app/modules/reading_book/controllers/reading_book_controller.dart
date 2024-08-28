@@ -20,7 +20,7 @@ import '../../../../provider/user.dart';
 import '../../../../services/audio.dart';
 
 class ReadingBookController extends GetxController
-    with StateMixin<ModelDataReadingPage> {
+    with StateMixin<ModelDataReadingPage>, WidgetsBindingObserver {
   final ChapterProvider chapterProvider;
   final FocusProvider focusProvider;
   final HistoryProvider historyProvider;
@@ -49,7 +49,8 @@ class ReadingBookController extends GetxController
   var listChapter = <DataChapter>[];
 
   final Rx<int> currentChapter = 0.obs;
-  final Rx<String> currentIdChapter = ''.obs;
+
+  // final Rx<String> currentIdChapter = ''.obs;
   final Rx<String> currentContentChapter = "".obs;
   final Rx<bool> stateMusic = false.obs;
   final Rx<bool> isViewMusic = false.obs;
@@ -68,23 +69,28 @@ class ReadingBookController extends GetxController
     log('init Reading', name: 'on init');
     stopwatchReading.start();
     getArgument();
+    WidgetsBinding.instance.addObserver(this);
     super.onInit();
   }
 
   @override
-  void onClose() async {
+  void onClose() {
     musicPlayer.dispose();
-    await sendDataFocus();
-    await sendHistory(
-      lastChapter: currentChapter.value,
-      idChapter: currentIdChapter.value,
-    );
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      sendDataFocus();
+    }
   }
 
   void startAutoScroll() {
     final maxScrollExtent = scrollController.position.maxScrollExtent;
-    final duration = Duration(milliseconds: (maxScrollExtent / scrollSpeed * 1000).toInt());
+    final duration =
+        Duration(milliseconds: (maxScrollExtent / scrollSpeed * 1000).toInt());
     isAutoScrolling.value = true;
     isAppBarVisible.value = false;
     isBottomBarVisible.value = false;
@@ -99,7 +105,8 @@ class ReadingBookController extends GetxController
     isAutoScrolling.value = false;
     isAppBarVisible.value = true;
     isBottomBarVisible.value = true;
-    scrollController.jumpTo(scrollController.offset); // Menghentikan animasi scroll
+    scrollController
+        .jumpTo(scrollController.offset); // Menghentikan animasi scroll
   }
 
   Future sendHistory({
@@ -109,11 +116,10 @@ class ReadingBookController extends GetxController
     final request =
         ModelRequestPostHistory(isFinished: false, lastChapter: lastChapter);
     historyProvider.postHistory(
-        uuidBook: dataBook!.uuid, idChapter: idChapter, request: request).then((v) {
-      Get.snackbar('info', 'Berhasil memperbarui history');
-    }).onError((e, st) {
-      Get.snackbar('info', 'Gagal memperbarui history');
-    });
+      uuidBook: dataBook!.uuid,
+      idChapter: idChapter,
+      request: request,
+    );
   }
 
   Future sendDataFocus() async {
@@ -124,15 +130,15 @@ class ReadingBookController extends GetxController
 
     final focus = stopwatchFocus.elapsedMilliseconds.toFormattedTime();
 
-    const manyBooks = 1;
+    // const manyBooks = 1;
 
     log(readings, name: 'readings');
     log(focus, name: 'focus');
-    log(manyBooks.toString(), name: 'manyBooks');
+    // log(manyBooks.toString(), name: 'manyBooks');
 
     final request = ModelRequestPutFocus(
       readings: readings,
-      manyBooks: manyBooks,
+      // manyBooks: manyBooks,
       focus: focus,
     );
 
@@ -200,24 +206,24 @@ class ReadingBookController extends GetxController
     currentContentChapter.value = value;
   }
 
-  void setCurrentIdChapterByNumber(String value) {
-    currentIdChapter.value = listChapter
-        .where((e) => e.number == value)
-        .map((v) => v.id.toString())
-        .toList()
-        .first;
-  }
+  // void setCurrentIdChapterByNumber(String value) {
+  //   currentIdChapter.value = listChapter
+  //       .where((e) => e.number == value)
+  //       .map((v) => v.id.toString())
+  //       .toList()
+  //       .first;
+  // }
 
-  void previousChapter() {
+  Future previousChapter() async {
     if (currentChapter.value == 1) {
       Get.snackbar('info', 'Chapter 1 is the first chapter');
     } else {
       currentChapter.value--;
-      getChapter(currentChapter.value.toString());
+      await getChapter(currentChapter.value.toString());
     }
   }
 
-  void nextChapter() {
+  Future nextChapter() async {
     if (isPremium.value == false && currentChapter.value >= 3) {
       Get.snackbar(
         'info',
@@ -228,8 +234,12 @@ class ReadingBookController extends GetxController
           'info', 'Chapter ${dataBook!.manyChapters} is the last chapter');
     } else {
       currentChapter.value++;
-      getChapter(currentChapter.value.toString());
+      await getChapter(currentChapter.value.toString());
     }
+    sendHistory(
+      lastChapter: currentChapter.value,
+      idChapter: currentChapter.value.toString(),
+    );
   }
 
   void playAudioIfUrlsAvailable() async {
@@ -271,11 +281,11 @@ class ReadingBookController extends GetxController
 
   Future getChapter(String numberChapter) async {
     change(null, status: RxStatus.loading());
-    setCurrentIdChapterByNumber(numberChapter);
+    // setCurrentIdChapterByNumber(numberChapter);
     chapterProvider
         .fetchIdChapter(
       idBook: dataBook!.uuid,
-      idChapter: currentIdChapter.value,
+      idChapter: currentChapter.value.toString(),
     )
         .then((v) {
       final formattedAudioUrl = "$baseURL${KeysApi.storage}/${dataBook!.music}";

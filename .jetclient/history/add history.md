@@ -1,7 +1,7 @@
 ```toml
 name = 'add history'
 method = 'POST'
-url = 'https://teknodipani.com/api/history/books/d0f02260-4c1f-47ec-bb27-25054df30b92/chapters/1'
+url = 'https://teknodipani.com/api/history/books/5e04e574-ba49-446c-a748-c7a275704bbb/chapters/6'
 sortWeight = 2000000
 id = 'bfcd92b8-b3b7-4cb8-85e2-5120bc03d9bb'
 

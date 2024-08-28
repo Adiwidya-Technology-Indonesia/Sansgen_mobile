@@ -1,7 +1,7 @@
 ```toml
 name = 'get id book'
 method = 'GET'
-url = 'https://testimoni.contohdomain.com/api/books/0afb9a35-352c-4c88-b781-66a2f7e98356/comments'
+url = 'https://teknodipani.com/api/books/5e04e574-ba49-446c-a748-c7a275704bbb/chapters'
 sortWeight = 4000000
 id = '3381a8b7-ae57-4576-bcac-c8ed54c46fa8'
 ```

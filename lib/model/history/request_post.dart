@@ -5,11 +5,11 @@ ModelRequestPostHistory modelRequestPostHistoryFromJson(String str) => ModelRequ
 String modelRequestPostHistoryToJson(ModelRequestPostHistory data) => json.encode(data.toJson());
 
 class ModelRequestPostHistory {
-  final bool isFinished;
+  // final bool isFinished;
   final int lastChapter;
 
   ModelRequestPostHistory({
-    required this.isFinished,
+    // required this.isFinished,
     required this.lastChapter,
   });
 
@@ -18,17 +18,17 @@ class ModelRequestPostHistory {
     int? lastChapter,
   }) =>
       ModelRequestPostHistory(
-        isFinished: isFinished ?? this.isFinished,
+        // isFinished: isFinished ?? this.isFinished,
         lastChapter: lastChapter ?? this.lastChapter,
       );
 
   factory ModelRequestPostHistory.fromJson(Map<String, dynamic> json) => ModelRequestPostHistory(
-    isFinished: json["isFinished"],
+    // isFinished: json["isFinished"],
     lastChapter: json["lastChapter"],
   );
 
   Map<String, dynamic> toJson() => {
-    "isFinished": isFinished,
+    // "isFinished": isFinished,
     "lastChapter": lastChapter,
   };
 }
