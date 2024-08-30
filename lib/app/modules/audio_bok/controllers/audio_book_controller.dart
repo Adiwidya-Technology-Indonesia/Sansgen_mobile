@@ -136,20 +136,20 @@ class AudioBookController extends GetxController
     currentContentChapter.value = value;
   }
 
-  // void setCurrentIdChapterByNumber(String value) {
-  //   currentIdChapter.value = listChapter
-  //       .where((e) => e.number == value)
-  //       .map((v) => v.id.toString())
-  //       .toList()
-  //       .first;
-  // }
-
   void previousChapter() async {
     if (currentChapter.value == 1) {
       Get.snackbar('info', 'Chapter 1 is the first chapter');
     } else {
-      currentChapter.value--;
-      await getChapter(currentChapter.value.toString());
+      // Cari indexchapter saat ini di listChapter
+      final currentIndex = listChapter.indexWhere(
+          (chapter) => int.parse(chapter.number) == currentChapter.value);
+
+      // Jika chapter saat ini bukan chapter pertama, pindah ke chapter sebelumnya
+      if (currentIndex > 0) {
+        final previousChapter = listChapter[currentIndex - 1];
+        currentChapter.value = int.parse(previousChapter.number);
+        await getChapter(previousChapter.number);
+      }
     }
   }
 
@@ -163,8 +163,16 @@ class AudioBookController extends GetxController
       Get.snackbar(
           'info', 'Chapter ${dataBook!.manyChapters} is the last chapter');
     } else {
-      currentChapter.value++;
-      await getChapter(currentChapter.value.toString());
+// Cari index chapter saat ini di listChapter
+      final currentIndex = listChapter.indexWhere(
+          (chapter) => int.parse(chapter.number) == currentChapter.value);
+
+      // Jika chapter saat ini bukan chapter terakhir, pindah ke chapter berikutnya
+      if (currentIndex < listChapter.length - 1) {
+        final nextChapter = listChapter[currentIndex + 1];
+        currentChapter.value = int.parse(nextChapter.number);
+        await getChapter(nextChapter.number);
+      }
     }
   }
 
@@ -178,7 +186,7 @@ class AudioBookController extends GetxController
       log(initDataChapter.toJson().toString(), name: "initDataChapter");
       log(listChapter.toString(), name: "listChapter");
 
-      currentChapter.value = initDataChapter.id;
+      currentChapter.value = int.parse(initDataChapter.number);
       // currentIdChapter.value = initDataChapter.id.toString();
       dataBook = initDataBook;
       currentContentChapter.value = initDataChapter.content;
@@ -200,7 +208,7 @@ class AudioBookController extends GetxController
     )
         .then((v) {
       final dataPage = ModelDataAudioPage(
-          dataBook: dataBook!.copyWith(image: dataBook!.image!.formattedUrl),
+          dataBook: dataBook!.copyWith(image: dataBook!.image!),
           dataChapter: v.data.copyWith(audio: v.data.audio!.formattedUrl));
       urlAudio = dataPage.dataChapter.audio;
       setCurrentContent(dataPage.dataChapter.content);
@@ -208,7 +216,7 @@ class AudioBookController extends GetxController
       change(dataPage, status: RxStatus.success());
       if (urlAudio == null || urlAudio == '') {
         isViewAudio.value = false;
-      } else{
+      } else {
         isViewAudio.value = true;
         playAudioIfUrlsAvailable(); // Coba putar music setelah urlAudio tersedia
       }
