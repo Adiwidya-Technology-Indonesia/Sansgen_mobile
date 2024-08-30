@@ -51,7 +51,7 @@ class ProfilController extends GetxController with StateMixin<ModelUser> {
     EasyLoading.show(status: "Loading");
     userProvider.logOut().then((v) async {
       EasyLoading.dismiss();
-      EasyLoading.showSuccess('Update Data berhasil');
+      EasyLoading.showSuccess('berhasil log-out');
       await prefService.clearAllData();
       Get.offAllNamed(Routes.LOGIN);
     }).onError((e, st) {

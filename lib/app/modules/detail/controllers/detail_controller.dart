@@ -160,7 +160,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
           status: RxStatus.success(),
         );
       }
-    } catch (e, st) {
+    } catch (e) {
       Get.snackbar('info', 'Anda sudah memberikan Rating');
     }
   }
@@ -185,7 +185,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
         );
         commentFormC.clear();
       }
-    } catch (e, st) {
+    } catch (e) {
       Get.snackbar('info', 'gagal mengirim komentar');
     }
   }
@@ -202,7 +202,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
           status: RxStatus.success(),
         );
       }
-    } catch (e, st) {
+    } catch (e) {
       Get.snackbar('info', 'gagal mengirim like');
     }
   }

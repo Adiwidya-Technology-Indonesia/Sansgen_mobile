@@ -8,6 +8,7 @@ import '../controllers/on_boarding_controller.dart';
 
 class OnBoardingView extends GetView<OnBoardingController> {
   const OnBoardingView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,24 +32,25 @@ class OnBoardingView extends GetView<OnBoardingController> {
               ),
               const Gap(32),
               controller.listPage[controller.currentPage.value].page,
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40),
-                child: ElevatedButton(
-                  onPressed: controller.nextPage,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(
-                    controller
-                        .listPage[controller.currentPage.value].titleButton,
-                  ),
-                ),
-              ),
+              SizedBox(width: Get.width),
             ],
+          ),
+        ),
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 40, right: 20, left: 20),
+        child: ElevatedButton(
+          onPressed: controller.nextPage,
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            controller.listPage[controller.currentPage.value].titleButton,
           ),
         ),
       ),
