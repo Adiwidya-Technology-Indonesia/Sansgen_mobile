@@ -22,6 +22,7 @@ abstract class Routes {
   static const READING_BOOK = _Paths.READING_BOOK;
   static const PAYMENT_BUY = _Paths.PAYMENT_BUY;
   static const AUDIO_BOOK = _Paths.AUDIO_BOOK;
+  static const SPLASH_CREEN = _Paths.SPLASH_CREEN;
 }
 
 abstract class _Paths {
@@ -43,4 +44,5 @@ abstract class _Paths {
   static const READING_BOOK = '/reading-book';
   static const PAYMENT_BUY = '/payment-buy';
   static const AUDIO_BOOK = '/audio-book';
+  static const SPLASH_CREEN = '/splash-creen';
 }

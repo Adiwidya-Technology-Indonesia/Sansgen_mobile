@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-ModelResponseGetRate modelResponseGetRateFromJson(String str) => ModelResponseGetRate.fromJson(json.decode(str));
+ModelResponseGetRate modelResponseGetRateFromJson(String str) =>
+    ModelResponseGetRate.fromJson(json.decode(str));
 
-String modelResponseGetRateToJson(ModelResponseGetRate data) => json.encode(data.toJson());
+String modelResponseGetRateToJson(ModelResponseGetRate data) =>
+    json.encode(data.toJson());
 
 class ModelResponseGetRate {
   final bool status;
@@ -26,17 +28,18 @@ class ModelResponseGetRate {
         data: data ?? this.data,
       );
 
-  factory ModelResponseGetRate.fromJson(Map<String, dynamic> json) => ModelResponseGetRate(
-    status: json["status"],
-    message: json["message"],
-    data: DataResponseGetRate.fromJson(json["data"]),
-  );
+  factory ModelResponseGetRate.fromJson(Map<String, dynamic> json) =>
+      ModelResponseGetRate(
+        status: json["status"],
+        message: json["message"],
+        data: DataResponseGetRate.fromJson(json["data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "data": data.toJson(),
-  };
+        "status": status,
+        "message": message,
+        "data": data.toJson(),
+      };
 }
 
 class DataResponseGetRate {
@@ -57,15 +60,17 @@ class DataResponseGetRate {
         ratings: ratings ?? this.ratings,
       );
 
-  factory DataResponseGetRate.fromJson(Map<String, dynamic> json) => DataResponseGetRate(
-    averageRate: json["average_rate"]?.toDouble(),
-    ratings: List<Rating>.from(json["ratings"].map((x) => Rating.fromJson(x))),
-  );
+  factory DataResponseGetRate.fromJson(Map<String, dynamic> json) =>
+      DataResponseGetRate(
+        averageRate: json["average_rate"] ?? 0.0,
+        ratings:
+            List<Rating>.from(json["ratings"].map((x) => Rating.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "average_rate": averageRate,
-    "ratings": List<dynamic>.from(ratings.map((x) => x.toJson())),
-  };
+        "average_rate": averageRate,
+        "ratings": List<dynamic>.from(ratings.map((x) => x.toJson())),
+      };
 }
 
 class Rating {
@@ -107,24 +112,25 @@ class Rating {
       );
 
   factory Rating.fromJson(Map<String, dynamic> json) => Rating(
-    id: json["id"],
-    uuid: json["uuid"],
-    rate: json["rate"],
-    createdAt: DateTime.parse(json["created_at"]),
-    timeElapsed: json["time_elapsed"],
-    user: User.fromJson(json["user"]),
-    book: Book.fromJson(json["book"]),
-  );
+        id: json["id"],
+        uuid: json["uuid"],
+        rate: json["rate"],
+        createdAt: DateTime.parse(json["created_at"]),
+        timeElapsed: json["time_elapsed"],
+        user: User.fromJson(json["user"]),
+        book: Book.fromJson(json["book"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "rate": rate,
-    "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
-    "time_elapsed": timeElapsed,
-    "user": user.toJson(),
-    "book": book.toJson(),
-  };
+        "id": id,
+        "uuid": uuid,
+        "rate": rate,
+        "created_at":
+            "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
+        "time_elapsed": timeElapsed,
+        "user": user.toJson(),
+        "book": book.toJson(),
+      };
 }
 
 class Book {
@@ -150,16 +156,16 @@ class Book {
       );
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
-    id: json["id"],
-    uuid: json["uuid"],
-    title: json["title"],
-  );
+        id: json["id"],
+        uuid: json["uuid"],
+        title: json["title"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "title": title,
-  };
+        "id": id,
+        "uuid": uuid,
+        "title": title,
+      };
 }
 
 class User {
@@ -185,14 +191,14 @@ class User {
       );
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    uuid: json["uuid"],
-    name: json["name"],
-  );
+        id: json["id"],
+        uuid: json["uuid"],
+        name: json["name"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "name": name,
-  };
+        "id": id,
+        "uuid": uuid,
+        "name": name,
+      };
 }

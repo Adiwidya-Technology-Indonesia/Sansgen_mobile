@@ -35,7 +35,16 @@ GestureDetector cardChapter({
             children: [
               Text(
                 "Bab ${value.number}",
-                style: context.titleMediumBold,
+                style: context.titleMediumBold.copyWith(
+                  color: context.colorScheme.surface,
+                  // shadows: [
+                  //   Shadow(
+                  //     offset: const Offset(2.0, 2.0),
+                  //     blurRadius: 4.0,
+                  //     color: context.colorScheme.surface,
+                  //   ),
+                  // ],
+                ),
               ),
               const Gap(12),
               SizedBox(

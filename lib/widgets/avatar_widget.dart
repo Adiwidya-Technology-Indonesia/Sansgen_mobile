@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/utils/ext_string.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AvatarWidget extends StatelessWidget {
   const AvatarWidget({
@@ -34,12 +35,16 @@ class AvatarWidget extends StatelessWidget {
                 height: height,
                 width: width,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  height: height,
+                placeholder: (context, url) =>  SizedBox(
                   width: width,
-                  color: Colors.grey,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+                  height: height,
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey,
+                    highlightColor: Colors.white,
+                    child: const Card(
+                      margin: EdgeInsets.all(0),
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
                 errorWidget: (context, url, error) => Container(

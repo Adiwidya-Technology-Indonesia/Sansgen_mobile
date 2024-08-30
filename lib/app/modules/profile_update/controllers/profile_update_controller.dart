@@ -74,10 +74,12 @@ class ProfileUpdateController extends GetxController {
   Future profilUpdateButton() async {
     try {
       EasyLoading.show(status: "Loading");
-      String imageName = '';
+      String? imageName = '';
       final imageController = Get.find<ImageUpdateController>();
+      // String? imageFormat = imageController.getImageFormat();
       // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
       if (imageController.imageFileList.isNotEmpty) {
+        // imageName = imageController.getImageFormat();
         imageName = imageController.imageFileList.first.name;
       } else {
         imageName = '';

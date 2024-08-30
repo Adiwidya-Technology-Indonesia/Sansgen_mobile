@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 class ImageUpdateController extends GetxController with StateMixin<List<XFile>> {
   final count = 0.obs;
@@ -11,11 +12,6 @@ class ImageUpdateController extends GetxController with StateMixin<List<XFile>> 
     stateSuccess(imageFileList);
     super.onInit();
   }
-
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  // }
 
   @override
   void onClose() {
@@ -40,5 +36,13 @@ class ImageUpdateController extends GetxController with StateMixin<List<XFile>> 
 
   void stateSuccess(List<XFile> list) {
     change(list, status: list.isEmpty ? RxStatus.empty() : RxStatus.success());
+  }
+
+  // Fungsi untuk mendapatkan format file
+  String? getImageFormat() {
+    if (imageFileList.isNotEmpty) {
+      return path.extension(imageFileList.first.path).replaceAll('.', '');
+    }
+    return null;
   }
 }

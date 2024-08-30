@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sansgen/app/modules/audio_bok/bindings/audio_book_bindings.dart';
-import 'package:sansgen/app/modules/audio_bok/views/audio_book_view.dart';
 
+import '../modules/audio_bok/bindings/audio_book_bindings.dart';
+import '../modules/audio_bok/views/audio_book_view.dart';
 import '../modules/authentication/login/bindings/login_binding.dart';
 import '../modules/authentication/login/views/login_view.dart';
 import '../modules/authentication/lupa_pass/bindings/lupa_pass_binding.dart';

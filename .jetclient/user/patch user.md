@@ -10,18 +10,18 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = '62b0619a-2c96-4ffd-adc8-3bc6da178fa4'
+token = 'a13f3abe-7a72-4ae2-ba2a-5a20179a61ca'
 
 [body]
 type = 'JSON'
 raw = '''
 {
 //  "name": "rahmat",
-  "image" : "3https://image.popbela.com/content-images/post/20220923/60d517e15ca1ecf2a5257c2873630379.png?width=640&format=webp&w=640",
-  "dateOfBirth": "2024-08-31",
+  "image" : "ecf2a5257c2873630379.png",
+//  "dateOfBirth": "2024-08-31",
 ////  "rangeAge": "18-24",
 ////  "gender": "Laki-laki",
 //  "hobby": "hh",
-  "idCategory":[1,2,]
+//  "idCategory":[1,2,]
 }'''
 ```

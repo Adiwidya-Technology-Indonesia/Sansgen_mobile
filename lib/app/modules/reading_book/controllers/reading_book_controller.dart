@@ -132,12 +132,6 @@ class ReadingBookController extends GetxController
 
     final focus = stopwatchFocus.elapsedMilliseconds.toFormattedTime();
 
-    // const manyBooks = 1;
-
-    // log(readings, name: 'readings');
-    // log(focus, name: 'focus');
-    // log(manyBooks.toString(), name: 'manyBooks');
-
     final request = ModelRequestPutFocus(
       readings: readings,
       // manyBooks: manyBooks,
@@ -177,15 +171,6 @@ class ReadingBookController extends GetxController
     }
   }
 
-  // void onStartTimer() => controllerTimer.start();
-  //
-  // void onPauseTimer() => controllerTimer.pause();
-  //
-  // void onResumeTimer() => controllerTimer.resume();
-  //
-  // void onRestartTimer(int duration) =>
-  //     controllerTimer.restart(duration: duration);
-
   void openDrawer() {
     scaffoldKey.currentState?.openDrawer();
   }
@@ -204,20 +189,20 @@ class ReadingBookController extends GetxController
     currentContentChapter.value = value;
   }
 
-  // void setCurrentIdChapterByNumber(String value) {
-  //   currentIdChapter.value = listChapter
-  //       .where((e) => e.number == value)
-  //       .map((v) => v.id.toString())
-  //       .toList()
-  //       .first;
-  // }
-
   Future previousChapter() async {
     if (currentChapter.value == 1) {
       Get.snackbar('info', 'Chapter 1 is the first chapter');
     } else {
-      currentChapter.value--;
-      await getChapter(currentChapter.value.toString());
+      // Cari indexchapter saat ini di listChapter
+      final currentIndex = listChapter.indexWhere(
+          (chapter) => int.parse(chapter.number) == currentChapter.value);
+
+      // Jika chapter saat ini bukan chapter pertama, pindah ke chapter sebelumnya
+      if (currentIndex > 0) {
+        final previousChapter = listChapter[currentIndex - 1];
+        currentChapter.value = int.parse(previousChapter.number);
+        await getChapter(previousChapter.number);
+      }
     }
   }
 
@@ -231,8 +216,16 @@ class ReadingBookController extends GetxController
       Get.snackbar(
           'info', 'Chapter ${dataBook!.manyChapters} is the last chapter');
     } else {
-      currentChapter.value++;
-      await getChapter(currentChapter.value.toString());
+      // Cari index chapter saat ini di listChapter
+      final currentIndex = listChapter.indexWhere(
+          (chapter) => int.parse(chapter.number) == currentChapter.value);
+
+      // Jika chapter saat ini bukan chapter terakhir, pindah ke chapter berikutnya
+      if (currentIndex < listChapter.length - 1) {
+        final nextChapter = listChapter[currentIndex + 1];
+        currentChapter.value = int.parse(nextChapter.number);
+        await getChapter(nextChapter.number);
+      }
     }
     sendHistory(
       lastChapter: currentChapter.value,
@@ -279,7 +272,6 @@ class ReadingBookController extends GetxController
 
   Future getChapter(String numberChapter) async {
     change(null, status: RxStatus.loading());
-    // setCurrentIdChapterByNumber(numberChapter);
     chapterProvider
         .fetchIdChapter(
       idBook: dataBook!.uuid,
