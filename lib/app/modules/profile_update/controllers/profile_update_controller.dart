@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sansgen/app/routes/app_pages.dart';
 import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/utils/ext_context.dart';
@@ -17,6 +18,7 @@ class ProfileUpdateController extends GetxController {
   // final AuthProvider authProvider;
   // final PrefService prefService;
   ProfileUpdateController({required this.userProvider});
+
   final UserProvider userProvider;
   DateTime selectedDate = DateTime.now();
   final nameController = TextEditingController();
@@ -35,7 +37,7 @@ class ProfileUpdateController extends GetxController {
       user = Get.arguments;
       nameController.text = user.name;
       hobbyController.text = user.hobby ?? "";
-      tglLahirController.text = user.dateOfBirth?? '';
+      tglLahirController.text = user.dateOfBirth ?? '';
     } else {
       user = ModelUser.fromJson({});
     }
@@ -74,28 +76,30 @@ class ProfileUpdateController extends GetxController {
   Future profilUpdateButton() async {
     try {
       EasyLoading.show(status: "Loading");
-      String? imageName = '';
+      XFile? imagePath;
       final imageController = Get.find<ImageUpdateController>();
       // String? imageFormat = imageController.getImageFormat();
       // final categorySelesai = listPreferences.where((e)=>e.isSelected.value == true).toList().map((v)=>v.title);
       if (imageController.imageFileList.isNotEmpty) {
-        // imageName = imageController.getImageFormat();
-        imageName = imageController.imageFileList.first.name;
+        // imagePath = imageController.getImageFormat();
+        imagePath = imageController.imageFileList.first;
+        log(imagePath.name, name: 'imagePath');
       } else {
-        imageName = '';
+        imagePath = null;
       }
-      log(imageName, name: 'imageName');
       final request = ModelRequestPatchUser(
         name: nameController.text,
         hobby: hobbyController.text,
-        dateOfBirth: picked.toString(),
-        image: imageName,
+        dateOfBirth: tglLahirController.text,
+        // image: imageName,
       );
-      userProvider.patchInfoPribadi(request).then((v) async {
+      log(request.toInfoPribadi().toString(), name: "request");
+
+      userProvider.patchInfoPribadi(request, imagePath).then((v) async {
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Update Data berhasil');
         log(v.toJson().toString());
-        Get.offAllNamed(Routes.DASHBOARD,arguments: 3);
+        Get.offAllNamed(Routes.DASHBOARD, arguments: 3);
         return;
       }).onError((e, st) {
         EasyLoading.dismiss();
@@ -118,20 +122,21 @@ class ProfileUpdateController extends GetxController {
     // required DateTime selectedDate,
   }) async {
     picked = await showDatePicker(
-      builder: (ctx,child){
+      builder: (ctx, child) {
         return Theme(
-          data: Theme.of(ctx).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: ctx.colorScheme.surface, // header background color
-              onPrimary: ctx.colorScheme.primary, // header text color
-              onSurface: ctx.colorScheme.surface, // body text color
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red, // button text color
+            data: Theme.of(ctx).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: ctx.colorScheme.surface, // header background color
+                onPrimary: ctx.colorScheme.primary, // header text color
+                onSurface: ctx.colorScheme.surface, // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.red, // button text color
+                ),
               ),
             ),
-          ), child: child!);
+            child: child!);
       },
       context: context,
       initialDate: selectedDate,

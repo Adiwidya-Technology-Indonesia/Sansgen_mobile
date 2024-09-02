@@ -8,7 +8,7 @@ String modelRequestPatchUserToJson(ModelRequestPatchUser data) =>
 
 class ModelRequestPatchUser {
   final String? name;
-  final String? image;
+  final dynamic image;
   final dynamic dateOfBirth;
   final String? rangeAge;
   final String? gender;
@@ -84,7 +84,7 @@ class ModelRequestPatchUser {
 
   Map<String, dynamic> toInfoPribadi() => {
         "name": name,
-        "image": image,
+        // "image": image,
         "dateOfBirth": dateOfBirth.toString(),
         "hobby": hobby,
       };

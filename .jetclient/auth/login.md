@@ -14,6 +14,6 @@ type = 'JSON'
 raw = '''
 {
   "email": "rahmat999ht@gmail.com",
-  "password": "R@h999ht"
+  "password": "yayat999"
 }'''
 ```

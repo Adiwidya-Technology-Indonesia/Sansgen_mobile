@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sansgen/model/user/response_get.dart';
 
 import '../keys/api.dart';
@@ -40,7 +42,7 @@ class UserProvider extends GetConnect {
       log(baseURL, name: "data baseURL");
       log(patchUserCurrent, name: "data url patchUserCurrent");
       log(request.toOnBoarding().toString(), name: "data request");
-      final response = await patch(
+      final response = await post(
         patchUserCurrent,
         request.toOnBoarding(),
       );
@@ -65,28 +67,44 @@ class UserProvider extends GetConnect {
     }
   }
 
-  Future patchInfoPribadi(ModelRequestPatchUser request) async {
+  Future patchInfoPribadi(
+      ModelRequestPatchUser request, XFile? imagePath) async {
     try {
       const String patchUserCurrent = KeysApi.users + KeysApi.current;
       log(baseURL, name: "data baseURL");
       log(patchUserCurrent, name: "data url patchUserCurrent");
-      final response = await patch(
+
+      final formData = FormData({});
+      // Tambahkan data teks lainnya
+      request.toInfoPribadi().forEach((key, value) {
+        formData.fields.add(MapEntry(key, value?.toString() ?? ''));
+      });
+
+      // Tambahkan gambar jika ada
+      if (imagePath != null) {
+        formData.files.add(MapEntry(
+          'image',
+          MultipartFile(File(imagePath.path), filename: imagePath.name),
+        ));
+      }
+
+      // Gunakan 'patch' bukan 'post' untuk permintaan PATCH
+      final response = await post(
         patchUserCurrent,
-        request.toInfoPribadi(),
+        formData,
       );
+
       if (response.status.hasError) {
-        log(response.bodyString.toString(), name: 'data error patchUserCurrent');
-        if (response.statusCode == 401) {
-          // Handle unauthorized error (misalnya, logout pengguna)
+          if (response.statusCode == 401) {
           throw Exception('Unauthorized');
         } else if (response.statusCode == 500) {
-          // Handle internal server error
           throw Exception('Internal Server Error');
         } else {
-          // Handle other error codes
           throw Exception('Failed to update user: ${response.statusCode}');
         }
       } else {
+        log(response.bodyString.toString(),
+            name: 'data bodyString patchUserCurrent');
         return modelResponseUserFromJson(response.bodyString!);
       }
     } catch (error) {
@@ -100,7 +118,7 @@ class UserProvider extends GetConnect {
       const String patchUserCurrent = KeysApi.users + KeysApi.current;
       log(baseURL, name: "data baseURL");
       log(patchUserCurrent, name: "data url patchUserCurrent");
-      final response = await patch(
+      final response = await post(
         patchUserCurrent,
         request.toReference(),
       );
@@ -124,7 +142,6 @@ class UserProvider extends GetConnect {
       rethrow;
     }
   }
-
 
   Future logOut() async {
     try {

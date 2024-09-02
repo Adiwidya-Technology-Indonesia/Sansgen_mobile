@@ -29,6 +29,9 @@ class DetailBinding extends Bindings {
     Get.lazyPut<UserProvider>(
           () => UserProvider(),
     );
+    Get.lazyPut<HistoryProvider>(
+          () => HistoryProvider(),
+    );
     Get.lazyPut<DetailController>(
       () => DetailController(
         commentProvider: Get.find(),
@@ -36,6 +39,7 @@ class DetailBinding extends Bindings {
         ratingProvider: Get.find(),
         chapterProvider: Get.find(),
         userProvider: Get.find(),
+        historyProvider: Get.find(),
       ),
     );
   }

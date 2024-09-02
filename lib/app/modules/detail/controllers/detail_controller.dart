@@ -9,6 +9,7 @@ import '../../../../model/chapter/data_chapter.dart';
 import '../../../../model/comment/request_post.dart';
 import '../../../../model/ratings/request_post.dart';
 import '../../../../provider/comment.dart';
+import '../../../../provider/history.dart';
 import '../../../../provider/like.dart';
 import '../../../../services/prefs.dart';
 import '../../../../model/book/book.dart';
@@ -25,6 +26,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   final RatingProvider ratingProvider;
   final ChapterProvider chapterProvider;
   final UserProvider userProvider;
+  final HistoryProvider historyProvider;
 
   DetailController({
     required this.commentProvider,
@@ -32,6 +34,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     required this.ratingProvider,
     required this.chapterProvider,
     required this.userProvider,
+    required this.historyProvider,
   });
 
   final prefServices = PrefService();
@@ -49,6 +52,8 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   final listChapter = <DataChapter>[].obs;
   final averageRate = 0.0.obs;
   final indexDashboard = 0.obs;
+
+  RxList<int> readChapterIds = <int>[].obs; // Gunakan ID chapter,
 
 // void likeState() => isLike.value = !isLike.value;
   void backToDashboard() {
@@ -73,6 +78,16 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     }
     super.onInit();
   }
+
+  // Future<void> fetchReadChapters() async {
+  //   final allHistory = await historyProvider.fetchHistory();
+  //   final bookHistory = allHistory.firstWhereOrNull(
+  //           (history) => history.book.uuid == dataBook.uuid);
+  //
+  //   if (bookHistory != null) {
+  //     readChapterIds.value = bookHistory.chapters.map((e) => e.id).toList();
+  //   }
+  // }
 
   void tapViewBottomSheetChapter(
       List<DataChapter> listChapter, BuildContext context) {

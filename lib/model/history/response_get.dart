@@ -13,7 +13,7 @@ String modelResponseGetHistoryToJson(ModelResponseGetHistory data) => json.encod
 class ModelResponseGetHistory {
   final bool status;
   final String message;
-  final List<Datum> data;
+  final List<DataHistory> data;
 
   ModelResponseGetHistory({
     required this.status,
@@ -24,7 +24,7 @@ class ModelResponseGetHistory {
   ModelResponseGetHistory copyWith({
     bool? status,
     String? message,
-    List<Datum>? data,
+    List<DataHistory>? data,
   }) =>
       ModelResponseGetHistory(
         status: status ?? this.status,
@@ -35,7 +35,7 @@ class ModelResponseGetHistory {
   factory ModelResponseGetHistory.fromJson(Map<String, dynamic> json) => ModelResponseGetHistory(
     status: json["status"],
     message: json["message"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<DataHistory>.from(json["data"].map((x) => DataHistory.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -45,7 +45,7 @@ class ModelResponseGetHistory {
   };
 }
 
-class Datum {
+class DataHistory {
   final int id;
   final String uuid;
   final String isFinished;
@@ -53,7 +53,7 @@ class Datum {
   final DataBook book;
   final List<Chapter> chapters;
 
-  Datum({
+  DataHistory({
     required this.id,
     required this.uuid,
     required this.isFinished,
@@ -62,7 +62,7 @@ class Datum {
     required this.chapters,
   });
 
-  Datum copyWith({
+  DataHistory copyWith({
     int? id,
     String? uuid,
     String? isFinished,
@@ -70,7 +70,7 @@ class Datum {
     DataBook? book,
     List<Chapter>? chapters,
   }) =>
-      Datum(
+      DataHistory(
         id: id ?? this.id,
         uuid: uuid ?? this.uuid,
         isFinished: isFinished ?? this.isFinished,
@@ -79,7 +79,7 @@ class Datum {
         chapters: chapters ?? this.chapters,
       );
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory DataHistory.fromJson(Map<String, dynamic> json) => DataHistory(
     id: json["id"],
     uuid: json["uuid"],
     isFinished: json["isFinished"],

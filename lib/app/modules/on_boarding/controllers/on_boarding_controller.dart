@@ -30,7 +30,7 @@ class OnBoardingController extends GetxController {
   final Rx<int> selectedIndexAge = 0.obs;
 
   final listGender = <ModelGender>[
-    ModelGender(title: 'Laki-laki', imageAssets: KeysAssetsImages.maleGender),
+    ModelGender(title: 'Laki-Laki', imageAssets: KeysAssetsImages.maleGender),
     ModelGender(title: 'Perempuan', imageAssets: KeysAssetsImages.femaleGender),
   ];
 
@@ -101,6 +101,7 @@ class OnBoardingController extends GetxController {
 
   void simpan() {
     try {
+      EasyLoading.show(status: "loading");
       final listIdCategory = listPreferences
           .where((v) => v.isSelected.value == true)
           .map((e) => e.id)

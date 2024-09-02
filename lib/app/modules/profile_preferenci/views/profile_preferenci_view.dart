@@ -71,7 +71,7 @@ class ProfilePreferenciView extends GetView<ProfilePreferenciController> {
                             : context.colorScheme.primary,
                         index: index,
                         onTap: () {
-                          e.isSelected.value = true;
+                          e.isSelected.value = !e.isSelected.value;
                         },
                       ),
                     );
