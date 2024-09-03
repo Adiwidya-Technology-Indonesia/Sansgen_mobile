@@ -78,6 +78,9 @@ class RegisterController extends GetxController {
     if (password!.length < 8) {
       errorMessage += 'Kata sandi minimal 8 karakter.\n';
     }
+    if (password.length > 10) {
+      errorMessage += 'Kata sandi maximal 10 karakter.\n';
+    }
     // // Berisi setidaknya satu huruf besar
     // if (!password.contains(RegExp(r'[A-Z]'))) {
     //   errorMessage += '• Huruf besar tidak ada.\n';
