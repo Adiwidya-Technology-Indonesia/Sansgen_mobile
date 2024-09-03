@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/register/model_request_register.dart';
+import 'package:sansgen/model/register/model_response_register.dart';
 
 import '../../../../../model/error.dart';
+import '../../../../../model/register/response_error_regis.dart';
 import '../../../../../provider/auth.dart';
 import '../../../../routes/app_pages.dart';
 
@@ -33,7 +35,9 @@ class RegisterController extends GetxController {
   }
 
   void stateObscurePass() => isObscurePass.value = !isObscurePass.value;
-  void stateObscureComPass() => isObscureComPass.value = !isObscureComPass.value;
+
+  void stateObscureComPass() =>
+      isObscureComPass.value = !isObscureComPass.value;
 
   void backToLogin() {
     Get.back();
@@ -131,23 +135,49 @@ class RegisterController extends GetxController {
         email: emailController.text,
         password: passwordController.text,
       );
-      await authProvider.authRegister(request).then((v) {
+      await authProvider.authRegister(request).then((response) {
+        if (response.statusCode == 200) {
+          log(response.body.toString(), name: 'response regis');
+          // Periksa apakah respons berhasil
+          // Periksa apakah respons berhasil
+
+          final registerResponse = modelResponseRegisterFromJson(response.bodyString!);
+
+          if (registerResponse.success) {
+            EasyLoading.dismiss();
+            formCLear();
+            EasyLoading.showSuccess('Register berhasil');
+            Get.toNamed(Routes.LOGIN);
+            log(registerResponse.toJson().toString(), name: 'register');
+          } else {
+            EasyLoading.dismiss();
+            String errorMessage = registerResponse.message;
+            if (registerResponse.data is DataErrorRegis) {
+              final dataError = registerResponse.data as DataErrorRegis;
+              if (dataError.email.isNotEmpty) {
+                errorMessage = dataError.email.join(", ");
+              }
+            }
+            EasyLoading.showError(errorMessage);
+          }
+        } else if (response.statusCode == 422) {
+          EasyLoading.showError(response.body['message']);
+        } else if (response.statusCode == null) {
+          EasyLoading.showError('No internet connection!');
+        } else {
+          EasyLoading.showError('Server Error');
+        }
         EasyLoading.dismiss();
-        formCLear();
-        EasyLoading.showSuccess('Register berhasil');
-        Get.toNamed(Routes.LOGIN);
-        log(v.toJson().toString(), name: 'register');
-        return;
       }).onError((e, st) {
         EasyLoading.dismiss();
         final errors = Errors(message: ['$e', '$st']);
         final dataError = ModelResponseError(errors: errors);
-        log(dataError.toJson().toString(), name: 'register');
+        log(dataError.toJson().toString(), name: 'register onError');
         EasyLoading.showError('Register Gagal');
         return;
       });
     } catch (e) {
-      log(e.toString(), name: 'register error');
+      log(e.toString(), name: 'register catch error');
       Get.defaultDialog(
         title: 'Error',
         content: Text('Error: $e'),

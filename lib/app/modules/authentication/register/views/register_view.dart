@@ -113,7 +113,7 @@ class RegisterView extends GetView<RegisterController> {
                     const Text('Sudah memiliki akun? '),
                     InkWell(
                       onTap: controller.backToLogin,
-                      child: Text('Sing In', style: context.titleSmallBold),
+                      child: Text('Sign In', style: context.titleSmallBold),
                     ),
                   ],
                 ),

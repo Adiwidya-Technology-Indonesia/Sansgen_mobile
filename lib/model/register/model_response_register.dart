@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:sansgen/model/register/response_error_regis.dart';
+
 import 'data_response_register.dart';
 
 ModelResponseRegister modelResponseRegisterFromJson(String str) =>
@@ -11,7 +13,7 @@ String modelResponseRegisterToJson(ModelResponseRegister data) =>
 class ModelResponseRegister {
   final bool success;
   final String message;
-  final DataResponseRegister? data;
+  final dynamic data;
 
   ModelResponseRegister({
     required this.success,
@@ -23,7 +25,9 @@ class ModelResponseRegister {
     return ModelResponseRegister(
       success: json['success'],
       message: json['message'],
-      data: json['data'] != null ? DataResponseRegister.fromJson(json['data']) : null,
+      data: json['success'] == true
+          ? DataResponseRegister.fromJson(json['data'])
+          : DataErrorRegis.fromJson(json['data']),
     );
   }
 
@@ -31,7 +35,7 @@ class ModelResponseRegister {
     return {
       'success': success,
       'message': message,
-      'data': data?.toJson(),
+      'data': data!.toJson(),
     };
   }
 }

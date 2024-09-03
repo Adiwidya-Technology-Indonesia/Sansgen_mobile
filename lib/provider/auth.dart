@@ -5,12 +5,10 @@ import 'package:get/get.dart';
 
 import '../keys/api.dart';
 import '../keys/env.dart';
-import '../model/error.dart';
 import '../model/login/request_login.dart';
 import '../model/lupa_pass/request_lupa_pass.dart';
 import '../model/lupa_pass/response_post.dart';
 import '../model/register/model_request_register.dart';
-import '../model/register/model_response_register.dart';
 
 class AuthProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
@@ -19,26 +17,8 @@ class AuthProvider extends GetConnect {
     return post(KeysApi.login, request.toJson());
   }
 
-  Future authRegister(ModelReqestRegister request) async {
-    try {
-      const String urlRegiser = KeysApi.register;
-      log(urlRegiser, name: "url register");
-      final response = await post(
-        urlRegiser,
-        request.toJson(),
-      );
-      if (response.status.hasError) {
-        log(response.toString(), name: 'regis error');
-        // return Future.error(response);
-        return modelResponseErrorFromJson(response.bodyString!);
-      } else {
-        log(response.bodyString!, name: 'data response');
-        return modelResponseRegisterFromJson(response.bodyString!);
-      }
-    } catch (error) {
-      log(error.toString(), name: "auth regis error");
-      rethrow;
-    }
+  Future<Response> authRegister(ModelReqestRegister request) async {
+    return post(KeysApi.register, request.toJson());
   }
 
   Future authLupaPass(ModelRequestPostLupaPass request) async {
