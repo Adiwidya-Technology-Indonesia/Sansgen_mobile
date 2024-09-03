@@ -7,7 +7,6 @@ import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/error.dart';
 import '../model/login/request_login.dart';
-import '../model/login/response_login.dart';
 import '../model/lupa_pass/request_lupa_pass.dart';
 import '../model/lupa_pass/response_post.dart';
 import '../model/register/model_request_register.dart';
@@ -16,23 +15,8 @@ import '../model/register/model_response_register.dart';
 class AuthProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
 
-  Future<ModelResponseLogin> authLogin(ModelReqestLogin request) async {
-    try {
-      final response = await post(
-        KeysApi.login,
-        request.toJson(),
-      );
-      if (response.status.hasError) {
-        log(response.body.toString(), name: 'login error');
-        throw Exception('Failed to login');
-        // return modelResponseErrorFromJson(response.bodyString!);
-      } else {
-        return modelResponseLoginFromJson(response.bodyString!);
-      }
-    } catch (error) {
-      log(error.toString(), name: "auth regis error");
-      rethrow;
-    }
+  Future<Response> authLogin(ModelReqestLogin request) async {
+    return post(KeysApi.login, request.toJson());
   }
 
   Future authRegister(ModelReqestRegister request) async {

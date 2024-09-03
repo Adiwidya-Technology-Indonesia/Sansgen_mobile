@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:sansgen/app/routes/app_pages.dart';
 import 'package:sansgen/model/error.dart';
 import 'package:sansgen/model/login/request_login.dart';
+import 'package:sansgen/model/login/response_login.dart';
 import '../../../../../provider/auth.dart';
 import '../../../../../services/prefs.dart';
 
@@ -113,19 +114,39 @@ class LoginController extends GetxController {
         email: emailController.text,
         password: passwordController.text,
       );
-      await authProvider.authLogin(request).then((v) async {
+      await authProvider.authLogin(request).then((response) async {
+        if (response.statusCode == 200) {
+          EasyLoading.showSuccess('Login berhasil');
+          final v = modelResponseLoginFromJson(response.bodyString!);
+          await prefService.putUserToken(v.data.token);
+          await prefService.putUserUuid(v.data.uuid);
+          Timer.periodic(const Duration(seconds: 3), (t) {
+            log(prefService.getUserToken ?? 'kosong', name: 'setToken');
+            t.cancel();
+          });
+          log(v.toJson().toString());
+          formClear();
+          Get.offAllNamed(Routes.ON_BOARDING);
+          return;
+        } else if (response.statusCode == 401) {
+          final errors = modelResponseErrorFromJson(response.bodyString!);
+          // Hilangkan tanda kurung siku dari pesan error
+          String errorMessage = errors.errors.message.toString();
+          errorMessage = errorMessage.substring(
+            1,
+            errorMessage.length - 1,
+          );
+          // Hilangkan karakter pertama dan terakhir
+          EasyLoading.showError(errorMessage);
+          return;
+        } else if (response.statusCode == 422) {
+          EasyLoading.showError(response.body['message']);
+        } else if (response.statusCode == null) {
+          EasyLoading.showError('No internet connection!');
+        } else {
+          EasyLoading.showError('Server Error');
+        }
         EasyLoading.dismiss();
-        formClear();
-        EasyLoading.showSuccess('Login berhasil');
-        await prefService.putUserToken(v.data.token);
-        await prefService.putUserUuid(v.data.uuid);
-        Timer.periodic(const Duration(seconds: 3), (t) {
-          log(prefService.getUserToken ?? 'kosong', name: 'setToken');
-          t.cancel();
-        });
-        log(v.toJson().toString());
-        Get.offAllNamed(Routes.ON_BOARDING);
-        return;
       }).onError((e, st) {
         EasyLoading.dismiss();
         final errors = Errors(message: ['$e', '$st']);
