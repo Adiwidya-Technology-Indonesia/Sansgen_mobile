@@ -36,35 +36,8 @@ class UserProvider extends GetConnect {
     }
   }
 
-  Future patchOnBoarding(ModelRequestPatchUser request) async {
-    try {
-      const String patchUserCurrent = KeysApi.users + KeysApi.current;
-      log(baseURL, name: "data baseURL");
-      log(patchUserCurrent, name: "data url patchUserCurrent");
-      log(request.toOnBoarding().toString(), name: "data request");
-      final response = await post(
-        patchUserCurrent,
-        request.toOnBoarding(),
-      );
-      if (response.status.hasError) {
-        log(response.toString(), name: 'data error patchUserCurrent');
-        if (response.statusCode == 401) {
-          // Handle unauthorized error (misalnya, logout pengguna)
-          throw Exception('Unauthorized');
-        } else if (response.statusCode == 500) {
-          // Handle internal server error
-          throw Exception('Internal Server Error');
-        } else {
-          // Handle other error codes
-          throw Exception('Failed to update user: ${response.statusCode}');
-        }
-      } else {
-        return modelResponseUserFromJson(response.bodyString!);
-      }
-    } catch (error) {
-      log(error.toString(), name: "catch error patchUserCurrent");
-      rethrow;
-    }
+  Future<Response> patchOnBoarding(ModelRequestPatchUser request) async {
+    return post(KeysApi.users + KeysApi.current, request.toOnBoarding());
   }
 
   Future patchInfoPribadi(
@@ -95,7 +68,7 @@ class UserProvider extends GetConnect {
       );
 
       if (response.status.hasError) {
-          if (response.statusCode == 401) {
+        if (response.statusCode == 401) {
           throw Exception('Unauthorized');
         } else if (response.statusCode == 500) {
           throw Exception('Internal Server Error');

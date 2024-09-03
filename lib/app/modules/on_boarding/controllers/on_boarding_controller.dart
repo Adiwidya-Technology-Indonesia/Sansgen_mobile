@@ -114,13 +114,20 @@ class OnBoardingController extends GetxController {
       );
       log(request.toJson().toString(), name: "request patch user");
 
-      userProvider.patchOnBoarding(request).then((v) async {
+      userProvider.patchOnBoarding(request).then((response) async {
+        if (response.statusCode == 200) {
+          EasyLoading.showSuccess('Update Data berhasil');
+          await prefService.putOnBoarding(true);
+          Get.offAllNamed(Routes.DASHBOARD);
+          return;
+        } else if (response.statusCode == 422) {
+          EasyLoading.showError(response.body['message']);
+        } else if (response.statusCode == null) {
+          EasyLoading.showError('No internet connection!');
+        } else {
+          EasyLoading.showError('Server Error');
+        }
         EasyLoading.dismiss();
-        EasyLoading.showSuccess('Update Data berhasil');
-        log(v.toString().toString());
-        await prefService.putOnBoarding(true);
-        Get.offAllNamed(Routes.DASHBOARD);
-        return;
       }).onError((e, st) {
         EasyLoading.dismiss();
         final errors = Errors(message: ['$e', '$st']);

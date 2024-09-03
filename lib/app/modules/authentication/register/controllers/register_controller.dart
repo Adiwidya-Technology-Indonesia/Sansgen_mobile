@@ -140,7 +140,6 @@ class RegisterController extends GetxController {
           log(response.body.toString(), name: 'response regis');
           // Periksa apakah respons berhasil
           // Periksa apakah respons berhasil
-
           final registerResponse = modelResponseRegisterFromJson(response.bodyString!);
 
           if (registerResponse.success) {
