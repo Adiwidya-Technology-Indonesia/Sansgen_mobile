@@ -14,6 +14,7 @@ Container contentBottomSheetChapter({
   required List<DataChapter> listChapter,
   required bool isPremium,
   required DataBook dataBook,
+  required List<int>  readChapterIds,
 }) {
   return Container(
     width: double.infinity,
@@ -41,6 +42,7 @@ Container contentBottomSheetChapter({
               (e) => cardChapter(
                 context: context,
                 value: e,
+                isRead: readChapterIds.contains(e.id),
                 onToReading: () {
                   final numberChapter = int.parse(e.number);
                   log(int.parse(e.number).toString(), name: 'number');

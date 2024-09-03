@@ -17,8 +17,8 @@ class DashboardBinding extends Bindings {
     Get.lazyPut<BookProvider>(
       () => BookProvider(),
     );
-    Get.lazyPut<HistoryProvider>(
-          () => HistoryProvider(),
+    Get.put<HistoryProvider>(
+      HistoryProvider(),
     );
     Get.lazyPut<UserProvider>(
       () => UserProvider(),

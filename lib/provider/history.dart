@@ -14,6 +14,18 @@ class HistoryProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
+  Future<Response> fetchHistoryByIdBook(String idBook) async {
+    try {
+      final String urlHistoryByIdBook =
+          '${KeysApi.history}${KeysApi.books}/$idBook';
+      final response = get(urlHistoryByIdBook);
+      return response;
+    } catch (error) {
+      log(error.toString(), name: "catch error History");
+      rethrow;
+    }
+  }
+
   Future<ModelResponseGetHistory> fetchHistory() async {
     try {
       const String urlHistory = KeysApi.history;
@@ -48,7 +60,8 @@ class HistoryProvider extends GetConnect {
         urlPostHistory,
         request.toJson(),
       );
-      log(response.statusCode.toString(), name: 'response status code Post History');
+      log(response.statusCode.toString(),
+          name: 'response status code Post History');
       if (response.status.hasError) {
         log(response.bodyString.toString(), name: 'response History error');
         return Future.error(response);

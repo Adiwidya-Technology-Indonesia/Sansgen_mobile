@@ -12,6 +12,7 @@ GestureDetector cardChapter({
   required DataChapter value,
   required Function() onToReading,
   required Function() onToAudio,
+  required bool isRead,
 }) {
   return GestureDetector(
     onTap: onToReading,
@@ -33,19 +34,12 @@ GestureDetector cardChapter({
         children: [
           Row(
             children: [
-              Text(
-                "Bab ${value.number}",
-                style: context.titleMediumBold.copyWith(
-                  color: context.colorScheme.surface,
-                  // shadows: [
-                  //   Shadow(
-                  //     offset: const Offset(2.0, 2.0),
-                  //     blurRadius: 4.0,
-                  //     color: context.colorScheme.surface,
-                  //   ),
-                  // ],
+              if (isRead) // Tampilkan ikon jika chapter telah dibaca
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Icon(Icons.check, color: context.colorScheme.surface),
                 ),
-              ),
+              Text("Bab ${value.number}", style: context.titleMediumBold),
               const Gap(12),
               SizedBox(
                 width: Get.width * 0.6,

@@ -43,7 +43,7 @@ class ModelResponseGetRate {
 }
 
 class DataResponseGetRate {
-  final double averageRate;
+  final dynamic averageRate;
   final List<Rating> ratings;
 
   DataResponseGetRate({
@@ -62,7 +62,9 @@ class DataResponseGetRate {
 
   factory DataResponseGetRate.fromJson(Map<String, dynamic> json) =>
       DataResponseGetRate(
-        averageRate: json["average_rate"] ?? 0.0,
+        averageRate: json["average_rate"] == null
+            ? 0.0
+            : json["average_rate"] as double,
         ratings:
             List<Rating>.from(json["ratings"].map((x) => Rating.fromJson(x))),
       );

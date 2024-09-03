@@ -7,6 +7,7 @@ import 'package:sansgen/provider/user.dart';
 
 import '../../../../model/chapter/data_chapter.dart';
 import '../../../../model/comment/request_post.dart';
+import '../../../../model/history/response_by_id_book.dart';
 import '../../../../model/ratings/request_post.dart';
 import '../../../../provider/comment.dart';
 import '../../../../provider/history.dart';
@@ -70,8 +71,9 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
       log('Get argument ada', name: 'onInit');
       dataBook = Get.arguments['dataBook'];
       indexDashboard.value = Get.arguments['indexDash'];
-      await fetchDataDetail(); // Panggil fungsi untuk mengambil semua data
       await prefServices.prefInit();
+      await fetchDataDetail(); // Panggil fungsi untuk mengambil semua data
+      await fetchReadChapters();
       log(dataBook.uuid, name: 'idBook');
     } else {
       // ... kode lainnya ...
@@ -79,15 +81,18 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     super.onInit();
   }
 
-  // Future<void> fetchReadChapters() async {
-  //   final allHistory = await historyProvider.fetchHistory();
-  //   final bookHistory = allHistory.firstWhereOrNull(
-  //           (history) => history.book.uuid == dataBook.uuid);
-  //
-  //   if (bookHistory != null) {
-  //     readChapterIds.value = bookHistory.chapters.map((e) => e.id).toList();
-  //   }
-  // }
+  Future<void> fetchReadChapters() async {
+    await historyProvider.fetchHistoryByIdBook(dataBook.uuid).then((response) {
+      if (response.statusCode == 200) {
+        final allHistory =
+            modelResponseHistoryByIdBookFromJson(response.bodyString!);
+        readChapterIds.value =
+            allHistory.data.chapters.map((e) => e.id).toList();
+      } else {
+        readChapterIds.value = [];
+      }
+    });
+  }
 
   void tapViewBottomSheetChapter(
       List<DataChapter> listChapter, BuildContext context) {
@@ -97,6 +102,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
         listChapter: listChapter,
         isPremium: isPremium.value,
         dataBook: dataBook,
+        readChapterIds: readChapterIds,
       ),
     );
   }
@@ -225,7 +231,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   Future getAllComment() async {
     await commentProvider.fetchCommentByBookId(dataBook.uuid).then((v) {
       v.data.map(
-            (e) => log(e.comment.toString(), name: 'data comment'),
+        (e) => log(e.comment.toString(), name: 'data comment'),
       );
       if (v.data == []) {
         log('comment kosong', name: 'data comment');
@@ -301,6 +307,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
       isPremium.value = false;
     });
   }
+
   Future<void> fetchDataDetail() async {
     try {
       change(null, status: RxStatus.loading()); // Set status loading
