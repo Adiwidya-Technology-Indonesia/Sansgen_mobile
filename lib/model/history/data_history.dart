@@ -7,7 +7,7 @@ class DataHistory {
   final String isFinished;
   final String lastChapter;
   final DataBook book;
-  final List<Chapter> chapters;
+  final List<Chapter>? chapters;
 
   DataHistory({
     required this.id,
@@ -41,7 +41,7 @@ class DataHistory {
     isFinished: json["isFinished"],
     lastChapter: json["lastChapter"],
     book: DataBook.fromJson(json["book"]),
-    chapters: List<Chapter>.from(json["chapters"].map((x) => Chapter.fromJson(x))),
+    chapters: json["chapters"] == null ? [] : List<Chapter>.from(json["chapters"].map((x) => Chapter.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -50,7 +50,7 @@ class DataHistory {
     "isFinished": isFinished,
     "lastChapter": lastChapter,
     "book": book.toJson(),
-    "chapters": List<dynamic>.from(chapters.map((x) => x.toJson())),
+    "chapters": List<dynamic>.from(chapters!.map((x) => x.toJson())),
   };
 }
 

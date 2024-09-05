@@ -86,8 +86,9 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
       if (response.statusCode == 200) {
         final allHistory =
             modelResponseHistoryByIdBookFromJson(response.bodyString!);
+        log(response.bodyString.toString(), name: 'response history chapter');
         readChapterIds.value =
-            allHistory.data.chapters.map((e) => e.id).toList();
+            allHistory.data.chapters!.map((e) => e.id).toList();
       } else {
         readChapterIds.value = [];
       }
