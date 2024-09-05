@@ -22,7 +22,7 @@ class ProfilePreferenciController extends GetxController
 
   final listPreferences = <ModelPreferenci>[
     ModelPreferenci(id: 1, title: 'Bisnis', isSelected: false.obs),
-    ModelPreferenci(id: 2, title: 'Pengembangan diri', isSelected: false.obs),
+    ModelPreferenci(id: 2, title: 'Pengembangan Diri', isSelected: false.obs),
     ModelPreferenci(id: 3, title: 'Marketing & Sales', isSelected: false.obs),
     ModelPreferenci(id: 4, title: 'Sains', isSelected: false.obs),
     ModelPreferenci(id: 5, title: 'Filsafat', isSelected: false.obs),
@@ -81,7 +81,7 @@ class ProfilePreferenciController extends GetxController
         EasyLoading.dismiss();
         EasyLoading.showSuccess('Update Data berhasil');
         log(v.toJson().toString());
-        Get.offAllNamed(Routes.PROFIL);
+        Get.offAllNamed(Routes.DASHBOARD, arguments: 3);
         return;
       }).onError((e, st) {
         EasyLoading.dismiss();

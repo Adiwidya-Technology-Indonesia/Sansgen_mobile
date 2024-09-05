@@ -9,7 +9,7 @@ import '../../../routes/app_pages.dart';
 import '../../../../model/book/book.dart';
 import 'card_chapter.dart';
 
-Container contentBottomSheetChapter({
+Widget contentBottomSheetChapter({
   required BuildContext context,
   required List<DataChapter> listChapter,
   required bool isPremium,
@@ -30,52 +30,60 @@ Container contentBottomSheetChapter({
         topRight: Radius.circular(10),
       ),
     ),
-    child: ListView(
+    child: Column(
+     crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Total: ${listChapter.length} Bab",
           style: context.titleMedium,
         ),
         const Divider(),
-        ...listChapter
-            .map(
-              (e) => cardChapter(
-                context: context,
-                value: e,
-                isRead: readChapterIds.contains(e.id),
-                onToReading: () {
-                  final numberChapter = int.parse(e.number);
-                  log(int.parse(e.number).toString(), name: 'number');
-                  if (isPremium == false && numberChapter > 3) {
-                    return Get.snackbar(
-                      'info',
-                      'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
-                    );
-                  }
-                  Get.toNamed(Routes.READING_BOOK, arguments: {
-                    'book': dataBook,
-                    'chapter': e,
-                    'listChapter': listChapter,
-                  });
-                },
-                onToAudio: () {
-                  final numberChapter = int.parse(e.number);
+        Expanded(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              ...listChapter
+                  .map(
+                    (e) => cardChapter(
+                      context: context,
+                      value: e,
+                      isRead: readChapterIds.contains(e.id),
+                      onToReading: () {
+                        final numberChapter = int.parse(e.number);
+                        log(int.parse(e.number).toString(), name: 'number');
+                        if (isPremium == false && numberChapter > 3) {
+                          return Get.snackbar(
+                            'info',
+                            'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
+                          );
+                        }
+                        Get.toNamed(Routes.READING_BOOK, arguments: {
+                          'book': dataBook,
+                          'chapter': e,
+                          'listChapter': listChapter,
+                        });
+                      },
+                      onToAudio: () {
+                        final numberChapter = int.parse(e.number);
 
-                  if (isPremium == false && numberChapter > 3) {
-                    return Get.snackbar(
-                      'info',
-                      'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
-                    );
-                  }
-                  Get.toNamed(Routes.AUDIO_BOOK, arguments: {
-                    'book': dataBook,
-                    'chapter': e,
-                    'listChapter': listChapter,
-                  });
-                },
-              ),
-            )
-            .toList(),
+                        if (isPremium == false && numberChapter > 3) {
+                          return Get.snackbar(
+                            'info',
+                            'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
+                          );
+                        }
+                        Get.toNamed(Routes.AUDIO_BOOK, arguments: {
+                          'book': dataBook,
+                          'chapter': e,
+                          'listChapter': listChapter,
+                        });
+                      },
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
+        ),
       ],
     ),
   );

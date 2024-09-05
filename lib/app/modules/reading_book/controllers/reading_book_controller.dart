@@ -207,6 +207,10 @@ class ReadingBookController extends GetxController
   }
 
   Future nextChapter() async {
+    sendHistory(
+      lastChapter: currentChapter.value,
+      idChapter: currentChapter.value.toString(),
+    );
     if (isPremium.value == false && currentChapter.value >= 3) {
       Get.snackbar(
         'info',
@@ -227,10 +231,7 @@ class ReadingBookController extends GetxController
         await getChapter(nextChapter.number);
       }
     }
-    sendHistory(
-      lastChapter: currentChapter.value,
-      idChapter: currentChapter.value.toString(),
-    );
+
   }
 
   void playAudioIfUrlsAvailable() async {

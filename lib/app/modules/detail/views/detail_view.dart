@@ -46,24 +46,26 @@ class DetailView extends GetView<DetailController> {
             ),
           ),
         ),
-        body: Stack(
-          alignment: AlignmentDirectional.topCenter,
-          children: [
-            contentHeader(
-              context: context,
-              image: controller.dataBook.image!,
-            ),
-            contentDetail(
-              context: context,
-              title: controller.dataBook.title,
-              image: controller.dataBook.image!,
-              rating: controller.dataBook.averageRate,
-              like: controller.dataBook.manyLikes,
-              comment: controller.dataBook.manyComments,
-              sinopsis: controller.dataBook.synopsis,
-              // listChapter: ,
-            ),
-          ],
+        body: SingleChildScrollView(
+          child: Stack(
+            alignment: AlignmentDirectional.topCenter,
+            children: [
+              contentHeader(
+                context: context,
+                image: controller.dataBook.image!,
+              ),
+              contentDetail(
+                context: context,
+                title: controller.dataBook.title,
+                image: controller.dataBook.image!,
+                rating: controller.dataBook.averageRate,
+                like: controller.dataBook.manyLikes,
+                comment: controller.dataBook.manyComments,
+                sinopsis: controller.dataBook.synopsis,
+                // listChapter: ,
+              ),
+            ],
+          ),
         ),
         resizeToAvoidBottomInset: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -112,7 +114,11 @@ class DetailView extends GetView<DetailController> {
           ),
         ),
         const Gap(20),
-        Text(title, style: context.titleLargeBold),
+        Text(
+          title,
+        textAlign: TextAlign.center,
+          style: context.titleLargeBold,
+        ),
         const Gap(8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -177,12 +183,8 @@ class DetailView extends GetView<DetailController> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: dataSinopsis(context, sinopsis),
-          // Text(
-          //   sinopsis,
-          //   textAlign: TextAlign.center,
-          //   maxLines: 10,
-          // ),
         ),
+        const Gap(60),
       ],
     );
   }
@@ -194,8 +196,8 @@ class DetailView extends GetView<DetailController> {
         fontStyle: FontStyle.normal,
         alignment: Alignment.center,
         textAlign: TextAlign.center,
-        maxLines: 7,
-        textOverflow: TextOverflow.ellipsis,
+        // maxLines: 7,
+        // textOverflow: TextOverflow.ellipsis,
       )
     });
   }

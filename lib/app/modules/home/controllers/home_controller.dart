@@ -89,7 +89,7 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
         infoUser = ModelUser.fromJson({});
         log('Permintaan informasi pengguna gagal', name: 'data kosong');
       } else {
-        infoUser = resultInfoUser.data!;
+        infoUser = resultInfoUser.data!.copyWith(image: resultInfoUser.data!.image!.formattedUrl);
         // log(infoUser.toJson().toString(), name: 'infoUser');
       }
       if (resultFocus.data == null) {

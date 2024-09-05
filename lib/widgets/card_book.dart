@@ -22,6 +22,7 @@ GestureDetector cardBook({
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           imageBook(
             image: book.image!,
@@ -33,10 +34,11 @@ GestureDetector cardBook({
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(book.title, style: context.titleSmallBold),
-                const Gap(4),
+                // const Gap(4),
                 Text('By: ${book.publisher}', style: context.labelSmall),
                 const Gap(4),
                 Container(
@@ -62,27 +64,28 @@ GestureDetector cardBook({
                   ),
                 ),
                 // const Gap(12),
-                Text('Sinopsis :', style: context.labelSmallBold),
-                Html(data: book.synopsis, style: {
-                  "div": Style(
-                    padding: HtmlPaddings.all(0),
-                    fontSize: FontSize.small,
-                    fontStyle: FontStyle.normal,
-                    maxLines: 2,
-                    lineHeight: const LineHeight(1.2),
-                    textOverflow: TextOverflow.ellipsis,
-                  ),
-                }),
-                // Text(
-                //   book.synopsis,
-                //   style: context.labelSmall.copyWith(
-                //     color: context.colorScheme.secondary,
-                //     inherit: true,
-                //     overflow: TextOverflow.ellipsis,
-                //   ),
-                //   softWrap: true,
-                //   maxLines: 3,
-                // ),
+                Stack(
+                  alignment: AlignmentDirectional.topStart,
+                  children: [
+                    Text('Sinopsis :', style: context.labelSmallBold),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Html(
+                        data: book.synopsis,
+                        style: {
+                          "div": Style(
+                            padding: HtmlPaddings.all(0),
+                            fontSize: FontSize.small,
+                            fontStyle: FontStyle.normal,
+                            lineHeight: const LineHeight(1.2),
+                            maxLines: 2,
+                            textOverflow: TextOverflow.ellipsis,
+                          ),
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

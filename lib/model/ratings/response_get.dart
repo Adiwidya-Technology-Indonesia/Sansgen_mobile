@@ -64,7 +64,7 @@ class DataResponseGetRate {
       DataResponseGetRate(
         averageRate: json["average_rate"] == null
             ? 0.0
-            : json["average_rate"] as double,
+            : double.parse(json["average_rate"].toString()),
         ratings:
             List<Rating>.from(json["ratings"].map((x) => Rating.fromJson(x))),
       );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -5,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/utils/ext_string.dart';
+import 'package:sansgen/widgets/avatar_widget.dart';
 import 'package:sansgen/widgets/book_empty.dart';
 
 import '../../../../state/empty.dart';
@@ -29,34 +32,35 @@ class HomeView extends GetView<HomeController> {
           focus: state.focus.focus,
         ),
         body: ListView(
+          shrinkWrap: true,
           children: [
             const Gap(40),
-            componentCard(
-              title: 'Pilihan terbaik untukmu',
-              emptyInfo: '',
-              context: context,
-              heightCom: 220,
-              widthCom: double.infinity,
-              scrollDirection: Axis.horizontal,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: state.bestForYou.length,
-              itemBuilder: (context, index) {
-                final book = state.bestForYou[index];
-                return cardTerbaikUntukmu(
-                  book: book,
-                  onTap: () {
-                    controller.toDetails(book);
-                  },
-                );
-              },
+            SizedBox(
+              height: 220,
+              width: double.infinity,
+              child: componentCard(
+                title: 'Pilihan terbaik untukmu',
+                emptyInfo: '',
+                context: context,
+                scrollDirection: Axis.horizontal,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: state.bestForYou.length,
+                itemBuilder: (context, index) {
+                  final book = state.bestForYou[index];
+                  return cardTerbaikUntukmu(
+                    book: book,
+                    onTap: () {
+                      controller.toDetails(book);
+                    },
+                  );
+                },
+              ),
             ),
             const Gap(12),
             componentCard(
               title: 'Populer',
               emptyInfo: '',
               context: context,
-              heightCom: context.height,
-              widthCom: double.infinity,
               scrollDirection: Axis.vertical,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: state.populer.length,
@@ -71,6 +75,7 @@ class HomeView extends GetView<HomeController> {
                 );
               },
             ),
+            // const Gap(80),
           ],
         ),
       ),
@@ -80,7 +85,7 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  GestureDetector cardPopuler({
+  Widget cardPopuler({
     required DataBook book,
     required BuildContext context,
     required Function() onTap,
@@ -108,7 +113,14 @@ class HomeView extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(book.title, style: context.titleSmallBold),
+                SizedBox(
+                  width: Get.width * 0.6,
+                  child: Text(
+                    book.title,
+                    softWrap: true,
+                    style: context.titleSmallBold,
+                  ),
+                ),
                 Text(
                   book.category,
                   style: context.labelSmall.copyWith(
@@ -157,54 +169,49 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  SizedBox componentCard({
+  Widget componentCard({
     required String title,
     required BuildContext context,
-    required double heightCom,
-    required double widthCom,
     required Axis scrollDirection,
     required ScrollPhysics physics,
     required int itemCount,
     required Widget? Function(BuildContext, int) itemBuilder,
     required String emptyInfo,
   }) {
-    return SizedBox(
-      height: heightCom,
-      width: widthCom,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title, style: context.titleMedium),
-                Text(
-                  'Lainnya',
-                  style: context.labelLarge.copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationThickness: 2,
-                    decorationStyle: TextDecorationStyle.solid,
-                    decorationColor: context.colorScheme.secondary,
-                  ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: context.titleMedium),
+              Text(
+                'Lainnya',
+                style: context.labelLarge.copyWith(
+                  decoration: TextDecoration.underline,
+                  decorationThickness: 2,
+                  decorationStyle: TextDecorationStyle.solid,
+                  decorationColor: context.colorScheme.secondary,
                 ),
-              ],
+              ),
+            ],
+          ),
+        ),
+        if (itemCount == 0)
+          bookEmpty(emptyInfo, height: 170)
+        else
+          SizedBox( // Ganti Expanded dengan SizedBox
+            height: scrollDirection == Axis.horizontal ? 220 : null, // Tetapkan tinggi jika horizontal
+            child: ListView.builder(
+              itemCount: itemCount,
+              shrinkWrap: true,
+              scrollDirection: scrollDirection,
+              physics: physics,
+              itemBuilder: itemBuilder,
             ),
           ),
-          if (itemCount == 0)
-            bookEmpty(emptyInfo, height: 170)
-          else
-            Expanded(
-              child: ListView.builder(
-                itemCount: itemCount,
-                shrinkWrap: true,
-                scrollDirection: scrollDirection,
-                physics: physics,
-                itemBuilder: itemBuilder,
-              ),
-            ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -253,24 +260,11 @@ class HomeView extends GetView<HomeController> {
         GestureDetector(
           onTap: () {},
           child: SizedBox(
-            width: 40,
-            height: 40,
-            child: CircleAvatar(
-              child: image.isURL
-                  ? ClipRRect(
-                      // Tambahkan ClipRRect di sini
-                      borderRadius:
-                          BorderRadius.circular(25), // Atur radius di sini
-                      child: Image.network(
-                        image,
-                        height: 40,
-                        width: 40,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : const Icon(Icons.person_outline_rounded),
-            ),
-          ),
+              width: 40,
+              height: 40,
+              child: AvatarWidget(
+                image: image,
+              )),
         ),
         const Gap(20),
       ],

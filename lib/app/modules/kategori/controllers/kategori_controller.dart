@@ -21,14 +21,14 @@ class KategoriController extends GetxController
 
   final List<String> kategoriList = [
     'All',
-    'Fiksi',
-    'Non-Fiksi',
-    'Edukasi',
-    'Sejarah',
-    'Teknologi',
+    'Bisnis',
+    'Pengembangan Diri',
+    'Marketing & Sales',
     'Sains',
-    'Biografi',
-    'Komik',
+    'Filsafat',
+    'Agama',
+    'Politik',
+    'Sejarah',
   ];
 
   final genreList = <String>[
