@@ -10,9 +10,9 @@ key = 'Content-Type'
 value = 'application/json'
 
 [auth.bearer]
-token = 'a13f3abe-7a72-4ae2-ba2a-5a20179a61ca'
+token = '05e27511-5148-410c-80df-526939a0a9cb'
 
 [body]
 type = 'JSON'
-raw = '{readings: "00:02:24", manyBooks: 1, focus: "00:00:00"}'
+raw = '{readings: "00:00:24", focus: "00:03:00"}'
 ```

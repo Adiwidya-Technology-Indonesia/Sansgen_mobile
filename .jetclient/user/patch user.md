@@ -10,7 +10,7 @@ key = 'Content-Type'
 value = 'multipart/form-data'
 
 [auth.bearer]
-token = 'f8b1857f-354a-4337-abad-8f3f1ac77c35'
+token = '05e27511-5148-410c-80df-526939a0a9cb'
 
 [[body.formData]]
 type = 'FILE'
@@ -21,9 +21,14 @@ disabled = true
 [[body.formData]]
 key = 'dateOfBirth'
 value = '2024-09-27 00:00:00.000'
+disabled = true
 
 [[body.formData]]
 key = 'hobby'
 value = 'sxbskdba'
 disabled = true
+
+[[body.formData]]
+key = 'categories'
+value = '[ 2]'
 ```

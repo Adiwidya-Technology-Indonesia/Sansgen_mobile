@@ -1,5 +1,6 @@
-// import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
+// import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
@@ -14,16 +15,16 @@ class Footer extends StatelessWidget {
       builder: (context, mode) {
         Widget body;
         if (mode == LoadStatus.idle) {
-          body = const Text("pull up load");
+          body = Text("pull up load", style: context.labelLarge);
         } else if (mode == LoadStatus.loading) {
-          // body =  CupertinoActivityIndicator(color: context.colorScheme.surface);
-          body =  CircularProgressIndicator(color: context.colorScheme.surface);
+          body = CupertinoActivityIndicator(color: context.colorScheme.surface);
+          // body =  CircularProgressIndicator(color: context.colorScheme.surface);
         } else if (mode == LoadStatus.failed) {
-          body = const Text("Tidak Ada lagi Data");
+          body = Text("Tidak Ada lagi Data", style: context.labelLarge);
         } else if (mode == LoadStatus.canLoading) {
-          body = const Text("release to load more");
+          body = Text("release to load more", style: context.labelLarge);
         } else {
-          body = const Text("Tidak Ada lagi Data");
+          body = Text("Tidak Ada lagi Data", style: context.labelLarge);
         }
         return SizedBox(
           height: 55.0,

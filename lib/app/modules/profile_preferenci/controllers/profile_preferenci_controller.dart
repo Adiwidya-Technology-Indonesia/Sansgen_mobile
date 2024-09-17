@@ -60,37 +60,39 @@ class ProfilePreferenciController extends GetxController
 
   Future simpan() async {
     try {
-      EasyLoading.show(status: "Loading");
       final categorySelesai = listPreferences
           .where((e) => e.isSelected.value == true)
           .map((v) => v.id)
           .toList();
       if (categorySelesai.length < 3) {
-        return Get.snackbar(
+        Get.snackbar(
           'Info',
           'Silakan pilih setidaknya 3 kategori buku',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.grey,
           colorText: Colors.white,
         );
+        return;
+      } else {
+        EasyLoading.show(status: "Loading");
+
+        final request = ModelRequestPatchUser(idCategory: categorySelesai);
+
+        return userProvider.patchReference(request).then((v) async {
+          EasyLoading.dismiss();
+          EasyLoading.showSuccess('Update Data berhasil');
+          log(v.toJson().toString());
+          Get.offAllNamed(Routes.DASHBOARD, arguments: 3);
+          return;
+        }).onError((e, st) {
+          EasyLoading.dismiss();
+          final errors = Errors(message: ['$e', '$st']);
+          final dataError = ModelResponseError(errors: errors);
+          log(dataError.toJson().toString());
+          EasyLoading.showError('Update Data Gagal');
+          return;
+        });
       }
-
-      final request = ModelRequestPatchUser(idCategory: categorySelesai);
-
-      return userProvider.patchReference(request).then((v) async {
-        EasyLoading.dismiss();
-        EasyLoading.showSuccess('Update Data berhasil');
-        log(v.toJson().toString());
-        Get.offAllNamed(Routes.DASHBOARD, arguments: 3);
-        return;
-      }).onError((e, st) {
-        EasyLoading.dismiss();
-        final errors = Errors(message: ['$e', '$st']);
-        final dataError = ModelResponseError(errors: errors);
-        log(dataError.toJson().toString());
-        EasyLoading.showError('Update Data Gagal');
-        return;
-      });
     } catch (e) {
       Get.defaultDialog(
         title: 'Error',

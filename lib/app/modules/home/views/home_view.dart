@@ -14,6 +14,7 @@ import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
 import '../../../../state/loading.dart';
 import '../../../../widgets/footer.dart';
+import '../../../../widgets/header.dart';
 import '../../../../widgets/image_book.dart';
 import '../controllers/home_controller.dart';
 
@@ -41,73 +42,76 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
       body: controller.obx(
-        (state) => SmartRefresher(
-          controller: controller.refreshController,
-          enablePullUp: true,
-          onRefresh: () async {
-            final result = await controller.getPassengerHome(isRefresh: true);
-            if (result) {
-              controller.refreshController.refreshCompleted();
-            } else {
-              controller.refreshController.refreshFailed();
-            }
-          },
-          footer: const Footer(),
-          onLoading: () async {
-            final result = await controller.getPassengerHome();
-            if (result) {
-              controller.refreshController.loadComplete();
-            } else {
-              controller.refreshController.loadFailed();
-            }
-          },
-          child: ListView(
-            controller: controller.scrollController,
-            shrinkWrap: true,
-            children: [
-              const Gap(40),
-              SizedBox(
-                height: 220,
-                width: double.infinity,
-                child: componentCard(
-                  title: 'Pilihan terbaik untukmu',
+        (state) => Material(
+          child: SmartRefresher(
+            controller: controller.refreshController,
+            enablePullUp: true,
+            onRefresh: () async {
+              final result = await controller.getPassengerHome(isRefresh: true);
+              if (result) {
+                controller.refreshController.refreshCompleted();
+              } else {
+                controller.refreshController.refreshFailed();
+              }
+            },
+            header: const Header(),
+            footer: const Footer(),
+            onLoading: () async {
+              final result = await controller.getPassengerHome();
+              if (result) {
+                controller.refreshController.loadComplete();
+              } else {
+                controller.refreshController.loadFailed();
+              }
+            },
+            child: ListView(
+              controller: controller.scrollController,
+              shrinkWrap: true,
+              children: [
+                const Gap(40),
+                SizedBox(
+                  height: 224,
+                  width: double.infinity,
+                  child: componentCard(
+                    title: 'Pilihan terbaik untukmu',
+                    emptyInfo: '',
+                    context: context,
+                    scrollDirection: Axis.horizontal,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: state!.bestForYou.length,
+                    itemBuilder: (context, index) {
+                      final book = state.bestForYou[index];
+                      return cardTerbaikUntukmu(
+                        book: book,
+                        onTap: () {
+                          controller.toDetails(book);
+                        },
+                      );
+                    },
+                  ),
+                ),
+                const Gap(12),
+                componentCard(
+                  title: 'Populer',
                   emptyInfo: '',
                   context: context,
-                  scrollDirection: Axis.horizontal,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: state!.bestForYou.length,
+                  scrollDirection: Axis.vertical,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.populer.length,
                   itemBuilder: (context, index) {
-                    final book = state.bestForYou[index];
-                    return cardTerbaikUntukmu(
+                    final book = state.populer[index];
+                    return cardPopuler(
                       book: book,
+                      context: context,
                       onTap: () {
                         controller.toDetails(book);
                       },
                     );
                   },
                 ),
-              ),
-              const Gap(12),
-              componentCard(
-                title: 'Populer',
-                emptyInfo: '',
-                context: context,
-                scrollDirection: Axis.vertical,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.populer.length,
-                itemBuilder: (context, index) {
-                  final book = state.populer[index];
-                  return cardPopuler(
-                    book: book,
-                    context: context,
-                    onTap: () {
-                      controller.toDetails(book);
-                    },
-                  );
-                },
-              ),
-              // const Gap(80),
-            ],
+                // const Gap(80),
+              ],
+            ),
           ),
         ),
         onLoading: const LoadingState(),
@@ -235,7 +239,8 @@ class HomeView extends GetView<HomeController> {
         else
           SizedBox(
             // Ganti Expanded dengan SizedBox
-            height: scrollDirection == Axis.horizontal ? 220 : null,
+            height: scrollDirection == Axis.horizontal ? 200 : null,
+            width: Get.width,
             // Tetapkan tinggi jika horizontal
             child: ListView.builder(
               itemCount: itemCount,

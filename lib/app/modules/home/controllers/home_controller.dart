@@ -68,12 +68,6 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
     super.onInit();
   }
 
-  @override
-  void onReady() async {
-    await fetchDataHome();
-    super.onReady();
-  }
-
   Future<void> fetchDataHome() async {
     try {
       late List<DataBook> populerList;

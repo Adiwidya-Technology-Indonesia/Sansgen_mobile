@@ -39,7 +39,7 @@ GestureDetector cardBook({
               children: [
                 Text(book.title, style: context.titleSmallBold),
                 // const Gap(4),
-                Text('By: ${book.publisher}', style: context.labelSmall),
+                Text('By: ${book.writer}', style: context.labelSmall),
                 const Gap(4),
                 Container(
                   height: 20,
