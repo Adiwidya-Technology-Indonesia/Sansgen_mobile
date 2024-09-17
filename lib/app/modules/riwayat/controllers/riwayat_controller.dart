@@ -8,7 +8,7 @@ import 'package:sansgen/app/modules/riwayat/views/sudah_baca.dart';
 import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/env.dart';
-import '../../../../model/book/book.dart';
+import '../../../../model/book/books.dart';
 import '../../../../provider/history.dart';
 import '../../../../provider/book.dart';
 import '../../../routes/app_pages.dart';

@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
-import '../../../../model/chapter/data_chapter.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../model/book/book.dart';
 import 'card_chapter.dart';
 
 Widget contentBottomSheetChapter({
   required BuildContext context,
-  required List<DataChapter> listChapter,
+  required List<Chapter> listChapter,
   required bool isPremium,
-  required DataBook dataBook,
+  required DataIdBook dataBook,
   required List<int>  readChapterIds,
 }) {
   return Container(

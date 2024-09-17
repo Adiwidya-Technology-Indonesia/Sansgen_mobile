@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'book.dart';
+import 'books.dart';
 
 ModelBooks booksModelFromJson(String str) => ModelBooks.fromJson(json.decode(str));
 

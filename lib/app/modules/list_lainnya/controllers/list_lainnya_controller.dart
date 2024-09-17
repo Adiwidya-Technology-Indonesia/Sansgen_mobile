@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 
-import '../../../../model/book/book.dart';
+import '../../../../model/book/books.dart';
 import '../../../routes/app_pages.dart';
 
 class ListLainnyaController extends GetxController

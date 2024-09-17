@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/env.dart';
-import '../../../../model/book/book.dart';
+import '../../../../model/book/books.dart';
 import '../../../../provider/book.dart';
 import '../../../routes/app_pages.dart';
 
@@ -17,7 +17,6 @@ class KategoriController extends GetxController
   KategoriController({required this.bookProvider});
 
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
-
 
   final List<String> kategoriList = [
     'All',
@@ -31,10 +30,10 @@ class KategoriController extends GetxController
     'Sejarah',
   ];
 
-  final genreList = <String>[
-    'Laki-laki',
-    'Perempuan',
-  ];
+  // final genreList = <String>[
+  //   'Laki-laki',
+  //   'Perempuan',
+  // ];
 
   final genreCurrent = ''.obs;
   List<DataBook> bookList = <DataBook>[];
@@ -55,7 +54,7 @@ class KategoriController extends GetxController
   @override
   void onInit() {
     findBooks();
-    setGenre(genreList[0]);
+    // setGenre(genreList[0]);
     filterListKategori.value = kategoriList
         .map(
           (e) => ModelFilter(title: e, isSelected: false.obs),
@@ -68,11 +67,11 @@ class KategoriController extends GetxController
   @override
   void onReady() {
     findBooks();
-    setGenre(genreList[0]);
+    // setGenre(genreList[0]);
     filterListKategori.value = kategoriList
         .map(
           (e) => ModelFilter(title: e, isSelected: false.obs),
-    )
+        )
         .toList();
     filterListKategori[0].isSelected.value = true;
     super.onReady();
@@ -83,7 +82,7 @@ class KategoriController extends GetxController
       if (result.status == true) {
         log(result.toString(), name: 'data model');
         bookList = result.data.map((e) {
-         return e.copyWith(image: e.image!.formattedUrl);
+          return e.copyWith(image: e.image!.formattedUrl);
         }).toList();
         change(bookList, status: RxStatus.success());
       } else {
@@ -95,11 +94,11 @@ class KategoriController extends GetxController
     });
   }
 
-  void onChangeFilterGenre(String v) {
-    final onFilter = bookList.where((e) => e.gender == v).toList();
-    setGenre(v);
-    change(onFilter, status: RxStatus.success());
-  }
+  // void onChangeFilterGenre(String v) {
+  //   final onFilter = bookList.where((e) => e.gender == v).toList();
+  //   setGenre(v);
+  //   change(onFilter, status: RxStatus.success());
+  // }
 
   void onChangeSearch({required String value, required RxBool isSearch}) {
     if (value.isNotEmpty) {
@@ -111,9 +110,12 @@ class KategoriController extends GetxController
     final onSearch = value.isEmpty
         ? bookList
         : bookList
-            .where((element) => element.title.toLowerCase().contains(
-                  value.toLowerCase(),
-                ))
+            .where((element) =>
+                element.title.toLowerCase().contains(value.toLowerCase()) ||
+                element.synopsis.toLowerCase().contains(value.toLowerCase()) ||
+                element.publisher.toLowerCase().contains(value.toLowerCase()) ||
+                element.writer.toLowerCase().contains(value.toLowerCase()) ||
+                element.gender.toLowerCase().contains(value.toLowerCase()))
             .toList();
     change(onSearch, status: RxStatus.success());
   }

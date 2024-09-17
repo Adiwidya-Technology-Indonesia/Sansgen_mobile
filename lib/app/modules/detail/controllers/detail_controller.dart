@@ -3,21 +3,19 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:sansgen/provider/book.dart';
 import 'package:sansgen/provider/user.dart';
 
-import '../../../../model/chapter/data_chapter.dart';
 import '../../../../model/comment/request_post.dart';
 import '../../../../model/history/response_by_id_book.dart';
 import '../../../../model/ratings/request_post.dart';
 import '../../../../provider/comment.dart';
 import '../../../../provider/history.dart';
 import '../../../../provider/like.dart';
+import '../../../../provider/rate.dart';
 import '../../../../services/prefs.dart';
 import '../../../../model/book/book.dart';
-import '../../../../model/comment/user_comment.dart';
-import '../../../../model/like/data_like.dart';
-import '../../../../provider/rate.dart';
-import '../../../../provider/chapter.dart';
+import '../../../data/books.dart';
 import '../component/content_chapter.dart';
 import '../component/content_comment.dart';
 
@@ -25,7 +23,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   final CommentProvider commentProvider;
   final LikeProvider likeProvider;
   final RatingProvider ratingProvider;
-  final ChapterProvider chapterProvider;
+  final BookProvider bookProvider;
   final UserProvider userProvider;
   final HistoryProvider historyProvider;
 
@@ -33,7 +31,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     required this.commentProvider,
     required this.likeProvider,
     required this.ratingProvider,
-    required this.chapterProvider,
+    required this.bookProvider,
     required this.userProvider,
     required this.historyProvider,
   });
@@ -42,27 +40,22 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
 
   final isPremium = false.obs;
 
-  late DataBook dataBook;
+  late DataIdBook dataBook;
   final scrollController = ScrollController();
   final commentFormC = TextEditingController();
   final isLikeState = false.obs;
   final ratingCurrent = 0.0.obs;
 
-  final listComments = <UserComment>[].obs;
-  final listLike = <UserLike>[].obs;
-  final listChapter = <DataChapter>[].obs;
+  final listComments = <Comment>[].obs;
+  final listLike = <Like>[].obs;
+  final listChapter = <Chapter>[].obs;
   final averageRate = 0.0.obs;
   final indexDashboard = 0.obs;
 
   RxList<int> readChapterIds = <int>[].obs; // Gunakan ID chapter,
 
-// void likeState() => isLike.value = !isLike.value;
   void backToDashboard() {
     Get.back();
-    // Get.offAllNamed(
-    //   Routes.DASHBOARD,
-    //   arguments: indexDashboard.value,
-    // );
   }
 
   @override
@@ -76,6 +69,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
       await fetchReadChapters();
       log(dataBook.uuid, name: 'idBook');
     } else {
+      dataBook = book;
       // ... kode lainnya ...
     }
     super.onInit();
@@ -96,7 +90,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   void tapViewBottomSheetChapter(
-      List<DataChapter> listChapter, BuildContext context) {
+      List<Chapter> listChapter, BuildContext context) {
     Get.bottomSheet(
       contentBottomSheetChapter(
         context: context,
@@ -141,7 +135,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   void tapViewBottomSheetComment(
-    RxList<UserComment> listComment,
+    RxList<Comment> listComment,
     BuildContext ctx,
   ) {
     // listComment.sort((a, b) => a.time.compareTo(b.time));
@@ -230,16 +224,16 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllComment() async {
-    await commentProvider.fetchCommentByBookId(dataBook.uuid).then((v) {
-      v.data.map(
+    await bookProvider.fetchIdBooks(dataBook.uuid).then((v) {
+      v.data.comments.map(
         (e) => log(e.comment.toString(), name: 'data comment'),
       );
-      if (v.data == []) {
+      if (v.data.comments == []) {
         log('comment kosong', name: 'data comment');
         listComments.value = [];
       } else {
         log('comment ada', name: 'data comment');
-        listComments.value = v.data;
+        listComments.value = v.data.comments;
       }
     }).onError((e, st) {
       listComments.value = [];
@@ -247,15 +241,15 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllLike() async {
-    await likeProvider.fetchLikeByBookId(uuidBook: dataBook.uuid).then((v) {
-      if (v.data == []) {
+    await bookProvider.fetchIdBooks(dataBook.uuid).then((v) {
+      if (v.data.likes == []) {
         log('like kosong', name: 'data like');
         listLike.value = [];
       } else {
         log('like ada', name: 'data like');
-        listLike.value = v.data;
+        listLike.value = v.data.likes;
         final idUser = prefServices.getUserUuid;
-        final isLike = v.data.where((e) => e.user.uuid == idUser);
+        final isLike = v.data.likes.where((e) => e.user.uuid == idUser);
         if (isLike.isEmpty) {
           isLikeState.value = false;
         } else {
@@ -268,13 +262,13 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllRating() async {
-    await ratingProvider.fetchRatingByBookId(uuidBook: dataBook.uuid).then((v) {
-      if (v.data.ratings == []) {
+    await bookProvider.fetchIdBooks(dataBook.uuid).then((v) {
+      if (v.data.manyRatings == 0) {
         log('comment kosong', name: 'data like');
         averageRate.value = 0.0;
       } else {
         log('comment ada', name: 'data like');
-        averageRate.value = v.data.averageRate;
+        averageRate.value = v.data.averageRate!;
       }
     }).onError((e, st) {
       listLike.value = [];
@@ -282,13 +276,13 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllChapter() async {
-    await chapterProvider.fetchChapter(dataBook.uuid).then((v) {
+    await bookProvider.fetchIdBooks(dataBook.uuid).then((v) {
       if (v.status == false) {
         log('comment kosong', name: 'data listChapter');
         listChapter.value = [];
       } else {
         log('comment ada', name: 'data listChapter');
-        listChapter.value = v.data;
+        listChapter.value = v.data.chapters;
       }
     }).onError((e, st) {
       listLike.value = [];
@@ -313,52 +307,47 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     try {
       change(null, status: RxStatus.loading()); // Set status loading
 
-      final resultComments =
-          await commentProvider.fetchCommentByBookId(dataBook.uuid);
-      final resultLikes =
-          await likeProvider.fetchLikeByBookId(uuidBook: dataBook.uuid);
-      final resultRatings =
-          await ratingProvider.fetchRatingByBookId(uuidBook: dataBook.uuid);
-      final resultChapters = await chapterProvider.fetchChapter(dataBook.uuid);
+      final resultIdBook =
+          await bookProvider.fetchIdBooks(dataBook.uuid);
       final resultUser = await userProvider.fetchUserId();
 
       // Proses data komentar
-      if (resultComments.data == []) {
+      if (resultIdBook.data.comments == []) {
         log('comment kosong', name: 'data comment');
         listComments.value = [];
       } else {
         log('comment ada', name: 'data comment');
-        listComments.value = resultComments.data;
+        listComments.value = resultIdBook.data.comments;
       }
 
       // Proses data like
-      if (resultLikes.data == []) {
+      if (resultIdBook.data.likes == []) {
         log('like kosong', name: 'data like');
         listLike.value = [];
       } else {
         log('like ada', name: 'data like');
-        listLike.value = resultLikes.data;
+        listLike.value = resultIdBook.data.likes;
         final idUser = prefServices.getUserUuid;
-        final isLike = resultLikes.data.where((e) => e.user.uuid == idUser);
+        final isLike = resultIdBook.data.likes.where((e) => e.user.uuid == idUser);
         isLikeState.value = isLike.isNotEmpty;
       }
 
       // Proses data rating
-      if (resultRatings.data.ratings == []) {
+      if (resultIdBook.data.manyRatings == 0) {
         log('rating kosong', name: 'data rating');
         averageRate.value = 0.0;
       } else {
         log('rating ada', name: 'data rating');
-        averageRate.value = resultRatings.data.averageRate;
+        averageRate.value = resultIdBook.data.averageRate!;
       }
 
       // Proses data chapter
-      if (resultChapters.status == false) {
+      if (resultIdBook.data.chapters == []) {
         log('chapter kosong', name: 'data listChapter');
         listChapter.value = [];
       } else {
         log('chapter ada', name: 'data listChapter');
-        listChapter.value = resultChapters.data;
+        listChapter.value = resultIdBook.data.chapters;
       }
 
       // Proses data pengguna
@@ -385,94 +374,14 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
       change(null, status: RxStatus.error(err.toString())); // Set status error
     }
   }
-//
-// Future getAllComment() async {
-//   await commentProvider.fetchCommentByBookId(dataBook.uuid).then((v) {
-//     v.data.map(
-//       (e) => log(e.comment.toString(), name: 'data comment'),
-//     );
-//     if (v.data == []) {
-//       log('comment kosong', name: 'data comment');
-//       listComments.value = [];
-//     } else {
-//       log('comment ada', name: 'data comment');
-//       listComments.value = v.data;
-//     }
-//   }).onError((e, st) {
-//     listComments.value = [];
-//   });
-// }
-
-// Future getAllLike() async {
-//   await likeProvider.fetchLikeByBookId(uuidBook: dataBook.uuid).then((v) {
-//     if (v.data == []) {
-//       log('like kosong', name: 'data like');
-//       listLike.value = [];
-//     } else {
-//       log('like ada', name: 'data like');
-//       listLike.value = v.data;
-//       final idUser = prefServices.getUserUuid;
-//       final isLike = v.data.where((e) => e.user.uuid == idUser);
-//       if (isLike.isEmpty) {
-//         isLikeState.value = false;
-//       } else {
-//         isLikeState.value = true;
-//       }
-//     }
-//   }).onError((e, st) {
-//     listLike.value = [];
-//   });
-// }
-
-// Future getAllRating() async {
-//   await ratingProvider.fetchRatingByBookId(uuidBook: dataBook.uuid).then((v) {
-//     if (v.data.ratings == []) {
-//       log('comment kosong', name: 'data like');
-//       averageRate.value = 0.0;
-//     } else {
-//       log('comment ada', name: 'data like');
-//       averageRate.value = v.data.averageRate;
-//     }
-//   }).onError((e, st) {
-//     listLike.value = [];
-//   });
-// }
-
-// Future getAllChapter() async {
-//   await chapterProvider.fetchChapter(dataBook.uuid).then((v) {
-//     if (v.status == false) {
-//       log('comment kosong', name: 'data listChapter');
-//       listChapter.value = [];
-//     } else {
-//       log('comment ada', name: 'data listChapter');
-//       listChapter.value = v.data;
-//     }
-//   }).onError((e, st) {
-//     listLike.value = [];
-//   });
-// }
-
-// Future getUserLogin() async {
-//   await userProvider.fetchUserId().then((v) {
-//     if (v.data != null && v.data!.isPremium == '1') {
-//       log('kosong', name: 'data isPremium');
-//       isPremium.value = true;
-//     } else {
-//       log('ada', name: 'data isPremium');
-//       isPremium.value = false;
-//     }
-//   }).onError((e, st) {
-//     isPremium.value = false;
-//   });
-// }
 }
 
 // Model data untuk DetailController (dengan tambahan isLiked)
 class ModelDataDetail {
-  final RxList<UserComment> comments;
-  final RxList<UserLike> likes;
+  final RxList<Comment> comments;
+  final RxList<Like> likes;
   final double averageRate;
-  final RxList<DataChapter> chapters;
+  final RxList<Chapter> chapters;
   final bool isPremium;
   final bool isLiked; // Tambahkan properti isLiked
 
@@ -487,10 +396,10 @@ class ModelDataDetail {
 
   // Tambahkan metode copyWith untuk memperbarui state
   ModelDataDetail copyWith({
-    RxList<UserComment>? comments,
-    RxList<UserLike>? likes,
+    RxList<Comment>? comments,
+    RxList<Like>? likes,
     double? averageRate,
-    RxList<DataChapter>? chapters,
+    RxList<Chapter>? chapters,
     bool? isPremium,
     bool? isLiked,
   }) {

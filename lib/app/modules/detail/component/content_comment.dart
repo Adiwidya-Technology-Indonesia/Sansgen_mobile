@@ -6,12 +6,12 @@ import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/avatar_widget.dart';
 import 'package:sansgen/widgets/book_empty.dart';
 
-import '../../../../model/comment/user_comment.dart';
+import '../../../../model/book/book.dart';
 import 'input_comment.dart';
 
 Container contentBottomSheetComment({
   required BuildContext context,
-  required RxList<UserComment> listComment,
+  required RxList<Comment> listComment,
   required ScrollController scrollController,
   required TextEditingController controller,
   required void Function() onTapSend,

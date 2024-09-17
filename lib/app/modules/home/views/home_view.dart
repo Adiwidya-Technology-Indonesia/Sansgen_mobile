@@ -1,10 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:sansgen/model/book/book.dart';
+import 'package:hidable/hidable.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sansgen/model/book/books.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/utils/ext_string.dart';
 import 'package:sansgen/widgets/avatar_widget.dart';
@@ -13,6 +13,7 @@ import 'package:sansgen/widgets/book_empty.dart';
 import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
 import '../../../../state/loading.dart';
+import '../../../../widgets/footer.dart';
 import '../../../../widgets/image_book.dart';
 import '../controllers/home_controller.dart';
 
@@ -21,67 +22,98 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return controller.obx(
-      (state) => Scaffold(
-        appBar: appBarCustom(
-          context: context,
-          name: state!.profil.name,
-          image: state.profil.image ?? "",
-          reading: state.focus.readings,
-          books: state.focus.manyBooks,
-          focus: state.focus.focus,
+    return Scaffold(
+      appBar: Hidable(
+        controller: controller.scrollController,
+        enableOpacityAnimation: true, // optional, defaults to `true`.
+        preferredWidgetSize: Size.fromHeight(
+          controller.isAppBarVisible.value ? 140 : 0,
         ),
-        body: ListView(
-          shrinkWrap: true,
-          children: [
-            const Gap(40),
-            SizedBox(
-              height: 220,
-              width: double.infinity,
-              child: componentCard(
-                title: 'Pilihan terbaik untukmu',
+        child: Obx(
+          () => appBarCustom(
+            context: context,
+            name: controller.appBarData.value.name,
+            image: controller.appBarData.value.image,
+            reading: controller.appBarData.value.reading,
+            books: controller.appBarData.value.books,
+            focus: controller.appBarData.value.focus,
+          ),
+        ),
+      ),
+      body: controller.obx(
+        (state) => SmartRefresher(
+          controller: controller.refreshController,
+          enablePullUp: true,
+          onRefresh: () async {
+            final result = await controller.getPassengerHome(isRefresh: true);
+            if (result) {
+              controller.refreshController.refreshCompleted();
+            } else {
+              controller.refreshController.refreshFailed();
+            }
+          },
+          footer: const Footer(),
+          onLoading: () async {
+            final result = await controller.getPassengerHome();
+            if (result) {
+              controller.refreshController.loadComplete();
+            } else {
+              controller.refreshController.loadFailed();
+            }
+          },
+          child: ListView(
+            controller: controller.scrollController,
+            shrinkWrap: true,
+            children: [
+              const Gap(40),
+              SizedBox(
+                height: 220,
+                width: double.infinity,
+                child: componentCard(
+                  title: 'Pilihan terbaik untukmu',
+                  emptyInfo: '',
+                  context: context,
+                  scrollDirection: Axis.horizontal,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: state!.bestForYou.length,
+                  itemBuilder: (context, index) {
+                    final book = state.bestForYou[index];
+                    return cardTerbaikUntukmu(
+                      book: book,
+                      onTap: () {
+                        controller.toDetails(book);
+                      },
+                    );
+                  },
+                ),
+              ),
+              const Gap(12),
+              componentCard(
+                title: 'Populer',
                 emptyInfo: '',
                 context: context,
-                scrollDirection: Axis.horizontal,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: state.bestForYou.length,
+                scrollDirection: Axis.vertical,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.populer.length,
                 itemBuilder: (context, index) {
-                  final book = state.bestForYou[index];
-                  return cardTerbaikUntukmu(
+                  final book = state.populer[index];
+                  return cardPopuler(
                     book: book,
+                    context: context,
                     onTap: () {
                       controller.toDetails(book);
                     },
                   );
                 },
               ),
-            ),
-            const Gap(12),
-            componentCard(
-              title: 'Populer',
-              emptyInfo: '',
-              context: context,
-              scrollDirection: Axis.vertical,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: state.populer.length,
-              itemBuilder: (context, index) {
-                final book = state.populer[index];
-                return cardPopuler(
-                  book: book,
-                  context: context,
-                  onTap: () {
-                    controller.toDetails(book);
-                  },
-                );
-              },
-            ),
-            // const Gap(80),
-          ],
+              // const Gap(80),
+            ],
+          ),
         ),
+        onLoading: const LoadingState(),
+        onError: (error) => ErrorState(error: error.toString()),
+        onEmpty: const EmptyState(),
       ),
-      onLoading: const LoadingState(),
-      onError: (error) => ErrorState(error: error.toString()),
-      onEmpty: const EmptyState(),
     );
   }
 
@@ -161,7 +193,7 @@ class HomeView extends GetView<HomeController> {
         margin: const EdgeInsets.only(left: 16),
         child: imageBook(
           image: book.image!,
-          height: 196,
+          height: 190,
           width: 149,
           radius: 8,
         ),
@@ -186,23 +218,25 @@ class HomeView extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: context.titleMedium),
-              Text(
-                'Lainnya',
-                style: context.labelLarge.copyWith(
-                  decoration: TextDecoration.underline,
-                  decorationThickness: 2,
-                  decorationStyle: TextDecorationStyle.solid,
-                  decorationColor: context.colorScheme.secondary,
-                ),
-              ),
+              // Text(
+              //   'Lainnya',
+              //   style: context.labelLarge.copyWith(
+              //     decoration: TextDecoration.underline,
+              //     decorationThickness: 2,
+              //     decorationStyle: TextDecorationStyle.solid,
+              //     decorationColor: context.colorScheme.secondary,
+              //   ),
+              // ),
             ],
           ),
         ),
         if (itemCount == 0)
           bookEmpty(emptyInfo, height: 170)
         else
-          SizedBox( // Ganti Expanded dengan SizedBox
-            height: scrollDirection == Axis.horizontal ? 220 : null, // Tetapkan tinggi jika horizontal
+          SizedBox(
+            // Ganti Expanded dengan SizedBox
+            height: scrollDirection == Axis.horizontal ? 220 : null,
+            // Tetapkan tinggi jika horizontal
             child: ListView.builder(
               itemCount: itemCount,
               shrinkWrap: true,

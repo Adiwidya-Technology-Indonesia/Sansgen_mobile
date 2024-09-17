@@ -13,7 +13,7 @@ String modelBookByIdToJson(ModelBookById data) => json.encode(data.toJson());
 class ModelBookById {
   final bool status;
   final String message;
-  final DataBook data;
+  final DataIdBook data;
 
   ModelBookById({
     required this.status,
@@ -24,7 +24,7 @@ class ModelBookById {
   ModelBookById copyWith({
     bool? status,
     String? message,
-    DataBook? data,
+    DataIdBook? data,
   }) =>
       ModelBookById(
         status: status ?? this.status,
@@ -35,7 +35,7 @@ class ModelBookById {
   factory ModelBookById.fromJson(Map<String, dynamic> json) => ModelBookById(
     status: json["status"],
     message: json["message"],
-    data: DataBook.fromJson(json["data"]),
+    data: DataIdBook.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {

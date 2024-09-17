@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:sansgen/model/book/book.dart';
+import 'package:sansgen/model/book/books.dart';
 import 'package:sansgen/model/focus/request_put.dart';
 import 'package:sansgen/utils/ext_int.dart';
 import 'package:sansgen/utils/ext_string.dart';

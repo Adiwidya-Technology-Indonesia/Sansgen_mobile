@@ -1,14 +1,16 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:sansgen/provider/book.dart';
 import 'package:sansgen/provider/focus.dart';
 import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/env.dart';
-import '../../../../model/book/book.dart';
+import '../../../../model/book/books.dart';
 import '../../../../model/focus/data_focus.dart';
 import '../../../../model/user/user.dart';
 import '../../../../provider/best_for_you.dart';
@@ -32,12 +34,32 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
 
   // final List<DataBook> bookList = List.generate(7, (index) => book);
   List<DataBook> bookList = <DataBook>[];
+  final ScrollController scrollController = ScrollController();
+  final isAppBarVisible = true.obs;
+  var appBarData = AppBarData(
+    name: '-',
+    image: '-',
+    reading: '-',
+    books: '-',
+    focus: '-',
+  ).obs;
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   void toDetails(DataBook book) {
     Get.toNamed(Routes.DETAIL, arguments: {
       'dataBook': book,
       'indexDash': 0,
     });
+  }
+
+  Future<bool> getPassengerHome({bool isRefresh = false}) async {
+    if (isRefresh) {
+      await fetchDataHome();
+    } else {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -89,29 +111,41 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
         infoUser = ModelUser.fromJson({});
         log('Permintaan informasi pengguna gagal', name: 'data kosong');
       } else {
-        infoUser = resultInfoUser.data!.copyWith(image: resultInfoUser.data!.image!.formattedUrl);
+        infoUser = resultInfoUser.data!
+            .copyWith(image: resultInfoUser.data!.image!.formattedUrl);
+        appBarData.value = appBarData.value.copyWith(
+          name: resultInfoUser.data!.name,
+          image: resultInfoUser.data!.image,
+        );
         // log(infoUser.toJson().toString(), name: 'infoUser');
       }
       if (resultFocus.data == null) {
         infoFocus = DataFocus.fromJson({});
       } else {
         infoFocus = resultFocus.data!;
+        appBarData.value = appBarData.value.copyWith(
+          reading: resultFocus.data!.readings,
+          focus: resultFocus.data!.focus,
+          books: resultFocus.data!.manyBooks,
+        );
       }
       if (populerList.isEmpty &&
           bestForYouList.isEmpty &&
           infoUser == ModelUser.fromJson({})) {
         change(null, status: RxStatus.empty());
         log('Semua data kosong', name: 'data kosong');
+      } else {
+        log(appBarData.toJson().toString(), name: 'data appbar');
+        change(
+          ModelDataHome(
+            populer: populerList,
+            bestForYou: bestForYouList,
+            profil: infoUser,
+            focus: infoFocus,
+          ),
+          status: RxStatus.success(),
+        );
       }
-      change(
-        ModelDataHome(
-          populer: populerList,
-          bestForYou: bestForYouList,
-          profil: infoUser,
-          focus: infoFocus,
-        ),
-        status: RxStatus.success(),
-      );
     } catch (err) {
       log(err.toString(), name: 'pesan error home controller');
       change(null, status: RxStatus.error(err.toString()));
@@ -131,4 +165,46 @@ class ModelDataHome {
     required this.profil,
     required this.focus,
   });
+}
+
+class AppBarData {
+  final String name;
+  final String image;
+  final String reading;
+  final String books;
+  final String focus;
+
+  AppBarData({
+    required this.name,
+    required this.image,
+    required this.reading,
+    required this.books,
+    required this.focus,
+  });
+
+  AppBarData copyWith({
+    String? name,
+    String? image,
+    String? reading,
+    String? books,
+    String? focus,
+  }) {
+    return AppBarData(
+      name: name ?? this.name,
+      image: image ?? this.image,
+      reading: reading ?? this.reading,
+      books: books ?? this.books,
+      focus: focus ?? this.focus,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'image': image,
+      'reading': reading,
+      'books': books,
+      'focus': focus,
+    };
+  }
 }

@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_popup_menu_button/custom_popup_menu_button.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
@@ -130,37 +130,7 @@ class KategoriView extends GetView<KategoriController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(title, style: context.titleMedium),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FlutterPopupMenuButton(
-                      direction: MenuDirection.values.first,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: Colors.white),
-                      popupMenuSize: const Size(120, 120),
-                      child: FlutterPopupMenuIcon(
-                        key: GlobalKey(),
-                        child: Obx(
-                          () => Text(controller.genreCurrent.value),
-                        ),
-                      ),
-                      children: controller.genreList
-                          .map(
-                            (v) => FlutterPopupMenuItem(
-                              onTap: () => controller.onChangeFilterGenre(v),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 20, bottom: 16),
-                                child: Text(v),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    const Icon(Icons.keyboard_arrow_down_sharp),
-                  ],
-                ),
+
               ],
             ),
           ),
@@ -184,6 +154,40 @@ class KategoriView extends GetView<KategoriController> {
       ),
     );
   }
+  //
+  // Widget filterGender(){
+  //   return Row(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       FlutterPopupMenuButton(
+  //         direction: MenuDirection.values.first,
+  //         decoration: const BoxDecoration(
+  //             borderRadius: BorderRadius.all(Radius.circular(20)),
+  //             color: Colors.white),
+  //         popupMenuSize: const Size(120, 120),
+  //         child: FlutterPopupMenuIcon(
+  //           key: GlobalKey(),
+  //           child: Obx(
+  //                 () => Text(controller.genreCurrent.value),
+  //           ),
+  //         ),
+  //         children: controller.genreList
+  //             .map(
+  //               (v) => FlutterPopupMenuItem(
+  //             onTap: () => controller.onChangeFilterGenre(v),
+  //             child: Padding(
+  //               padding:
+  //               const EdgeInsets.only(left: 20, bottom: 16),
+  //               child: Text(v),
+  //             ),
+  //           ),
+  //         )
+  //             .toList(),
+  //       ),
+  //       const Icon(Icons.keyboard_arrow_down_sharp),
+  //     ],
+  //   ),
+  // }
 
   PreferredSize bottomAppBar(BuildContext context) {
     return PreferredSize(

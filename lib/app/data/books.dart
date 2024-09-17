@@ -1,6 +1,6 @@
-import 'package:sansgen/model/book/book.dart';
+import '../../model/book/book.dart';
 
-final DataBook book = DataBook(
+final DataIdBook book = DataIdBook(
   uuid: '',
   id: 1,
   title: 'Buku G',
@@ -18,9 +18,11 @@ final DataBook book = DataBook(
   manyLikes: 100,
   manyComments: 12,
   manyChapters: 100,
-  averageRate: '4.5',
+  averageRate: 4.5,
   music: '',
-  // createdAt: DateTime.now(),
+  comments: [],
+  likes: [],
+  chapters: [],
   // createdAt: DateTime.now(),
   // listChapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 );

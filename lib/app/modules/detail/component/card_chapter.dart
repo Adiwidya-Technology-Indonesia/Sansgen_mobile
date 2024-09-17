@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
-import '../../../../model/chapter/data_chapter.dart';
+import '../../../../model/book/book.dart';
+
 
 GestureDetector cardChapter({
   required BuildContext context,
-  required DataChapter value,
+  required Chapter value,
   required Function() onToReading,
   required Function() onToAudio,
   required bool isRead,

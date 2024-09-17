@@ -35,12 +35,12 @@ mixin ImageState {
       alignment: AlignmentDirectional.bottomEnd,
       children: [
         SizedBox(
-          height: 180,
-          width: 180,
+          height: 140,
+          width: 140,
           child: AvatarWidget(
             image: image,
-            height: 180,
-            width: 180,
+            height: 140,
+            width: 140,
             radius: 100,
           ),
         ),
@@ -71,8 +71,8 @@ mixin ImageState {
           child: Image.file(
             File(state.first.path),
             fit: BoxFit.cover,
-            height: 180,
-            width: 180,
+            height: 140,
+            width: 140,
           ),
         ),
         InkWell(

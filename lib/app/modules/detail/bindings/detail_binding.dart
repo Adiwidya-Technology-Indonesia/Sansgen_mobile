@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sansgen/provider/chapter.dart';
+import 'package:sansgen/provider/book.dart';
 import 'package:sansgen/provider/history.dart';
 import 'package:sansgen/provider/like.dart';
 import 'package:sansgen/provider/rate.dart';
@@ -20,24 +20,25 @@ class DetailBinding extends Bindings {
     Get.lazyPut<RatingProvider>(
       () => RatingProvider(),
     );
-    Get.lazyPut<ChapterProvider>(
-      () => ChapterProvider(),
-    );
-    Get.lazyPut<HistoryProvider>(
-          () => HistoryProvider(),
+    // Get.lazyPut<ChapterProvider>(
+    //   () => ChapterProvider(),
+    // );
+    Get.lazyPut<BookProvider>(
+      () => BookProvider(),
     );
     Get.lazyPut<UserProvider>(
-          () => UserProvider(),
+      () => UserProvider(),
     );
     Get.lazyPut<HistoryProvider>(
-          () => HistoryProvider(),
+      () => HistoryProvider(),
     );
     Get.lazyPut<DetailController>(
       () => DetailController(
         commentProvider: Get.find(),
         likeProvider: Get.find(),
         ratingProvider: Get.find(),
-        chapterProvider: Get.find(),
+        // chapterProvider: Get.find(),
+        bookProvider: Get.find(),
         userProvider: Get.find(),
         historyProvider: Get.find(),
       ),
