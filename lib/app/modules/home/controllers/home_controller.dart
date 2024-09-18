@@ -128,18 +128,17 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
           infoUser == ModelUser.fromJson({})) {
         change(null, status: RxStatus.empty());
         log('Semua data kosong', name: 'data kosong');
-      } else {
-        log(appBarData.toJson().toString(), name: 'data appbar');
-        change(
-          ModelDataHome(
-            populer: populerList,
-            bestForYou: bestForYouList,
-            profil: infoUser,
-            focus: infoFocus,
-          ),
-          status: RxStatus.success(),
-        );
       }
+      log(appBarData.toJson().toString(), name: 'data appbar');
+      change(
+        ModelDataHome(
+          populer: populerList,
+          bestForYou: bestForYouList,
+          profil: infoUser,
+          focus: infoFocus,
+        ),
+        status: RxStatus.success(),
+      );
     } catch (err) {
       log(err.toString(), name: 'pesan error home controller');
       change(null, status: RxStatus.error(err.toString()));

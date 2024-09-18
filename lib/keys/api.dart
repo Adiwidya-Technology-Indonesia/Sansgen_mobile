@@ -11,6 +11,7 @@ class KeysApi {
   static const String logout = '/logout';
   static const String books = '/books';
   static const String comments = '/comments';
+  static const String category = '/category';
   static const String likes = '/likes';
   static const String rate = '/rate';
   static const String chapters = '/chapters';

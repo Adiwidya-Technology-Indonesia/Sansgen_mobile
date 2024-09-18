@@ -1,34 +1,29 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sansgen/utils/ext_string.dart';
 
-import '../../../../keys/env.dart';
 import '../../../../model/book/books.dart';
 import '../../../../provider/book.dart';
+import '../../../../provider/category.dart';
 import '../../../routes/app_pages.dart';
 
 class KategoriController extends GetxController
     with StateMixin<List<DataBook>> {
   final BookProvider bookProvider;
+  final CategoryProvider categoryProvider;
 
-  KategoriController({required this.bookProvider});
+  KategoriController({
+    required this.bookProvider,
+    required this.categoryProvider,
+  });
 
-  final String baseURL = dotenv.get(KeysEnv.baseUrl);
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
-  final List<String> kategoriList = [
-    'All',
-    'Bisnis',
-    'Pengembangan Diri',
-    'Marketing & Sales',
-    'Sains',
-    'Filsafat',
-    'Agama',
-    'Politik',
-    'Sejarah',
-  ];
+  final kategoriList = ['All'].obs;
 
   // final genreList = <String>[
   //   'Laki-laki',
@@ -52,8 +47,9 @@ class KategoriController extends GetxController
   }
 
   @override
-  void onInit() {
-    findBooks();
+  void onInit() async {
+    await findBooks();
+    await findCategory();
     // setGenre(genreList[0]);
     filterListKategori.value = kategoriList
         .map(
@@ -64,17 +60,21 @@ class KategoriController extends GetxController
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    findBooks();
-    // setGenre(genreList[0]);
-    filterListKategori.value = kategoriList
-        .map(
-          (e) => ModelFilter(title: e, isSelected: false.obs),
-        )
-        .toList();
-    filterListKategori[0].isSelected.value = true;
-    super.onReady();
+  Future<bool> getPassengerCategory({bool isRefresh = false}) async {
+    if (isRefresh) {
+      await findBooks();
+      await findCategory(); // Pindahkan dan tambahkan await di sini
+      // setGenre(genreList[0]);
+      filterListKategori.value = kategoriList
+          .map(
+            (e) => ModelFilter(title: e, isSelected: false.obs),
+          )
+          .toList();
+      filterListKategori[0].isSelected.value = true;
+    } else {
+      return false;
+    }
+    return true;
   }
 
   Future findBooks() async {
@@ -91,6 +91,22 @@ class KategoriController extends GetxController
       }
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
+    });
+  }
+
+  Future findCategory() async {
+    categoryProvider.fetchCategory().then((result) {
+      if (result.status == true) {
+        log(result.categories.map((e) => e.name).toList().toString(),
+            name: 'data categories');
+        // Mengambil nama kategori dan menambahkannya ke kategoriList
+        final categories = result.categories.map((e) => e.name).toList();
+        kategoriList.value = ['All', ...categories];
+      } else {
+        log('kosong', name: 'data kosong');
+      }
+    }, onError: (err) {
+      kategoriList.value = ['All'];
     });
   }
 
@@ -162,4 +178,11 @@ class ModelFilter {
     required this.title,
     required this.isSelected,
   });
+}
+
+class ModelCategoryPage {
+  final List<DataBook> books;
+  final List<String> categories;
+
+  ModelCategoryPage({required this.books, required this.categories});
 }

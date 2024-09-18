@@ -28,7 +28,7 @@ Future main() async {
     builder: (context, s) {
       if (s.connectionState == ConnectionState.waiting) {
         return const MaterialApp(
-          title: "Pulse Detector",
+          title: "Sansgen",
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
         );

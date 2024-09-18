@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/book_empty.dart';
@@ -12,6 +13,8 @@ import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
 import '../../../../state/loading.dart';
 import '../../../../widgets/card_book.dart';
+import '../../../../widgets/footer.dart';
+import '../../../../widgets/header.dart';
 import '../controllers/kategori_controller.dart';
 
 class KategoriView extends GetView<KategoriController> {
@@ -66,14 +69,15 @@ class KategoriView extends GetView<KategoriController> {
       scrollDirection: Axis.horizontal,
       child: Padding(
         padding: const EdgeInsets.only(left: 16),
-        child: Row(
-          children: controller.filterListKategori.asMap().entries.map((entry) {
-            final index = entry.key;
-            final e = entry.value;
-            return GestureDetector(
-              onTap: () => controller.onChangeFilterCategory(index),
-              child: Obx(
-                () => Container(
+        child: Obx(
+          () => Row(
+            children:
+                controller.filterListKategori.asMap().entries.map((entry) {
+              final index = entry.key;
+              final e = entry.value;
+              return GestureDetector(
+                onTap: () => controller.onChangeFilterCategory(index),
+                child: Container(
                   height: 36,
                   padding: const EdgeInsets.all(10.0),
                   margin: const EdgeInsets.only(right: 6),
@@ -92,9 +96,9 @@ class KategoriView extends GetView<KategoriController> {
                     ),
                   ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
@@ -111,7 +115,7 @@ class KategoriView extends GetView<KategoriController> {
     required Widget? Function(BuildContext, int) itemBuilder,
   }) {
     late String categoryActive;
-    if (controller.searchC.text != '' &&  controller.isSearch.isTrue) {
+    if (controller.searchC.text != '' && controller.isSearch.isTrue) {
       categoryActive = controller.searchC.text;
     } else {
       categoryActive = controller.filterListKategori
@@ -130,7 +134,6 @@ class KategoriView extends GetView<KategoriController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(title, style: context.titleMedium),
-
               ],
             ),
           ),
@@ -142,18 +145,44 @@ class KategoriView extends GetView<KategoriController> {
             )
           else
             Expanded(
-              child: ListView.builder(
-                itemCount: itemCount,
-                shrinkWrap: true,
-                scrollDirection: scrollDirection,
-                physics: physics,
-                itemBuilder: itemBuilder,
+              child: Material(
+                child: SmartRefresher(
+                  controller: controller.refreshController,
+                  enablePullUp: true,
+                  onRefresh: () async {
+                    final result =
+                        await controller.getPassengerCategory(isRefresh: true);
+                    if (result) {
+                      controller.refreshController.refreshCompleted();
+                    } else {
+                      controller.refreshController.refreshFailed();
+                    }
+                  },
+                  header: const Header(height: 40),
+                  footer: const Footer(),
+                  onLoading: () async {
+                    final result = await controller.getPassengerCategory();
+                    if (result) {
+                      controller.refreshController.loadComplete();
+                    } else {
+                      controller.refreshController.loadFailed();
+                    }
+                  },
+                  child: ListView.builder(
+                    itemCount: itemCount,
+                    shrinkWrap: true,
+                    scrollDirection: scrollDirection,
+                    physics: physics,
+                    itemBuilder: itemBuilder,
+                  ),
+                ),
               ),
             ),
         ],
       ),
     );
   }
+
   //
   // Widget filterGender(){
   //   return Row(

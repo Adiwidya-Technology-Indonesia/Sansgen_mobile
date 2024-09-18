@@ -4,6 +4,7 @@ import 'package:sansgen/app/modules/kategori/controllers/kategori_controller.dar
 import 'package:sansgen/app/modules/profil/controllers/profil_controller.dart';
 import 'package:sansgen/app/modules/riwayat/controllers/riwayat_controller.dart';
 import 'package:sansgen/provider/book.dart';
+import 'package:sansgen/provider/category.dart';
 import 'package:sansgen/provider/focus.dart';
 import 'package:sansgen/provider/history.dart';
 import 'package:sansgen/provider/user.dart';
@@ -29,6 +30,9 @@ class DashboardBinding extends Bindings {
     Get.lazyPut<BestForYouProvider>(
       () => BestForYouProvider(),
     );
+    Get.lazyPut<CategoryProvider>(
+      () => CategoryProvider(),
+    );
     Get.lazyPut<DashboardController>(
       () => DashboardController(),
     );
@@ -43,6 +47,7 @@ class DashboardBinding extends Bindings {
     Get.lazyPut<KategoriController>(
       () => KategoriController(
         bookProvider: Get.find(),
+        categoryProvider: Get.find(),
       ),
     );
     Get.lazyPut<RiwayatController>(

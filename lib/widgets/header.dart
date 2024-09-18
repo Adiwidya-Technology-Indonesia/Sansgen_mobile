@@ -7,7 +7,10 @@ import 'package:sansgen/utils/ext_context.dart';
 class Header extends StatelessWidget {
   const Header({
     Key? key,
+    this.height,
   }) : super(key: key);
+
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class Header extends StatelessWidget {
         Widget body;
         body = CupertinoActivityIndicator(color: context.colorScheme.surface);
         return SizedBox(
-          height: 20.0,
+          height: height ?? 20.0,
           child: Center(child: body),
         );
       },
