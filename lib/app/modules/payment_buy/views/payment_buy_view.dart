@@ -14,49 +14,62 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
   @override
   Widget build(BuildContext context) {
     return controller.obx(
-      (state) => Scaffold(
-        appBar: appBar(context: context, image: state!.image!),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              txtMain(
-                  txt:
-                      'Nikmati Pengalaman Membaca Tanpa Batas dengan Aku Premium di Sansgen!',
-                  context: context),
-              txtDot(
-                  txtDot:
-                      'Sebagai pengguna premium, Anda memiliki akses tak terbatas ke seluruh koleksi buku di Sansgen. Dari buku sejarah, biografi, hingga buku-buku ilmiah, semuanya tersedia untuk Anda baca kapan saja dan di mana saja. Tidak ada lagi batasan jumlah buku yang bisa Anda nikmati setiap bulannya!',
-                  context: context),
-              txtDot(
-                  txtDot:
-                      'Update dan Rekomendasi Eksklusif, Dapatkan rekomendasi buku terbaru dan terpopuler yang disesuaikan dengan preferensi Anda. Pengguna premium selalu menjadi yang pertama mendapatkan notifikasi tentang buku-buku baru yang dirilis dan event-event eksklusif yang diadakan oleh Sansgen.',
-                  context: context),
-              const SizedBox(
-                height: 10,
-              ),
-              txtMain(
-                  txt:
-                      'Jangan lewatkan kesempatan untuk meningkatkan pengalaman membaca Anda! Berlangganan Akun Premium hanya dengan membayar Rp.10.000 di aplikasi baca buku Sansgen sekarang dan rasakan sendiri perbedaannya.',
-                  context: context),
-            ],
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ElevatedButton(
-            onPressed: controller.postPayment,
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              minimumSize: const Size(double.infinity, 50),
+      (state) => PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) return; // Jika sudah di-pop, tidak perlu tindakan lagi
+          final onPop = await controller.onWillPop(context);
+          if (onPop) {
+            Get.offAllNamed(Routes.DASHBOARD, arguments: 3);
+          } else {
+            return;
+          }
+        },
+        child: Scaffold(
+          appBar: appBar(context: context, image: state!.image!),
+          body: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                txtMain(
+                    txt:
+                        'Nikmati Pengalaman Membaca Tanpa Batas dengan Aku Premium di Sansgen!',
+                    context: context),
+                txtDot(
+                    txtDot:
+                        'Sebagai pengguna premium, Anda memiliki akses tak terbatas ke seluruh koleksi buku di Sansgen. Dari buku sejarah, biografi, hingga buku-buku ilmiah, semuanya tersedia untuk Anda baca kapan saja dan di mana saja. Tidak ada lagi batasan jumlah buku yang bisa Anda nikmati setiap bulannya!',
+                    context: context),
+                txtDot(
+                    txtDot:
+                        'Update dan Rekomendasi Eksklusif, Dapatkan rekomendasi buku terbaru dan terpopuler yang disesuaikan dengan preferensi Anda. Pengguna premium selalu menjadi yang pertama mendapatkan notifikasi tentang buku-buku baru yang dirilis dan event-event eksklusif yang diadakan oleh Sansgen.',
+                    context: context),
+                const SizedBox(
+                  height: 10,
+                ),
+                txtMain(
+                    txt:
+                        'Jangan lewatkan kesempatan untuk meningkatkan pengalaman membaca Anda! Berlangganan Akun Premium hanya dengan membayar Rp.10.000 di aplikasi baca buku Sansgen sekarang dan rasakan sendiri perbedaannya.',
+                    context: context),
+              ],
             ),
-            child: Text(
-              'Bayar',
-              style: context.titleMedium
-                  .copyWith(color: context.colorScheme.primary),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ElevatedButton(
+              onPressed: controller.postPayment,
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: Text(
+                'Bayar',
+                style: context.titleMedium
+                    .copyWith(color: context.colorScheme.primary),
+              ),
             ),
           ),
         ),
@@ -72,7 +85,13 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: ()=> Get.offAllNamed(Routes.DASHBOARD,arguments: 3),
+            onTap: () {
+              controller.onWillPop(context).then((e) {
+                if (e) {
+                  Get.offAllNamed(Routes.DASHBOARD, arguments: 3);
+                }
+              });
+            },
             child: AvatarWidget(
               image: image,
               height: 50.0,

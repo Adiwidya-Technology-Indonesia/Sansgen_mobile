@@ -12,15 +12,21 @@ import '../../../../model/error.dart';
 import '../../../../model/on_boarding/gender.dart';
 import '../../../../model/on_boarding/on_boarding.dart';
 import '../../../../model/on_boarding/referency.dart';
+import '../../../../provider/category.dart';
 import '../../../routes/app_pages.dart';
 import '../views/age.dart';
 import '../views/gender.dart';
 import '../views/preferences.dart';
 
-class OnBoardingController extends GetxController {
+class OnBoardingController extends GetxController
+    with StateMixin<List<ModelPreferenci>> {
   final UserProvider userProvider;
+  final CategoryProvider categoryProvider;
 
-  OnBoardingController({required this.userProvider});
+  OnBoardingController({
+    required this.userProvider,
+    required this.categoryProvider,
+  });
 
   final PrefService prefService = PrefService();
 
@@ -36,19 +42,18 @@ class OnBoardingController extends GetxController {
 
   final listAge = ['18-24', '25-34', '35-44', '45-54', '55+'];
 
-  final listPreferences = <ModelPreferenci>[
-    ModelPreferenci(id: 1, title: 'Bisnis', isSelected: false.obs),
-    ModelPreferenci(id: 2, title: 'Pengembangan Diri', isSelected: false.obs),
-    ModelPreferenci(id: 3, title: 'Marketing & Sales', isSelected: false.obs),
-    ModelPreferenci(id: 4, title: 'Sains', isSelected: false.obs),
-    ModelPreferenci(id: 5, title: 'Filsafat', isSelected: false.obs),
-    ModelPreferenci(id: 6, title: 'Agama', isSelected: false.obs),
-    ModelPreferenci(id: 7, title: 'Politik', isSelected: false.obs),
-    ModelPreferenci(id: 8, title: 'Sejarah', isSelected: false.obs),
-  ];
+  var listPreferences = <ModelPreferenci>[];
 
   final Rx<String> selectedGender = ''.obs;
   final Rx<String> selectedAge = ''.obs;
+
+  @override
+  void onInit() async {
+    await prefService.prefInit();
+    currentPage.value = 0;
+    await fetchCategory();
+    super.onInit();
+  }
 
   String setGender(String value) {
     selectedGender.value = value;
@@ -58,6 +63,22 @@ class OnBoardingController extends GetxController {
   String setAge(String value) {
     selectedAge.value = value;
     return selectedAge.value;
+  }
+
+  Future fetchCategory() async {
+    await categoryProvider.fetchCategory().then((event) {
+      listPreferences = event.categories
+          .map((e) => ModelPreferenci(
+                id: e.id,
+                title: e.name,
+                isSelected: false.obs,
+              ))
+          .toList();
+      change(listPreferences, status: RxStatus.success());
+    }).onError((e, st) {
+      listPreferences = [];
+      change(listPreferences, status: RxStatus.empty());
+    });
   }
 
   void nextPage() {
@@ -178,11 +199,4 @@ class OnBoardingController extends GetxController {
       page: const PreferenciView(),
     ),
   ];
-
-  @override
-  void onInit() async {
-    await prefService.prefInit();
-    currentPage.value = 0;
-    super.onInit();
-  }
 }

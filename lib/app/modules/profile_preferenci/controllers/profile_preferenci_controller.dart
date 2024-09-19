@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -6,30 +7,27 @@ import 'package:get/get.dart';
 
 import 'package:sansgen/model/user/request_patch_user.dart';
 import 'package:sansgen/model/user/user.dart';
+import 'package:sansgen/utils/ext_context.dart';
 
 import '../../../../model/error.dart';
 import '../../../../model/on_boarding/referency.dart';
+import '../../../../provider/category.dart';
 import '../../../../provider/user.dart';
 import '../../../routes/app_pages.dart';
 
 class ProfilePreferenciController extends GetxController
-    with StateMixin<ModelUser> {
+    with StateMixin<ModelUpdatePreferencyPage> {
   final UserProvider userProvider;
+  final CategoryProvider categoryProvider;
 
-  ProfilePreferenciController({required this.userProvider});
+  ProfilePreferenciController({
+    required this.categoryProvider,
+    required this.userProvider,
+  });
 
   ModelUser? dataUser;
 
-  final listPreferences = <ModelPreferenci>[
-    ModelPreferenci(id: 1, title: 'Bisnis', isSelected: false.obs),
-    ModelPreferenci(id: 2, title: 'Pengembangan Diri', isSelected: false.obs),
-    ModelPreferenci(id: 3, title: 'Marketing & Sales', isSelected: false.obs),
-    ModelPreferenci(id: 4, title: 'Sains', isSelected: false.obs),
-    ModelPreferenci(id: 5, title: 'Filsafat', isSelected: false.obs),
-    ModelPreferenci(id: 6, title: 'Agama', isSelected: false.obs),
-    ModelPreferenci(id: 7, title: 'Politik', isSelected: false.obs),
-    ModelPreferenci(id: 8, title: 'Sejarah', isSelected: false.obs),
-  ];
+  var listPreferences = <ModelPreferenci>[];
 
   @override
   void onInit() async {
@@ -37,9 +35,42 @@ class ProfilePreferenciController extends GetxController
     super.onInit();
   }
 
+  Future<bool> onWillPop(BuildContext context) async {
+    return await Get.defaultDialog(
+          title: 'Peringatan!',
+          middleText: "Yakin mau batalin update preferensi?",
+          confirm: TextButton(
+            onPressed: () => Get.back(result: true),
+            child: Text(
+              'Ya',
+              style: context.titleMedium
+                  .copyWith(color: context.colorScheme.surface),
+            ),
+          ),
+          cancel: TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text(
+              'Batal',
+              style: context.titleMedium
+                  .copyWith(color: context.colorScheme.surface),
+            ),
+          ),
+        ) ??
+        false;
+  }
+
   Future getArgument() async {
     try {
-      if (Get.arguments != null) {
+      final resultCategory = await categoryProvider.fetchCategory();
+
+      if (Get.arguments != null && resultCategory.status == true) {
+        listPreferences = resultCategory.categories
+            .map((e) => ModelPreferenci(
+                  id: e.id,
+                  title: e.name,
+                  isSelected: false.obs,
+                ))
+            .toList();
         dataUser = Get.arguments;
         for (var pref in listPreferences) {
           if (dataUser!.categories
@@ -48,10 +79,13 @@ class ProfilePreferenciController extends GetxController
             pref.isSelected.value = true;
           }
         }
-        change(dataUser, status: RxStatus.success());
+        final dataPage = ModelUpdatePreferencyPage(
+          user: dataUser!,
+          categories: listPreferences,
+        );
+        change(dataPage, status: RxStatus.success());
       } else {
-        dataUser = null;
-        change(dataUser, status: RxStatus.empty());
+        change(null, status: RxStatus.empty());
       }
     } catch (e) {
       change(null, status: RxStatus.error(e.toString()));
@@ -99,5 +133,22 @@ class ProfilePreferenciController extends GetxController
         content: Text('Error: $e'),
       );
     }
+  }
+}
+
+class ModelUpdatePreferencyPage {
+  final ModelUser user;
+  final List<ModelPreferenci> categories;
+
+  ModelUpdatePreferencyPage({required this.user, required this.categories});
+
+  ModelUpdatePreferencyPage copyWith({
+    ModelUser? user,
+    List<ModelPreferenci>? categories,
+  }) {
+    return ModelUpdatePreferencyPage(
+      user: user ?? this.user,
+      categories: categories ?? this.categories,
+    );
   }
 }

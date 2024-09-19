@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/provider/payment.dart';
+import 'package:sansgen/utils/ext_context.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class PaymentBuyController extends GetxController with StateMixin<ModelUser> {
@@ -16,6 +17,30 @@ class PaymentBuyController extends GetxController with StateMixin<ModelUser> {
   void onInit() {
     fetchDataProfil();
     super.onInit();
+  }
+
+  Future<bool> onWillPop(BuildContext context) async {
+    return await Get.defaultDialog(
+          title: 'Peringatan!',
+          middleText: "Yakin mau batalin pembayaran payment",
+          confirm: TextButton(
+            onPressed: () => Get.back(result: true),
+            child: Text(
+              'Ya',
+              style: context.titleMedium
+                  .copyWith(color: context.colorScheme.surface),
+            ),
+          ),
+          cancel: TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text(
+              'Batal',
+              style: context.titleMedium
+                  .copyWith(color: context.colorScheme.surface),
+            ),
+          ),
+        ) ??
+        false;
   }
 
   Future launchURL(String url) async => await canLaunchUrlString(url)

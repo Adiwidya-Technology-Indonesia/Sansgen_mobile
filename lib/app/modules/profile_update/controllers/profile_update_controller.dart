@@ -44,6 +44,31 @@ class ProfileUpdateController extends GetxController {
     super.onInit();
   }
 
+  Future<bool> onWillPop(BuildContext context) async {
+    return await Get.defaultDialog(
+      title: 'Peringatan!',
+      middleText: "Yakin mau batalin update profile?",
+      confirm: TextButton(
+        onPressed: () => Get.back(result: true),
+        child: Text(
+          'Ya',
+          style: context.titleMedium
+              .copyWith(color: context.colorScheme.surface),
+        ),
+      ),
+      cancel: TextButton(
+        onPressed: () => Get.back(result: false),
+        child: Text(
+          'Batal',
+          style: context.titleMedium
+              .copyWith(color: context.colorScheme.surface),
+        ),
+      ),
+    ) ??
+        false;
+  }
+
+
   bool nullValidation(String? value) {
     if (value == null || value.trim().isEmpty) {
       return true;
