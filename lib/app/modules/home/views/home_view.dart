@@ -41,30 +41,16 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
-      body: controller.obx(
-        (state) => Material(
-          child: SmartRefresher(
-            controller: controller.refreshController,
-            enablePullUp: true,
-            onRefresh: () async {
-              final result = await controller.getPassengerHome(isRefresh: true);
-              if (result) {
-                controller.refreshController.refreshCompleted();
-              } else {
-                controller.refreshController.refreshFailed();
-              }
-            },
-            header: const Header(),
-            footer: const Footer(),
-            onLoading: () async {
-              final result = await controller.getPassengerHome();
-              if (result) {
-                controller.refreshController.loadComplete();
-              } else {
-                controller.refreshController.loadFailed();
-              }
-            },
-            child: ListView(
+      body: Material(
+        child: SmartRefresher(
+          controller: controller.refreshController,
+          enablePullUp: true,
+          onRefresh: controller.onRefresh,
+          header: const Header(),
+          footer: const Footer(),
+          onLoading: controller.onLoading,
+          child: controller.obx(
+            (state) => ListView(
               controller: controller.scrollController,
               shrinkWrap: true,
               children: [
@@ -90,7 +76,7 @@ class HomeView extends GetView<HomeController> {
                     },
                   ),
                 ),
-                const Gap(12),
+                const Gap(20),
                 componentCard(
                   title: 'Populer',
                   emptyInfo: '',
@@ -112,11 +98,11 @@ class HomeView extends GetView<HomeController> {
                 // const Gap(80),
               ],
             ),
+            onLoading: const LoadingState(),
+            onError: (error) => ErrorState(error: error.toString()),
+            onEmpty: const EmptyState(),
           ),
         ),
-        onLoading: const LoadingState(),
-        onError: (error) => ErrorState(error: error.toString()),
-        onEmpty: const EmptyState(),
       ),
     );
   }
@@ -234,12 +220,13 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
         ),
+        if (scrollDirection == Axis.horizontal) const Gap(10),
         if (itemCount == 0)
           bookEmpty(emptyInfo, height: 170)
         else
           SizedBox(
             // Ganti Expanded dengan SizedBox
-            height: scrollDirection == Axis.horizontal ? 200 : null,
+            height: scrollDirection == Axis.horizontal ? 190 : null,
             width: Get.width,
             // Tetapkan tinggi jika horizontal
             child: ListView.builder(
@@ -297,13 +284,14 @@ class HomeView extends GetView<HomeController> {
       ),
       actions: [
         GestureDetector(
-          onTap: () {},
+          onTap: () => controller.dashController.setCurrentIndex(3),
           child: SizedBox(
-              width: 40,
-              height: 40,
-              child: AvatarWidget(
-                image: image,
-              )),
+            width: 40,
+            height: 40,
+            child: AvatarWidget(
+              image: image,
+            ),
+          ),
         ),
         const Gap(20),
       ],

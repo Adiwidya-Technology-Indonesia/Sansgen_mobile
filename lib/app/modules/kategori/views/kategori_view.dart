@@ -28,77 +28,94 @@ class KategoriView extends GetView<KategoriController> {
         backgroundColor: context.colorScheme.primary,
         bottom: bottomAppBar(context),
       ),
-      body: controller.obx(
-        (state) => Column(
-          children: [
-            const Gap(12),
-            filterCategory(context),
-            const Gap(16),
-            Expanded(
-              child: componentCard(
-                title: 'Hasil',
-                context: context,
-                heightCom: context.height,
-                widthCom: double.infinity,
-                scrollDirection: Axis.vertical,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: state!.length,
-                itemBuilder: (context, index) {
-                  final book = state[index];
-                  return cardBook(
-                    book: book,
+      body: Material(
+        child: SmartRefresher(
+          controller: controller.refreshController,
+          enablePullUp: true,
+          onRefresh: controller.onRefresh,
+          header: const Header(height: 40),
+          footer: const Footer(),
+          onLoading: controller.onLoading,
+          child: controller.obx(
+            (state) => Column(
+              children: [
+                const Gap(12),
+                filterCategory(
                     context: context,
-                    onTap: () {
-                      controller.toDetails(book);
+                    categories: controller.filterListKategori),
+                const Gap(16),
+                Expanded(
+                  child: componentCard(
+                    title: 'Hasil',
+                    context: context,
+                    heightCom: context.height,
+                    widthCom: double.infinity,
+                    scrollDirection: Axis.vertical,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: state!.length,
+                    itemBuilder: (context, index) {
+                      final book = state[index];
+                      return cardBook(
+                        book: book,
+                        context: context,
+                        onTap: () {
+                          controller.toDetails(book);
+                        },
+                      );
                     },
-                  );
-                },
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
+            onLoading: const LoadingState(),
+            onError: (error) => ErrorState(error: error.toString()),
+            onEmpty: const EmptyState(),
+          ),
         ),
-        onLoading: const LoadingState(),
-        onError: (error) => ErrorState(error: error.toString()),
-        onEmpty: const EmptyState(),
       ),
     );
   }
 
-  SingleChildScrollView filterCategory(BuildContext context) {
+  SingleChildScrollView filterCategory({
+    required BuildContext context,
+    required List<ModelFilter> categories,
+  }) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
         padding: const EdgeInsets.only(left: 16),
-        child: Obx(
-          () => Row(
-            children:
-                controller.filterListKategori.asMap().entries.map((entry) {
-              final index = entry.key;
-              final e = entry.value;
-              return GestureDetector(
-                onTap: () => controller.onChangeFilterCategory(index),
-                child: Container(
-                  height: 36,
-                  padding: const EdgeInsets.all(10.0),
-                  margin: const EdgeInsets.only(right: 6),
+        child: Row(
+          children: categories.asMap().entries.map((entry) {
+            final index = entry.key;
+            final e = entry.value;
+            return GestureDetector(
+              onTap: () => controller.onChangeFilterCategory(index),
+              child: Obx(
+                () => Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  // Tambah padding horizontal
+                  margin: const EdgeInsets.only(right: 10),
+                  // Tambah margin
                   decoration: BoxDecoration(
-                    color: e.isSelected.isTrue
+                    color: e.isSelected.value // Gunakan e.isSelected.value
                         ? context.colorScheme.surface
                         : context.colorScheme.surface.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius:
+                        BorderRadius.circular(20), // Ubah border radius
                   ),
                   child: Text(
                     e.title,
                     style: context.labelMedium.copyWith(
-                      color: e.isSelected.isTrue
+                      color: e.isSelected.value // Gunakan e.isSelected.value
                           ? context.colorScheme.primary
                           : context.colorScheme.surface,
                     ),
                   ),
                 ),
-              );
-            }).toList(),
-          ),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -147,27 +164,12 @@ class KategoriView extends GetView<KategoriController> {
             Expanded(
               child: Material(
                 child: SmartRefresher(
-                  controller: controller.refreshController,
+                  controller: controller.refreshControllerList,
                   enablePullUp: true,
-                  onRefresh: () async {
-                    final result =
-                        await controller.getPassengerCategory(isRefresh: true);
-                    if (result) {
-                      controller.refreshController.refreshCompleted();
-                    } else {
-                      controller.refreshController.refreshFailed();
-                    }
-                  },
+                  onRefresh: controller.onRefreshList,
                   header: const Header(height: 40),
                   footer: const Footer(),
-                  onLoading: () async {
-                    final result = await controller.getPassengerCategory();
-                    if (result) {
-                      controller.refreshController.loadComplete();
-                    } else {
-                      controller.refreshController.loadFailed();
-                    }
-                  },
+                  onLoading: controller.onLoadingList,
                   child: ListView.builder(
                     itemCount: itemCount,
                     shrinkWrap: true,
@@ -226,6 +228,7 @@ class KategoriView extends GetView<KategoriController> {
         child: Card(
           elevation: 4,
           child: TextFormField(
+            controller: controller.searchC,
             cursorColor: context.colorScheme.onPrimary,
             onChanged: (v) => controller.onChangeSearch(
               value: v,
@@ -256,12 +259,15 @@ class KategoriView extends GetView<KategoriController> {
               ),
               suffixIcon: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: SvgPicture.asset(
-                  KeysAssetsIcons.close,
-                  height: 13,
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.onSecondary,
-                    BlendMode.srcIn,
+                child: GestureDetector(
+                  onTap: controller.clearForm,
+                  child: SvgPicture.asset(
+                    KeysAssetsIcons.close,
+                    height: 13,
+                    colorFilter: ColorFilter.mode(
+                      context.colorScheme.onSecondary,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),

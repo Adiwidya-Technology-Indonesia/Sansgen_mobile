@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sansgen/app/modules/riwayat/views/belum_baca.dart';
 import 'package:sansgen/app/modules/riwayat/views/sudah_baca.dart';
 import 'package:sansgen/utils/ext_string.dart';
@@ -48,16 +49,42 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
     );
   }
 
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   void onInit() async {
-    getAllHistory();
+    await getAllHistory();
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    getAllHistory();
-    super.onReady();
+  Future<bool> getPassengerCategory({bool isRefresh = false}) async {
+    if (isRefresh) {
+      await getAllHistory(); // Pindahkan dan tambahkan await di sini
+    } else {
+      return false;
+    }
+    return true;
+  }
+
+// Function untuk onRefresh
+  Future<void> onRefresh() async {
+    final result = await getPassengerCategory(isRefresh: true);
+    if (result) {
+      refreshController.refreshCompleted();
+    } else {
+      refreshController.refreshFailed();
+    }
+  }
+
+// Function untuk onLoading
+  Future<void> onLoading() async {
+    final result = await getPassengerCategory();
+    if (result) {
+      refreshController.loadComplete();
+    } else {
+      refreshController.loadFailed();
+    }
   }
 
   Future getIdBook(String idBook) async {

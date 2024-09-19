@@ -1,19 +1,19 @@
 // To parse this JSON data, do
 //
-//     final dataBook = dataBookFromJson(jsonString);
+//     final dataIdBook = dataIdBookFromJson(jsonString);
 
 import 'dart:convert';
 
-DataIdBook dataBookFromJson(String str) =>
+DataIdBook dataIdBookFromJson(String str) =>
     DataIdBook.fromJson(json.decode(str));
 
-String dataBookToJson(DataIdBook data) => json.encode(data.toJson());
+String dataIdBookToJson(DataIdBook data) => json.encode(data.toJson());
 
 class DataIdBook {
   final int id;
   final String uuid;
   final String title;
-  final String? image;
+  final String image;
   final String synopsis;
   final String language;
   final String gender;
@@ -22,13 +22,13 @@ class DataIdBook {
   final String writer;
   final String publisher;
 
-  // final DateTime? createdAt;
-  final String? music;
+  // final DateTime createdAt;
+  final dynamic music;
   final int manyLikes;
   final int manyRatings;
   final int manyChapters;
   final int manyComments;
-  final double? averageRate;
+  final double averageRate;
   final List<Chapter> chapters;
   final List<Comment> comments;
   final List<Like> likes;
@@ -69,8 +69,8 @@ class DataIdBook {
     String? category,
     String? writer,
     String? publisher,
-    DateTime? createdAt,
-    String? music,
+    // DateTime? createdAt,
+    dynamic music,
     int? manyLikes,
     int? manyRatings,
     int? manyChapters,
@@ -124,7 +124,7 @@ class DataIdBook {
         manyComments: json["manyComments"],
         averageRate: json["average_rate"] == null
             ? 0.0
-            : double.parse(json["average_rate"].toString()),
+            : double.parse(json["average_rate"]),
         chapters: List<Chapter>.from(
             json["chapters"].map((x) => Chapter.fromJson(x))),
         comments: List<Comment>.from(
@@ -162,7 +162,7 @@ class Chapter {
   final String uuid;
   final String number;
   final String title;
-  final String? audio;
+  final dynamic audio;
 
   Chapter({
     required this.id,
@@ -177,7 +177,7 @@ class Chapter {
     String? uuid,
     String? number,
     String? title,
-    String? audio,
+    dynamic audio,
   }) =>
       Chapter(
         id: id ?? this.id,
@@ -207,14 +207,15 @@ class Chapter {
 class Comment {
   final int id;
   final String comment;
-  final DateTime createdAt;
+
+  // final DateTime createdAt;
   final String timeElapsed;
   final User user;
 
   Comment({
     required this.id,
     required this.comment,
-    required this.createdAt,
+    // required this.createdAt,
     required this.timeElapsed,
     required this.user,
   });
@@ -229,7 +230,7 @@ class Comment {
       Comment(
         id: id ?? this.id,
         comment: comment ?? this.comment,
-        createdAt: createdAt ?? this.createdAt,
+        // createdAt: createdAt ?? this.createdAt,
         timeElapsed: timeElapsed ?? this.timeElapsed,
         user: user ?? this.user,
       );
@@ -237,7 +238,7 @@ class Comment {
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         id: json["id"],
         comment: json["comment"],
-        createdAt: DateTime.parse(json["created_at"]),
+        // createdAt: DateTime.parse(json["created_at"]),
         timeElapsed: json["time_elapsed"],
         user: User.fromJson(json["user"]),
       );
@@ -245,8 +246,7 @@ class Comment {
   Map<String, dynamic> toJson() => {
         "id": id,
         "comment": comment,
-        "created_at":
-            "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
+        // "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
         "time_elapsed": timeElapsed,
         "user": user.toJson(),
       };
@@ -295,41 +295,41 @@ class User {
 
 class Like {
   final int id;
-  final DateTime createdAt;
+
+  // final DateTime createdAt;
   final String timeElapsed;
   final User user;
 
   Like({
     required this.id,
-    required this.createdAt,
+    // required this.createdAt,
     required this.timeElapsed,
     required this.user,
   });
 
   Like copyWith({
     int? id,
-    DateTime? createdAt,
+    // DateTime? createdAt,
     String? timeElapsed,
     User? user,
   }) =>
       Like(
         id: id ?? this.id,
-        createdAt: createdAt ?? this.createdAt,
+        // createdAt: createdAt ?? this.createdAt,
         timeElapsed: timeElapsed ?? this.timeElapsed,
         user: user ?? this.user,
       );
 
   factory Like.fromJson(Map<String, dynamic> json) => Like(
         id: json["id"],
-        createdAt: DateTime.parse(json["created_at"]),
+        // createdAt: DateTime.parse(json["created_at"]),
         timeElapsed: json["time_elapsed"],
         user: User.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "created_at":
-            "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
+        // "created_at": "${createdAt.year.toString().padLeft(4, '0')}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}",
         "time_elapsed": timeElapsed,
         "user": user.toJson(),
       };

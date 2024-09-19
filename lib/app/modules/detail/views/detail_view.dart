@@ -8,12 +8,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
 import '../../../../state/empty.dart';
 import '../../../../state/error.dart';
 import '../../../../state/loading.dart';
+import '../../../../widgets/footer.dart';
+import '../../../../widgets/header.dart';
 import '../../../../widgets/image_book.dart';
 import '../controllers/detail_controller.dart';
 
@@ -26,7 +29,7 @@ class DetailView extends GetView<DetailController> {
       (state) => Scaffold(
         appBar: AppBar(
           backgroundColor: context.colorScheme.primary,
-          title: Text(controller.dataBook.title),
+          title: Text(controller.state!.dataBook.title),
           leading: GestureDetector(
             onTap: controller.backToDashboard,
             child: Padding(
@@ -46,25 +49,35 @@ class DetailView extends GetView<DetailController> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Stack(
-            alignment: AlignmentDirectional.topCenter,
-            children: [
-              contentHeader(
-                context: context,
-                image: controller.dataBook.image!,
+        body: Material(
+          child: SmartRefresher(
+            controller: controller.refreshController,
+            enablePullUp: true,
+            onRefresh: controller.onRefresh,
+            header: const Header(height: 60),
+            footer: const Footer(),
+            onLoading: controller.onLoading,
+            child: SingleChildScrollView(
+              child: Stack(
+                alignment: AlignmentDirectional.topCenter,
+                children: [
+                  contentHeader(
+                    context: context,
+                    image: controller.state!.dataBook.image,
+                  ),
+                  contentDetail(
+                    context: context,
+                    title: controller.state!.dataBook.title,
+                    image: controller.state!.dataBook.image,
+                    rating: controller.state!.dataBook.averageRate.toString(),
+                    like: controller.state!.dataBook.manyLikes,
+                    comment: controller.state!.dataBook.manyComments,
+                    sinopsis: controller.state!.dataBook.synopsis,
+                    // listChapter: ,
+                  ),
+                ],
               ),
-              contentDetail(
-                context: context,
-                title: controller.dataBook.title,
-                image: controller.dataBook.image!,
-                rating: controller.dataBook.averageRate.toString(),
-                like: controller.dataBook.manyLikes,
-                comment: controller.dataBook.manyComments,
-                sinopsis: controller.dataBook.synopsis,
-                // listChapter: ,
-              ),
-            ],
+            ),
           ),
         ),
         resizeToAvoidBottomInset: false,
@@ -116,7 +129,7 @@ class DetailView extends GetView<DetailController> {
         const Gap(20),
         Text(
           title,
-        textAlign: TextAlign.center,
+          textAlign: TextAlign.center,
           style: context.titleLargeBold,
         ),
         const Gap(8),
@@ -128,7 +141,7 @@ class DetailView extends GetView<DetailController> {
                 GestureDetector(
                   onTap: controller.tapViewRating,
                   child: RatingBar.builder(
-                    initialRating: controller.averageRate.value,
+                    initialRating: controller.averageRate.value ?? 0.0,
                     minRating: 1,
                     direction: Axis.horizontal,
                     allowHalfRating: true,

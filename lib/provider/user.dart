@@ -27,7 +27,7 @@ class UserProvider extends GetConnect {
         return Future.error(response);
         // return modelResponseErrorFromJson(response.bodyString!);
       } else {
-        // log(response.bodyString!, name: 'data response');
+        log(response.bodyString!, name: 'data response urlUserId');
         return modelResponseUserFromJson(response.bodyString!);
       }
     } catch (error) {

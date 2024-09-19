@@ -23,7 +23,8 @@ class KategoriController extends GetxController
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  final kategoriList = ['All'].obs;
+  final RefreshController refreshControllerList =
+      RefreshController(initialRefresh: false);
 
   // final genreList = <String>[
   //   'Laki-laki',
@@ -31,9 +32,12 @@ class KategoriController extends GetxController
   // ];
 
   final genreCurrent = ''.obs;
+
   List<DataBook> bookList = <DataBook>[];
   final searchC = TextEditingController();
   var filterListKategori = <ModelFilter>[].obs;
+
+  // var dataModel = ModelCategoryPage();
 
   final isSearch = false.obs;
 
@@ -41,73 +45,104 @@ class KategoriController extends GetxController
 
   void toDetails(DataBook book) {
     Get.toNamed(Routes.DETAIL, arguments: {
-      'dataBook': book,
-      'indexDash': 1,
+      'uuidBook': book.uuid,
     });
   }
 
   @override
   void onInit() async {
-    await findBooks();
-    await findCategory();
+    await fetchData();
     // setGenre(genreList[0]);
-    filterListKategori.value = kategoriList
-        .map(
-          (e) => ModelFilter(title: e, isSelected: false.obs),
-        )
-        .toList();
-    filterListKategori[0].isSelected.value = true;
     super.onInit();
   }
 
   Future<bool> getPassengerCategory({bool isRefresh = false}) async {
     if (isRefresh) {
-      await findBooks();
-      await findCategory(); // Pindahkan dan tambahkan await di sini
-      // setGenre(genreList[0]);
-      filterListKategori.value = kategoriList
-          .map(
-            (e) => ModelFilter(title: e, isSelected: false.obs),
-          )
-          .toList();
-      filterListKategori[0].isSelected.value = true;
+      await fetchData(); // Pindahkan dan tambahkan await di sini
     } else {
       return false;
     }
     return true;
   }
 
-  Future findBooks() async {
-    bookProvider.fetchBooks().then((result) {
-      if (result.status == true) {
-        log(result.toString(), name: 'data model');
-        bookList = result.data.map((e) {
-          return e.copyWith(image: e.image!.formattedUrl);
-        }).toList();
-        change(bookList, status: RxStatus.success());
-      } else {
-        change([], status: RxStatus.empty());
-        log('kosong', name: 'data kosong');
-      }
-    }, onError: (err) {
-      change(null, status: RxStatus.error(err.toString()));
-    });
+// Function untuk onRefresh
+  Future<void> onRefresh() async {
+    final result = await getPassengerCategory(isRefresh: true);
+    if (result) {
+      refreshController.refreshCompleted();
+    } else {
+      refreshController.refreshFailed();
+    }
   }
 
-  Future findCategory() async {
-    categoryProvider.fetchCategory().then((result) {
-      if (result.status == true) {
-        log(result.categories.map((e) => e.name).toList().toString(),
-            name: 'data categories');
-        // Mengambil nama kategori dan menambahkannya ke kategoriList
-        final categories = result.categories.map((e) => e.name).toList();
-        kategoriList.value = ['All', ...categories];
+// Function untuk onLoading
+  Future<void> onLoading() async {
+    final result = await getPassengerCategory();
+    if (result) {
+      refreshController.loadComplete();
+    } else {
+      refreshController.loadFailed();
+    }
+  }
+
+  // Function untuk onRefresh
+  Future<void> onRefreshList() async {
+    final result = await getPassengerCategory(isRefresh: true);
+    if (result) {
+      refreshControllerList.refreshCompleted();
+    } else {
+      refreshControllerList.refreshFailed();
+    }
+  }
+
+// Function untuk onLoading
+  Future<void> onLoadingList() async {
+    final result = await getPassengerCategory();
+    if (result) {
+      refreshControllerList.loadComplete();
+    } else {
+      refreshControllerList.loadFailed();
+    }
+  }
+
+  Future clearForm() async {
+    searchC.clear();
+    await fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      final resultBooks = await bookProvider.fetchBooks();
+      final resultCategories = await categoryProvider.fetchCategory();
+
+      if (resultBooks.status == true && resultCategories.status == true) {
+        final books = resultBooks.data.map((e) {
+          return e.copyWith(image: e.image!.formattedUrl);
+        }).toList();
+        bookList = books;
+        final categories =
+            resultCategories.categories.map((e) => e.name).toList();
+        final kategoriList = ['All', ...categories];
+        filterListKategori.value = kategoriList
+            .map(
+              (e) => ModelFilter(title: e, isSelected: false.obs),
+            )
+            .toList();
+        filterListKategori[0].isSelected.value = true;
+        // dataModel =
+        //     ModelCategoryPage(books: books, categories: filterListKategori);
+        change(
+          bookList,
+          status: RxStatus.success(),
+        );
       } else {
-        log('kosong', name: 'data kosong');
+        change(null, status: RxStatus.empty());
+        log('Data buku atau kategori kosong', name: 'data kosong');
       }
-    }, onError: (err) {
-      kategoriList.value = ['All'];
-    });
+    } catch (err) {
+      change(null, status: RxStatus.error(err.toString()));
+      log(err.toString(), name: 'Error fetchData');
+    }
   }
 
   // void onChangeFilterGenre(String v) {
@@ -121,7 +156,7 @@ class KategoriController extends GetxController
       isSearch.value = true;
     } else {
       isSearch.value = false;
-      findBooks();
+      fetchData();
     }
     final onSearch = value.isEmpty
         ? bookList
@@ -141,6 +176,17 @@ class KategoriController extends GetxController
     filterListKategori[index].isSelected.value =
         !filterListKategori[index].isSelected.value;
 
+    // Periksa apakah semua filter selain "All" bernilai false
+    final allFalse = filterListKategori
+        .skip(1) // Lewati filter "All"
+        .every((e) => !e.isSelected.value);
+
+    if (allFalse) {
+      // Set "All" menjadi true
+      fetchData(); // Tampilkan semua buku jika 'All' dipilih
+      filterListKategori[0].isSelected.value = true;
+    }
+
     // Jika 'All' dipilih, hapus pilihan pada filter lainnya
     if (index == 0 && filterListKategori[index].isSelected.value) {
       for (var i = 1; i < filterListKategori.length; i++) {
@@ -158,12 +204,11 @@ class KategoriController extends GetxController
         .toList();
 
     if (selectedFilters.contains('All')) {
-      findBooks(); // Tampilkan semua buku jika 'All' dipilih
+      fetchData(); // Tampilkan semua buku jika 'All' dipilih
     } else {
       final filteredBooks = bookList
           .where((book) =>
-              selectedFilters.contains(book.category) &&
-              book.gender == genreCurrent.value)
+              selectedFilters.any((filter) => filter == book.category))
           .toList();
       change(filteredBooks, status: RxStatus.success());
     }
@@ -181,8 +226,18 @@ class ModelFilter {
 }
 
 class ModelCategoryPage {
-  final List<DataBook> books;
-  final List<String> categories;
+  final List<DataBook>? books;
+  final List<ModelFilter>? categories;
 
-  ModelCategoryPage({required this.books, required this.categories});
+  ModelCategoryPage({this.books, this.categories});
+
+  ModelCategoryPage copyWith({
+    List<DataBook>? books,
+    List<ModelFilter>? categories,
+  }) {
+    return ModelCategoryPage(
+      books: books ?? this.books,
+      categories: categories ?? this.categories,
+    );
+  }
 }

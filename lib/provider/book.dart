@@ -21,7 +21,7 @@ class BookProvider extends GetConnect {
         log(response.toString(), name: 'response error');
         return Future.error(response);
       } else {
-        // log(response.bodyString!, name: 'data response');
+        log(response.bodyString!, name: 'data response urlIdBooks');
         return modelBookByIdFromJson(response.bodyString!);
       }
     } catch (error) {

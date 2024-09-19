@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sansgen/app/modules/dashboard/controllers/dashboard_controller.dart';
 
 import 'package:sansgen/provider/book.dart';
 import 'package:sansgen/provider/focus.dart';
@@ -43,13 +44,21 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
     books: '-',
     focus: '-',
   ).obs;
+
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
+  final dashController = Get.find<DashboardController>();
+
+  @override
+  void onInit() async {
+    await fetchDataHome();
+    super.onInit();
+  }
+
   void toDetails(DataBook book) {
     Get.toNamed(Routes.DETAIL, arguments: {
-      'dataBook': book,
-      'indexDash': 0,
+      'uuidBook': book.uuid,
     });
   }
 
@@ -62,10 +71,24 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
     return true;
   }
 
-  @override
-  void onInit() async {
-    await fetchDataHome();
-    super.onInit();
+// Function untuk onRefresh
+  Future<void> onRefresh() async {
+    final result = await getPassengerHome(isRefresh: true);
+    if (result) {
+      refreshController.refreshCompleted();
+    } else {
+      refreshController.refreshFailed();
+    }
+  }
+
+// Function untuk onLoading
+  Future<void> onLoading() async {
+    final result = await getPassengerHome();
+    if (result) {
+      refreshController.loadComplete();
+    } else {
+      refreshController.loadFailed();
+    }
   }
 
   Future<void> fetchDataHome() async {
@@ -108,8 +131,8 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
         infoUser = resultInfoUser.data!
             .copyWith(image: resultInfoUser.data!.image!.formattedUrl);
         appBarData.value = appBarData.value.copyWith(
-          name: resultInfoUser.data!.name,
-          image: resultInfoUser.data!.image,
+          name: infoUser.name,
+          image: infoUser.image,
         );
         // log(infoUser.toJson().toString(), name: 'infoUser');
       }

@@ -12,7 +12,9 @@ class ListLainnyaController extends GetxController
   var bookList = <DataBook>[];
 
   void toDetails(DataBook book) {
-    Get.toNamed(Routes.DETAIL, arguments: book);
+    Get.toNamed(Routes.DETAIL, arguments: {
+      'uuidBook': book.uuid,
+    });
   }
 
   @override

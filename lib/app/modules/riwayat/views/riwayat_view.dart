@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../widgets/footer.dart';
+import '../../../../widgets/header.dart';
 import '../controllers/riwayat_controller.dart';
 
 class RiwayatView extends GetView<RiwayatController> {
@@ -46,9 +49,19 @@ class RiwayatView extends GetView<RiwayatController> {
             ],
           ),
         ),
-        body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          children: controller.listPage,
+        body: Material(
+          child: SmartRefresher(
+            controller: controller.refreshController,
+            enablePullUp: true,
+            onRefresh: controller.onRefresh,
+            header: const Header(),
+            footer: const Footer(),
+            onLoading: controller.onLoading,
+            child: TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
+              children: controller.listPage,
+            ),
+          ),
         ),
       ),
     );
