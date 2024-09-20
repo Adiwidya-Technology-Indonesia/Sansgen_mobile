@@ -12,7 +12,7 @@ Widget contentBottomSheetChapter({
   required BuildContext context,
   required List<Chapter> listChapter,
   required bool isPremium,
-  required DataIdBook dataBook,
+  required DataIdBook? dataBook,
   required List<int>  readChapterIds,
 }) {
   return Container(
@@ -56,11 +56,13 @@ Widget contentBottomSheetChapter({
                             'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
                           );
                         }
-                        Get.toNamed(Routes.READING_BOOK, arguments: {
-                          'book': dataBook,
-                          'chapter': e,
-                          'listChapter': listChapter,
-                        });
+                        if (dataBook != null && listChapter != []) {
+                          Get.toNamed(Routes.READING_BOOK, arguments: {
+                            'book': dataBook,
+                            'numberChapter': e.number,
+                            'listChapter': listChapter,
+                          });
+                        }
                       },
                       onToAudio: () {
                         final numberChapter = int.parse(e.number);
@@ -71,11 +73,13 @@ Widget contentBottomSheetChapter({
                             'Anda belum bisa membuka chapter ini, karena akun anda belum premium',
                           );
                         }
-                        Get.toNamed(Routes.AUDIO_BOOK, arguments: {
-                          'book': dataBook,
-                          'chapter': e,
-                          'listChapter': listChapter,
-                        });
+                        if (dataBook != null && listChapter != []) {
+                          Get.toNamed(Routes.READING_BOOK, arguments: {
+                            'book': dataBook,
+                            'numberChapter': e.number,
+                            'listChapter': listChapter,
+                          });
+                        }
                       },
                     ),
                   )

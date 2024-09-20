@@ -7,7 +7,7 @@ class DataHistory {
   final String isFinished;
   final String lastChapter;
   final DataBook book;
-  final List<Chapter>? chapters;
+  final List<ChapterHistory>? chapters;
 
   DataHistory({
     required this.id,
@@ -24,7 +24,7 @@ class DataHistory {
     String? isFinished,
     String? lastChapter,
     DataBook? book,
-    List<Chapter>? chapters,
+    List<ChapterHistory>? chapters,
   }) =>
       DataHistory(
         id: id ?? this.id,
@@ -41,7 +41,7 @@ class DataHistory {
     isFinished: json["isFinished"],
     lastChapter: json["lastChapter"],
     book: DataBook.fromJson(json["book"]),
-    chapters: json["chapters"] == null ? [] : List<Chapter>.from(json["chapters"].map((x) => Chapter.fromJson(x))),
+    chapters: json["chapters"] == null ? [] : List<ChapterHistory>.from(json["chapters"].map((x) => ChapterHistory.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -54,25 +54,25 @@ class DataHistory {
   };
 }
 
-class Chapter {
+class ChapterHistory {
   final int id;
   final String number;
 
-  Chapter({
+  ChapterHistory({
     required this.id,
     required this.number,
   });
 
-  Chapter copyWith({
+  ChapterHistory copyWith({
     int? id,
     String? number,
   }) =>
-      Chapter(
+      ChapterHistory(
         id: id ?? this.id,
         number: number ?? this.number,
       );
 
-  factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
+  factory ChapterHistory.fromJson(Map<String, dynamic> json) => ChapterHistory(
     id: json["id"],
     number: json["number"],
   );

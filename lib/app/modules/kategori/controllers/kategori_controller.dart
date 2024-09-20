@@ -46,6 +46,7 @@ class KategoriController extends GetxController
   void toDetails(DataBook book) {
     Get.toNamed(Routes.DETAIL, arguments: {
       'uuidBook': book.uuid,
+      'nameBook': book.title,
     });
   }
 

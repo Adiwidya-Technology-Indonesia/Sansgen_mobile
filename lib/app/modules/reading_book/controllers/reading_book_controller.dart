@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:sansgen/model/book/books.dart';
 import 'package:sansgen/model/focus/request_put.dart';
 import 'package:sansgen/utils/ext_int.dart';
-import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/api.dart';
 import '../../../../keys/env.dart';
+import '../../../../model/book/book.dart';
 import '../../../../model/chapter/data_chapter.dart';
 import '../../../../model/history/request_post.dart';
 import '../../../../provider/chapter.dart';
@@ -46,13 +45,12 @@ class ReadingBookController extends GetxController
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
-  DataBook? dataBook;
-  var listChapter = <DataChapter>[];
+  DataIdBook? dataBook;
+  var listChapter = <Chapter>[];
 
   final Rx<int> currentChapter = 0.obs;
 
   // final Rx<String> currentIdChapter = ''.obs;
-  final Rx<String> currentContentChapter = "".obs;
   final Rx<bool> stateMusic = false.obs;
   final Rx<bool> isViewMusic = false.obs;
   String? urlStorage;
@@ -185,10 +183,6 @@ class ReadingBookController extends GetxController
     Get.back();
   }
 
-  void setCurrentContent(String value) {
-    currentContentChapter.value = value;
-  }
-
   Future previousChapter() async {
     if (currentChapter.value == 1) {
       Get.snackbar('info', 'Chapter 1 is the first chapter');
@@ -231,7 +225,6 @@ class ReadingBookController extends GetxController
         await getChapter(nextChapter.number);
       }
     }
-
   }
 
   void playAudioIfUrlsAvailable() async {
@@ -252,18 +245,17 @@ class ReadingBookController extends GetxController
 
   Future getArgument() async {
     if (Get.arguments != null) {
-      final initDataBook = Get.arguments['book'] as DataBook;
-      final initDataChapter = Get.arguments['chapter'] as DataChapter;
-      listChapter = Get.arguments['listChapter'] as List<DataChapter>;
+      final initDataBook = Get.arguments['book'] as DataIdBook;
+      final initDataChapter = Get.arguments['numberChapter'] as String;
+      listChapter = Get.arguments['listChapter'] as List<Chapter>;
 
       log(initDataBook.toJson().toString(), name: "initDataBook");
-      log(initDataChapter.toJson().toString(), name: "initDataChapter");
+      // log(initDataChapter.toJson().toString(), name: "initDataChapter");
       log(listChapter.toString(), name: "listChapter");
-
-      currentChapter.value = int.parse(initDataChapter.number);
-      // currentIdChapter.value = initDataChapter.id.toString();
       dataBook = initDataBook;
-      currentContentChapter.value = initDataChapter.content;
+
+      currentChapter.value = int.parse(initDataChapter);
+      // currentIdChapter.value = initDataChapter.id.toString();
       await getChapter(currentChapter.value.toString());
       await getUserLogin();
     } else {
@@ -280,11 +272,11 @@ class ReadingBookController extends GetxController
     )
         .then((v) {
       final dataPage = ModelDataReadingPage(
-          dataBook: dataBook!.copyWith(music: dataBook!.music!.formattedUrl),
+          dataBook: dataBook!.copyWith(music: dataBook!.music),
           dataChapter: v.data);
-      urlMusic = dataBook!.music!;
-      setCurrentContent(dataPage.dataChapter.content);
-      log(urlMusic!, name: 'Data urlMusic');
+      urlMusic = dataBook!.music;
+      log(urlMusic.toString(), name: 'Data urlMusic');
+      log(v.data.toJson().toString(), name: 'Data dataChapter');
       change(dataPage, status: RxStatus.success());
       if (urlMusic == null || urlMusic == '') {
         isViewMusic.value = false;
@@ -293,6 +285,7 @@ class ReadingBookController extends GetxController
         playAudioIfUrlsAvailable(); // Coba putar music setelah urlMusic tersedia
       }
     }).onError((e, st) {
+      log(e.toString() + st.toString(), name: 'pesan error chapter');
       change(null, status: RxStatus.error(e.toString()));
     });
   }
@@ -313,7 +306,7 @@ class ReadingBookController extends GetxController
 }
 
 class ModelDataReadingPage {
-  final DataBook dataBook;
+  final DataIdBook dataBook;
   final DataChapter dataChapter;
 
   ModelDataReadingPage({required this.dataBook, required this.dataChapter});

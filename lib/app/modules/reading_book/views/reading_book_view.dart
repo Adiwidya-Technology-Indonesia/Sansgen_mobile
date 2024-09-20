@@ -13,8 +13,11 @@ import 'package:sansgen/keys/assets_icons.dart';
 import 'package:sansgen/utils/ext_context.dart';
 import 'package:sansgen/widgets/image_book.dart';
 
-import '../../../../model/chapter/data_chapter.dart';
+import '../../../../model/book/book.dart';
 import '../../../../services/common.dart';
+import '../../../../state/empty.dart';
+import '../../../../state/error.dart';
+import '../../../../state/loading.dart';
 import '../controllers/reading_book_controller.dart';
 
 class ReadingBookView extends GetView<ReadingBookController> {
@@ -49,21 +52,27 @@ class ReadingBookView extends GetView<ReadingBookController> {
             // centerTitle: true,
           ),
         ),
-        body: SingleChildScrollView(
-          controller: controller.scrollController,
-          physics: controller.isAutoScrolling.value
-              ? const NeverScrollableScrollPhysics()
-              : null,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Obx(
-                  () => dataContent(context),
-                ),
-              ],
+        body: controller.obx(
+          (state) => SingleChildScrollView(
+            controller: controller.scrollController,
+            physics: controller.isAutoScrolling.value
+                ? const NeverScrollableScrollPhysics()
+                : null,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  dataContent(
+                    context,
+                    state!.dataChapter.content,
+                  ),
+                ],
+              ),
             ),
           ),
+          onLoading: const LoadingState(),
+          onError: (error) => ErrorState(error: error.toString()),
+          onEmpty: const EmptyState(),
         ),
         resizeToAvoidBottomInset: false,
         floatingActionButton: controller.isViewMusic.isFalse
@@ -117,8 +126,8 @@ class ReadingBookView extends GetView<ReadingBookController> {
     );
   }
 
-  Widget dataContent(BuildContext ctx) {
-    return Html(data: controller.currentContentChapter.value, style: {
+  Widget dataContent(BuildContext ctx, String dataContentChapter) {
+    return Html(data: dataContentChapter, style: {
       "div": Style(
         fontSize: FontSize.large,
         fontStyle: FontStyle.normal,
@@ -269,7 +278,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
         children: [
           const Gap(20),
           imageBook(
-            image: controller.dataBook!.image!,
+            image: controller.dataBook!.image,
             height: 200,
             width: 140,
             radius: 8,
@@ -291,7 +300,7 @@ class ReadingBookView extends GetView<ReadingBookController> {
     );
   }
 
-  Padding cardDrawer(DataChapter e, BuildContext context) {
+  Padding cardDrawer(Chapter e, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,

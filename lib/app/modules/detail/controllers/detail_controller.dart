@@ -42,6 +42,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   final isPremium = false.obs;
 
   late String uuidBook;
+  late String nameBook;
   final scrollController = ScrollController();
   final commentFormC = TextEditingController();
   final isLikeState = false.obs;
@@ -67,6 +68,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     if (Get.arguments != null) {
       log('Get argument ada', name: 'onInit');
       uuidBook = Get.arguments['uuidBook'];
+      nameBook = Get.arguments['nameBook'];
       await prefServices.prefInit();
       await fetchDataDetail();
       // readChapterIds.value = [];
@@ -89,7 +91,6 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     }
     return true;
   }
-
 
 // Function untuk onRefresh
   Future<void> onRefresh() async {

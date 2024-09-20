@@ -59,6 +59,7 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
   void toDetails(DataBook book) {
     Get.toNamed(Routes.DETAIL, arguments: {
       'uuidBook': book.uuid,
+      'nameBook': book.title,
     });
   }
 

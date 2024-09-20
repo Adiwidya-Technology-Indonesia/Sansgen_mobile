@@ -39,12 +39,12 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
   final listBookFinish = <DataBook>[].obs;
   final listBookNotFinish = <DataBook>[].obs;
 
-  void toDetails(DataBook dataBook) {
+  void toDetails(DataBook book) {
     Get.toNamed(
       Routes.DETAIL,
       arguments: {
-        'dataBook': dataBook,
-        'indexDash': 2,
+        'uuidBook': book.uuid,
+        'nameBook': book.title,
       },
     );
   }

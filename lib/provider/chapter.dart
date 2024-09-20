@@ -29,7 +29,7 @@ class ChapterProvider extends GetConnect {
         // } else if (response.statusCode == 404) {
         //   return modelDataEmptyFromJson(response.bodyString!);
       } else {
-        // log(response.bodyString!, name: 'data response Chapter');
+        log(response.bodyString!, name: 'data response Chapter');
         return modelResponseGetIdChapterFromJson(response.bodyString!);
       }
     } catch (error) {

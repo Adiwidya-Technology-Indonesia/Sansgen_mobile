@@ -25,31 +25,31 @@ class DetailView extends GetView<DetailController> {
 
   @override
   Widget build(BuildContext context) {
-    return controller.obx(
-      (state) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: context.colorScheme.primary,
-          title: Text(controller.state!.dataBook.title),
-          leading: GestureDetector(
-            onTap: controller.backToDashboard,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Card(
-                color: context.colorScheme.primary.withOpacity(0.6),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios_new_outlined,
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: context.colorScheme.primary,
+        title: Text(controller.nameBook),
+        leading: GestureDetector(
+          onTap: controller.backToDashboard,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Card(
+              color: context.colorScheme.primary.withOpacity(0.6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Icon(
+                  Icons.arrow_back_ios_new_outlined,
                 ),
               ),
             ),
           ),
         ),
-        body: Material(
+      ),
+      body: controller.obx(
+        (state) => Material(
           child: SmartRefresher(
             controller: controller.refreshController,
             enablePullUp: true,
@@ -80,26 +80,26 @@ class DetailView extends GetView<DetailController> {
             ),
           ),
         ),
-        resizeToAvoidBottomInset: false,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ElevatedButton(
-            onPressed: () => controller.tapViewBottomSheetChapter(
-                controller.listChapter, context),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+        onLoading: const LoadingState(),
+        onError: (error) => ErrorState(error: error.toString()),
+        onEmpty: const EmptyState(),
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ElevatedButton(
+          onPressed: () => controller.tapViewBottomSheetChapter(
+              controller.listChapter, context),
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 40),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text('Baca'),
           ),
+          child: const Text('Baca'),
         ),
       ),
-      onLoading: const LoadingState(),
-      onError: (error) => ErrorState(error: error.toString()),
-      onEmpty: const EmptyState(),
     );
   }
 
