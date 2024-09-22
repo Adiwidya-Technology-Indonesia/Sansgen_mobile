@@ -8,32 +8,23 @@ import 'package:sansgen/utils/ext_context.dart';
 import '../../../../model/book/book.dart';
 
 
-GestureDetector cardChapter({
+Widget cardChapter({
   required BuildContext context,
   required Chapter value,
   required Function() onToReading,
   required Function() onToAudio,
   required bool isRead,
 }) {
-  return GestureDetector(
-    onTap: onToReading,
-    child: Container(
-      height: 35,
-      margin: const EdgeInsets.only(bottom: 8),
-      // decoration: BoxDecoration(
-      //   color: Colors.white,
-      //   boxShadow: [
-      //     // BoxShadow(
-      //     //   offset: const Offset(0, 12),
-      //     //   color: context.colorScheme.onPrimary.withOpacity(0.2),
-      //     //   blurRadius: 12,
-      //     // ),
-      //   ],
-      // ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      GestureDetector(
+        onTap: onToReading,
+        child: Container(
+          height: 35,
+          margin: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
             children: [
               if (isRead) // Tampilkan ikon jika chapter telah dibaca
                 Padding(
@@ -53,13 +44,13 @@ GestureDetector cardChapter({
               ),
             ],
           ),
-          if (value.audio != null)
-            GestureDetector(
-              onTap: onToAudio,
-              child: SvgPicture.asset(KeysAssetsIcons.audio),
-            ),
-        ],
+        ),
       ),
-    ),
+      if (value.audio != null)
+        IconButton(
+          onPressed: onToAudio,
+          icon: SvgPicture.asset(KeysAssetsIcons.audio),
+        ),
+    ],
   );
 }

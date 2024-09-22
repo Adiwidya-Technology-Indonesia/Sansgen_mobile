@@ -37,11 +37,11 @@ class PaymentBuyView extends GetView<PaymentBuyController> {
                     context: context),
                 txtDot(
                     txtDot:
-                        'Sebagai pengguna premium, Anda memiliki akses tak terbatas ke seluruh koleksi buku di Sansgen. Dari buku sejarah, biografi, hingga buku-buku ilmiah, semuanya tersedia untuk Anda baca kapan saja dan di mana saja. Tidak ada lagi batasan jumlah buku yang bisa Anda nikmati setiap bulannya!',
+                        'Sebagai pengguna premium, Anda memiliki akses tak terbatas ke seluruh koleksi buku di Sansgen. Dari buku sejarah, biografi, hingga buku-buku ilmiah, semuanya tersedia untuk Anda baca kapan saja dan di mana saja. Tidak ada lagi batasan jumlah buku atau bab yang bisa Anda nikmati setiap bulannya!',
                     context: context),
                 txtDot(
                     txtDot:
-                        'Update dan Rekomendasi Eksklusif, Dapatkan rekomendasi buku terbaru dan terpopuler yang disesuaikan dengan preferensi Anda. Pengguna premium selalu menjadi yang pertama mendapatkan notifikasi tentang buku-buku baru yang dirilis dan event-event eksklusif yang diadakan oleh Sansgen.',
+                        'Update dan Rekomendasi Eksklusif, Dapatkan rekomendasi buku terbaru dan terpopuler yang disesuaikan dengan preferensi Anda. Pengguna premium juga menjadi yang pertama mengetahui tentang buku-buku baru yang dirilis.',
                     context: context),
                 const SizedBox(
                   height: 10,

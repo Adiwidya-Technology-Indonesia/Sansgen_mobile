@@ -341,6 +341,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
       } else {
         log('comment ada', name: 'data listChapter');
         listChapter.value = v.data.chapters;
+        listChapter.sort((a, b) => int.parse(a.number).compareTo(int.parse(b.number)));
       }
       final currentData = state;
       change(
@@ -416,6 +417,7 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
       } else {
         log('chapter ada', name: 'data listChapter');
         listChapter.value = resultIdBook.data.chapters;
+        listChapter.sort((a, b) => int.parse(a.number).compareTo(int.parse(b.number)));
       }
 
       // Proses data pengguna

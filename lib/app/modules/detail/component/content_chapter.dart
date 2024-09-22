@@ -74,7 +74,7 @@ Widget contentBottomSheetChapter({
                           );
                         }
                         if (dataBook != null && listChapter != []) {
-                          Get.toNamed(Routes.READING_BOOK, arguments: {
+                          Get.toNamed(Routes.AUDIO_BOOK, arguments: {
                             'book': dataBook,
                             'numberChapter': e.number,
                             'listChapter': listChapter,

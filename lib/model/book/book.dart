@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:sansgen/utils/ext_string.dart';
+
 DataIdBook dataIdBookFromJson(String str) =>
     DataIdBook.fromJson(json.decode(str));
 
@@ -23,7 +25,7 @@ class DataIdBook {
   final String publisher;
 
   // final DateTime createdAt;
-  final dynamic music;
+  final String? music;
   final int manyLikes;
   final int manyRatings;
   final int manyChapters;
@@ -70,7 +72,7 @@ class DataIdBook {
     String? writer,
     String? publisher,
     // DateTime? createdAt,
-    dynamic music,
+    String? music,
     int? manyLikes,
     int? manyRatings,
     int? manyChapters,
@@ -117,7 +119,7 @@ class DataIdBook {
         writer: json["writer"],
         publisher: json["publisher"],
         // createdAt: DateTime.parse(json["created_at"]),
-        music: json["music"],
+        music: json["music"] == null ? '' : json["music"].toString().formattedUrl,
         manyLikes: json["manyLikes"],
         manyRatings: json["manyRatings"],
         manyChapters: json["manyChapters"],
@@ -162,7 +164,7 @@ class Chapter {
   final String uuid;
   final String number;
   final String title;
-  final dynamic audio;
+  final String? audio;
 
   Chapter({
     required this.id,
@@ -177,7 +179,7 @@ class Chapter {
     String? uuid,
     String? number,
     String? title,
-    dynamic audio,
+    String? audio,
   }) =>
       Chapter(
         id: id ?? this.id,

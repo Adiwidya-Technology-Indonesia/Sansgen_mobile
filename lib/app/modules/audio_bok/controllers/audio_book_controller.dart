@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/keys/api.dart';
-import 'package:sansgen/model/book/books.dart';
+import 'package:sansgen/model/book/book.dart';
 import 'package:sansgen/provider/chapter.dart';
 import 'package:sansgen/utils/ext_string.dart';
 
@@ -25,8 +25,8 @@ class AudioBookController extends GetxController
     required this.userProvider,
   });
 
-  DataBook? dataBook;
-  var listChapter = <DataChapter>[];
+  DataIdBook? dataBook;
+  var listChapter = <Chapter>[];
 
   final ScrollController scrollController = ScrollController();
   double scrollSpeed = 20.0; // Kecepatan scroll dalam piksel per detik
@@ -44,9 +44,6 @@ class AudioBookController extends GetxController
   final isAutoScrolling = false.obs;
 
   final Rx<int> currentChapter = 0.obs;
-
-  // final Rx<String> currentIdChapter = ''.obs;
-  final Rx<String> currentContentChapter = "".obs;
 
   PositionData? isPositionData;
 
@@ -132,10 +129,6 @@ class AudioBookController extends GetxController
     Get.back();
   }
 
-  void setCurrentContent(String value) {
-    currentContentChapter.value = value;
-  }
-
   void previousChapter() async {
     if (currentChapter.value == 1) {
       Get.snackbar('info', 'Chapter 1 is the first chapter');
@@ -147,6 +140,10 @@ class AudioBookController extends GetxController
       // Jika chapter saat ini bukan chapter pertama, pindah ke chapter sebelumnya
       if (currentIndex > 0) {
         final previousChapter = listChapter[currentIndex - 1];
+        if (previousChapter.audio == null) {
+          Get.snackbar('Gagal', 'Chapter sebelumnya tidak memiliki audio.');
+          return;
+        }
         currentChapter.value = int.parse(previousChapter.number);
         await getChapter(previousChapter.number);
       }
@@ -170,6 +167,10 @@ class AudioBookController extends GetxController
       // Jika chapter saat ini bukan chapter terakhir, pindah ke chapter berikutnya
       if (currentIndex < listChapter.length - 1) {
         final nextChapter = listChapter[currentIndex + 1];
+        if (nextChapter.audio == null) {
+          Get.snackbar('Gagal', 'Chapter selanjutnya tidak memiliki audio.');
+          return;
+        }
         currentChapter.value = int.parse(nextChapter.number);
         await getChapter(nextChapter.number);
       }
@@ -178,18 +179,17 @@ class AudioBookController extends GetxController
 
   Future getArgument() async {
     if (Get.arguments != null) {
-      final initDataBook = Get.arguments['book'] as DataBook;
-      final initDataChapter = Get.arguments['chapter'] as DataChapter;
-      listChapter = Get.arguments['listChapter'] as List<DataChapter>;
+      final initDataBook = Get.arguments['book'] as DataIdBook;
+      final initDataChapter = Get.arguments['numberChapter'] as String;
+      listChapter = Get.arguments['listChapter'] as List<Chapter>;
 
       log(initDataBook.toJson().toString(), name: "initDataBook");
-      log(initDataChapter.toJson().toString(), name: "initDataChapter");
+      log(initDataChapter.toString(), name: "initDataChapter");
       log(listChapter.toString(), name: "listChapter");
 
-      currentChapter.value = int.parse(initDataChapter.number);
+      currentChapter.value = int.parse(initDataChapter);
       // currentIdChapter.value = initDataChapter.id.toString();
       dataBook = initDataBook;
-      currentContentChapter.value = initDataChapter.content;
       await getChapter(currentChapter.value.toString());
       await getUserLogin();
     } else {
@@ -208,10 +208,10 @@ class AudioBookController extends GetxController
     )
         .then((v) {
       final dataPage = ModelDataAudioPage(
-          dataBook: dataBook!.copyWith(image: dataBook!.image!),
-          dataChapter: v.data.copyWith(audio: v.data.audio!.formattedUrl));
-      urlAudio = dataPage.dataChapter.audio;
-      setCurrentContent(dataPage.dataChapter.content);
+        dataBook: dataBook!.copyWith(image: dataBook!.image),
+        dataChapter: v.data,
+      );
+      urlAudio = v.data.audio!.formattedUrl;
       log(urlAudio!, name: 'Data urlAudio');
       change(dataPage, status: RxStatus.success());
       if (urlAudio == null || urlAudio == '') {
@@ -241,7 +241,7 @@ class AudioBookController extends GetxController
 }
 
 class ModelDataAudioPage {
-  final DataBook dataBook;
+  final DataIdBook dataBook;
   final DataChapter dataChapter;
 
   ModelDataAudioPage({required this.dataBook, required this.dataChapter});

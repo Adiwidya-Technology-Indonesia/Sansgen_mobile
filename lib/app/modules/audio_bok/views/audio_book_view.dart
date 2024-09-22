@@ -167,8 +167,8 @@ class AudioBookView extends GetView<AudioBookController> {
     required BuildContext ctx,
     required ModelDataAudioPage data,
   }) {
-    return Obx(
-      () => SingleChildScrollView(
+    return controller.obx(
+      (state) => SingleChildScrollView(
         controller: controller.scrollController,
         physics: controller.isAutoScrolling.value
             ? const NeverScrollableScrollPhysics()
@@ -177,21 +177,22 @@ class AudioBookView extends GetView<AudioBookController> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             children: [
-              Obx(
-                () => Html(
-                  data: controller.currentContentChapter.value,
-                  style: {
-                    "div": Style(
-                      fontSize: FontSize.large,
-                      fontStyle: FontStyle.normal,
-                    )
-                  },
-                ),
+              Html(
+                data: state!.dataChapter.content,
+                style: {
+                  "div": Style(
+                    fontSize: FontSize.large,
+                    fontStyle: FontStyle.normal,
+                  )
+                },
               ),
             ],
           ),
         ),
       ),
+      onLoading: const LoadingState(),
+      onError: (error) => ErrorState(error: error.toString()),
+      onEmpty: const EmptyState(),
     );
   }
 
@@ -203,7 +204,7 @@ class AudioBookView extends GetView<AudioBookController> {
       children: [
         const Gap(12),
         imageBook(
-          image: data.dataBook.image!,
+          image: data.dataBook.image,
           height: Get.height * 0.37,
           width: 200,
           radius: 8,
