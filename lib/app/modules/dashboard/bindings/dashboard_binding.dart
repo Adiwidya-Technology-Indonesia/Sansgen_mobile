@@ -24,8 +24,8 @@ class DashboardBinding extends Bindings {
     Get.lazyPut<UserProvider>(
       () => UserProvider(),
     );
-    Get.lazyPut<FocusProvider>(
-      () => FocusProvider(),
+    Get.put<FocusProvider>(
+      FocusProvider(),
     );
     Get.lazyPut<BestForYouProvider>(
       () => BestForYouProvider(),

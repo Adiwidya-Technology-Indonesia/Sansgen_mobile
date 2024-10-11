@@ -8,6 +8,7 @@ import 'package:sansgen/provider/user.dart';
 import 'package:sansgen/services/prefs.dart';
 
 import '../../../../keys/assets_images.dart';
+import '../../../../model/category/response_get.dart';
 import '../../../../model/error.dart';
 import '../../../../model/on_boarding/gender.dart';
 import '../../../../model/on_boarding/on_boarding.dart';
@@ -67,7 +68,10 @@ class OnBoardingController extends GetxController
 
   Future fetchCategory() async {
     await categoryProvider.fetchCategory().then((event) {
-      listPreferences = event.categories
+      final dataCategories =
+          modelResponseGetCategoryFromJson(event.bodyString!);
+
+      listPreferences = dataCategories.categories
           .map((e) => ModelPreferenci(
                 id: e.id,
                 title: e.name,

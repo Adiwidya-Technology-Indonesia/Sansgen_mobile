@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:sansgen/utils/ext_string.dart';
 
+import '../../../../model/book/book_by_id.dart';
+import '../../../../model/user/response_get.dart';
 import '../../../../provider/book.dart';
 import '../../../../provider/user.dart';
 import '../../../../model/comment/request_post.dart';
@@ -107,10 +108,11 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
     final result = await getPassengerDetails();
     if (result) {
       refreshController.loadComplete();
-    }else {
+    } else {
       refreshController.loadFailed();
     }
   }
+
   Future<void> fetchReadChapters() async {
     await historyProvider.fetchHistoryByIdBook(uuidBook).then((response) {
       if (response.statusCode == 200) {
@@ -265,16 +267,14 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllComment() async {
-    await bookProvider.fetchIdBooks(uuidBook).then((v) {
-      v.data.comments.map(
-        (e) => log(e.comment.toString(), name: 'data comment'),
-      );
-      if (v.data.comments == []) {
+    await bookProvider.fetchIdBooks(uuidBook).then((response) {
+      if (!response.isOk) {
         log('comment kosong', name: 'data comment');
         listComments.value = [];
       } else {
+        final bookData = modelBookByIdFromJson(response.bodyString!);
         log('comment ada', name: 'data comment');
-        listComments.value = v.data.comments;
+        listComments.value = bookData.data.comments;
         final currentData = state;
         if (currentData != null) {
           change(
@@ -289,16 +289,17 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllLike() async {
-    await bookProvider.fetchIdBooks(uuidBook).then((v) {
+    await bookProvider.fetchIdBooks(uuidBook).then((response) {
       final currentData = state;
-      if (v.data.likes == []) {
+      if (!response.isOk) {
         log('like kosong', name: 'data like');
         listLike.value = [];
       } else {
         log('like ada', name: 'data like');
-        listLike.value = v.data.likes;
+        final bookData = modelBookByIdFromJson(response.bodyString!);
+        listLike.value = bookData.data.likes;
         final idUser = prefServices.getUserUuid;
-        final isLike = v.data.likes.where((e) => e.user.uuid == idUser);
+        final isLike = bookData.data.likes.where((e) => e.user.uuid == idUser);
         if (isLike.isEmpty) {
           isLikeState.value = false;
         } else {
@@ -315,17 +316,17 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllRating() async {
-    await bookProvider.fetchIdBooks(uuidBook).then((v) {
-      if (v.data.manyRatings == 0) {
+    await bookProvider.fetchIdBooks(uuidBook).then((response) {
+      if (!response.isOk) {
         log('comment kosong', name: 'data like');
         averageRate.value = 0.0;
       } else {
+        final bookData = modelBookByIdFromJson(response.bodyString!);
         log('comment ada', name: 'data like');
-        averageRate.value = v.data.averageRate;
+        averageRate.value = bookData.data.averageRate;
       }
-      final currentData = state;
       change(
-        currentData!.copyWith(averageRate: averageRate.value),
+        state!.copyWith(averageRate: averageRate.value),
         status: RxStatus.success(),
       );
     }).onError((e, st) {
@@ -334,18 +335,19 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
   }
 
   Future getAllChapter() async {
-    await bookProvider.fetchIdBooks(uuidBook).then((v) {
-      if (v.status == false) {
+    await bookProvider.fetchIdBooks(uuidBook).then((response) {
+      if (!response.isOk) {
         log('comment kosong', name: 'data listChapter');
         listChapter.value = [];
       } else {
         log('comment ada', name: 'data listChapter');
-        listChapter.value = v.data.chapters;
-        listChapter.sort((a, b) => int.parse(a.number).compareTo(int.parse(b.number)));
+        final bookData = modelBookByIdFromJson(response.bodyString!);
+        listChapter.value = bookData.data.chapters;
+        listChapter
+            .sort((a, b) => int.parse(a.number).compareTo(int.parse(b.number)));
       }
-      final currentData = state;
       change(
-        currentData!.copyWith(chapters: listChapter),
+        state!.copyWith(chapters: listChapter),
         status: RxStatus.success(),
       );
     }).onError((e, st) {
@@ -374,76 +376,41 @@ class DetailController extends GetxController with StateMixin<ModelDataDetail> {
 
   Future<void> fetchDataDetail() async {
     try {
-      // change(null, status: RxStatus.loading()); // Set status loading
-
       final resultIdBook = await bookProvider.fetchIdBooks(uuidBook);
       final resultUser = await userProvider.fetchUserId();
 
-      // Proses data komentar
-      if (resultIdBook.data.comments == []) {
-        log('comment kosong', name: 'data comment');
-        listComments.value = [];
-      } else {
-        log('comment ada', name: 'data comment');
-        listComments.value = resultIdBook.data.comments;
-      }
+      if (resultIdBook.isOk && resultUser.isOk) {
+        final bookData = modelBookByIdFromJson(resultIdBook.bodyString!);
+        final userData = modelResponseUserFromJson(resultUser.bodyString!);
 
-      // Proses data like
-      if (resultIdBook.data.likes == []) {
-        log('like kosong', name: 'data like');
-        listLike.value = [];
-      } else {
-        log('like ada', name: 'data like');
-        listLike.value = resultIdBook.data.likes;
-        final idUser = prefServices.getUserUuid;
-        final isLike =
-            resultIdBook.data.likes.where((e) => e.user.uuid == idUser);
-        isLikeState.value = isLike.isNotEmpty;
-      }
+        listComments.value = bookData.data.comments;
+        listLike.value = bookData.data.likes;
+        averageRate.value = bookData.data.averageRate;
+        listChapter.value = bookData.data.chapters;
 
-      // Proses data rating
-      if (resultIdBook.data.manyRatings == 0) {
-        log('rating kosong', name: 'data rating');
-        averageRate.value = 0.0;
-      } else {
-        log('rating ada', name: 'data rating');
-        averageRate.value = resultIdBook.data.averageRate;
-      }
+        final isLike = bookData.data.likes
+            .where((e) => e.user.uuid == prefServices.getUserUuid)
+            .isNotEmpty;
+        isPremium.value = userData.data?.isPremium == '1';
 
-      // Proses data chapter
-      if (resultIdBook.data.chapters == []) {
-        log('chapter kosong', name: 'data listChapter');
-        listChapter.value = [];
-      } else {
-        log('chapter ada', name: 'data listChapter');
-        listChapter.value = resultIdBook.data.chapters;
-        listChapter.sort((a, b) => int.parse(a.number).compareTo(int.parse(b.number)));
-      }
+        final dataDetail = ModelDataDetail(
+          dataBook: bookData.data,
+          comments: listComments,
+          likes: listLike,
+          averageRate: averageRate.value!,
+          chapters: listChapter,
+          isPremium: isPremium.value,
+          isLiked: isLike,
+        );
 
-      // Proses data pengguna
-      if (resultUser.data != null && resultUser.data!.isPremium == '1') {
-        log('premium', name: 'data isPremium');
-        isPremium.value = true;
+        change(dataDetail, status: RxStatus.success());
       } else {
-        log('tidak premium', name: 'data isPremium');
-        isPremium.value = false;
+        Get.snackbar('Error', 'Gagal memuat data buku');
+        change(null, status: RxStatus.error('Gagal memuat data buku'));
       }
-      dataIdBook =  resultIdBook.data.copyWith(image: resultIdBook.data.image.formattedUrl);
-
-      // Buat objek ModelDataDetail dan update state
-      final dataDetail = ModelDataDetail(
-        dataBook: dataIdBook,
-        comments: listComments,
-        likes: listLike,
-        averageRate: averageRate.value ?? 00,
-        chapters: listChapter,
-        isPremium: isPremium.value,
-        isLiked: isLikeState.value,
-      );
-      change(dataDetail, status: RxStatus.success()); // Set status success
-    } catch (err) {
-      log(err.toString(), name: 'pesan error detail controller');
-      change(null, status: RxStatus.error(err.toString())); // Set status error
+    } catch (e) {
+      log(e.toString(), name: 'fetchDataDetail error');
+      change(null, status: RxStatus.error('Error fetching book details'));
     }
   }
 }

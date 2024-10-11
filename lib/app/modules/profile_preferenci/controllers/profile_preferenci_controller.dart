@@ -9,6 +9,7 @@ import 'package:sansgen/model/user/request_patch_user.dart';
 import 'package:sansgen/model/user/user.dart';
 import 'package:sansgen/utils/ext_context.dart';
 
+import '../../../../model/category/response_get.dart';
 import '../../../../model/error.dart';
 import '../../../../model/on_boarding/referency.dart';
 import '../../../../provider/category.dart';
@@ -63,8 +64,11 @@ class ProfilePreferenciController extends GetxController
     try {
       final resultCategory = await categoryProvider.fetchCategory();
 
-      if (Get.arguments != null && resultCategory.status == true) {
-        listPreferences = resultCategory.categories
+      if (Get.arguments != null && resultCategory.isOk) {
+        final dataCategories =
+            modelResponseGetCategoryFromJson(resultCategory.bodyString!);
+
+        listPreferences = dataCategories.categories
             .map((e) => ModelPreferenci(
                   id: e.id,
                   title: e.name,

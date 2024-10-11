@@ -20,10 +20,9 @@ class DataIdBook {
   final String language;
   final String gender;
   final String rangeAge;
-  final String category;
+  final String? category;
   final String writer;
   final String publisher;
-
   // final DateTime createdAt;
   final String? music;
   final int manyLikes;
@@ -110,12 +109,12 @@ class DataIdBook {
         id: json["id"],
         uuid: json["uuid"],
         title: json["title"],
-        image: json["image"],
+        image: json["image"].toString().formattedUrl,
         synopsis: json["synopsis"],
         language: json["language"],
         gender: json["gender"],
         rangeAge: json["rangeAge"],
-        category: json["category"],
+        category: json["category"] ?? "-",
         writer: json["writer"],
         publisher: json["publisher"],
         // createdAt: DateTime.parse(json["created_at"]),

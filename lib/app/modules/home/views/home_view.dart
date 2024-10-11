@@ -56,7 +56,7 @@ class HomeView extends GetView<HomeController> {
               children: [
                 const Gap(40),
                 SizedBox(
-                  height: 224,
+                  height: 228,
                   width: double.infinity,
                   child: componentCard(
                     title: 'Pilihan terbaik untukmu',
@@ -144,7 +144,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
                 Text(
-                  book.category,
+                  book.category ?? '-',
                   style: context.labelSmall.copyWith(
                     color: context.colorScheme.secondary,
                   ),

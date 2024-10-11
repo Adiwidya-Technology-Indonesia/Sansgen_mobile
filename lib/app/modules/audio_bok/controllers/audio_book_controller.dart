@@ -11,6 +11,7 @@ import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/env.dart';
 import '../../../../model/chapter/data_chapter.dart';
+import '../../../../model/user/response_get.dart';
 import '../../../../provider/user.dart';
 import '../../../../services/audio.dart';
 import '../../../../services/common.dart';
@@ -226,8 +227,13 @@ class AudioBookController extends GetxController
   }
 
   Future getUserLogin() async {
-    await userProvider.fetchUserId().then((v) {
-      if (v.data != null && v.data!.isPremium == '1') {
+    await userProvider.fetchUserId().then((response) {
+      if (!response.isOk) {
+        isPremium.value = false;
+        return;
+      }
+      final userData = modelResponseUserFromJson(response.bodyString!);
+      if (userData.data != null && userData.data!.isPremium == '1') {
         log('kosong', name: 'data isPremium');
         isPremium.value = true;
       } else {

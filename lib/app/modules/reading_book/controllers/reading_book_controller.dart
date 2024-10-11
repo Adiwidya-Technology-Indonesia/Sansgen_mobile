@@ -7,13 +7,13 @@ import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:sansgen/model/focus/request_put.dart';
 import 'package:sansgen/utils/ext_int.dart';
-import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/api.dart';
 import '../../../../keys/env.dart';
 import '../../../../model/book/book.dart';
 import '../../../../model/chapter/data_chapter.dart';
 import '../../../../model/history/request_post.dart';
+import '../../../../model/user/response_get.dart';
 import '../../../../provider/chapter.dart';
 import '../../../../provider/focus.dart';
 import '../../../../provider/history.dart';
@@ -293,8 +293,13 @@ class ReadingBookController extends GetxController
   }
 
   Future getUserLogin() async {
-    await userProvider.fetchUserId().then((v) {
-      if (v.data != null && v.data!.isPremium == '1') {
+    await userProvider.fetchUserId().then((response) {
+      if(response.isOk){
+        isPremium.value = false;
+        return;
+      }
+      final userData = modelResponseUserFromJson(response.bodyString!);
+      if (userData.data != null && userData.data!.isPremium == '1') {
         log('kosong', name: 'data isPremium');
         isPremium.value = true;
       } else {

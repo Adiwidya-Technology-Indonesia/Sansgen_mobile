@@ -12,7 +12,9 @@ import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/env.dart';
 import '../../../../model/book/books.dart';
+import '../../../../model/book/books_all.dart';
 import '../../../../model/focus/data_focus.dart';
+import '../../../../model/user/response_get.dart';
 import '../../../../model/user/user.dart';
 import '../../../../provider/best_for_you.dart';
 import '../../../../provider/user.dart';
@@ -104,20 +106,22 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
       final resultBestForYou = await bestForYouProvider.fetchBooksBestForYou();
       final resultFocus = await focusProvider.fetchFocusByUser();
 
-      if (resultPopuler.status != true) {
+      if (!resultPopuler.isOk) {
         populerList = [];
         log('Permintaan buku populer gagal', name: 'data kosong');
       } else {
-        populerList = resultPopuler.data.map((e) {
+        final bookData = booksModelFromJson(resultPopuler.bodyString!);
+        populerList = bookData.data.map((e) {
           return e.copyWith(image: e.image!.formattedUrl);
         }).toList();
         // log(populerList.map((e) => e.toJson()).toString(), name: 'populerList');
       }
-      if (resultBestForYou.status != true) {
+      if (!resultBestForYou.isOk) {
         bestForYouList = [];
         log('Permintaan buku terbaik untuk Anda gagal', name: 'data kosong');
       } else {
-        bestForYouList = resultBestForYou.data.map((e) {
+        final bookData = booksModelFromJson(resultBestForYou.bodyString!);
+        bestForYouList = bookData.data.map((e) {
           return e.copyWith(image: e.image!.formattedUrl);
         }).toList();
         log(
@@ -125,12 +129,14 @@ class HomeController extends GetxController with StateMixin<ModelDataHome> {
           name: 'bestForYouList',
         );
       }
-      if (resultInfoUser.data == null) {
+      if (!resultInfoUser.isOk) {
         infoUser = ModelUser.fromJson({});
         log('Permintaan informasi pengguna gagal', name: 'data kosong');
       } else {
-        infoUser = resultInfoUser.data!
-            .copyWith(image: resultInfoUser.data!.image!.formattedUrl);
+        final userData = modelResponseUserFromJson(resultInfoUser.bodyString!);
+
+        infoUser =
+            userData.data!.copyWith(image: userData.data!.image!.formattedUrl);
         appBarData.value = appBarData.value.copyWith(
           name: infoUser.name,
           image: infoUser.image,

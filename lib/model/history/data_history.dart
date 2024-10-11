@@ -1,4 +1,3 @@
-
 import '../book/books.dart';
 
 class DataHistory {
@@ -36,22 +35,28 @@ class DataHistory {
       );
 
   factory DataHistory.fromJson(Map<String, dynamic> json) => DataHistory(
-    id: json["id"],
-    uuid: json["uuid"],
-    isFinished: json["isFinished"],
-    lastChapter: json["lastChapter"],
-    book: DataBook.fromJson(json["book"]),
-    chapters: json["chapters"] == null ? [] : List<ChapterHistory>.from(json["chapters"].map((x) => ChapterHistory.fromJson(x))),
-  );
+        id: json["id"],
+        uuid: json["uuid"],
+        isFinished: json["isFinished"],
+        lastChapter: json["lastChapter"],
+        book: DataBook.fromJson(json["book"]),
+        chapters: json["chapters"] == null
+            ? []
+            : List<ChapterHistory>.from(
+                (json['chapters'] as List).map(
+                  (x) => ChapterHistory.fromJson(x),
+                ),
+              ),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "isFinished": isFinished,
-    "lastChapter": lastChapter,
-    "book": book.toJson(),
-    "chapters": List<dynamic>.from(chapters!.map((x) => x.toJson())),
-  };
+        "id": id,
+        "uuid": uuid,
+        "isFinished": isFinished,
+        "lastChapter": lastChapter,
+        "book": book.toJson(),
+        "chapters": List<dynamic>.from(chapters!.map((x) => x.toJson())),
+      };
 }
 
 class ChapterHistory {
@@ -73,12 +78,12 @@ class ChapterHistory {
       );
 
   factory ChapterHistory.fromJson(Map<String, dynamic> json) => ChapterHistory(
-    id: json["id"],
-    number: json["number"],
-  );
+        id: json["id"],
+        number: json["number"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "number": number,
-  };
+        "id": id,
+        "number": number,
+      };
 }

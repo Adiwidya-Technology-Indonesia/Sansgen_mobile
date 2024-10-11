@@ -10,6 +10,7 @@ import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../keys/env.dart';
 import '../../../../model/book/books.dart';
+import '../../../../model/history/response_get.dart';
 import '../../../../provider/history.dart';
 import '../../../../provider/book.dart';
 import '../../../routes/app_pages.dart';
@@ -92,15 +93,15 @@ class RiwayatController extends GetxController with StateMixin<ModelHistory> {
   }
 
   Future getAllHistory() async {
-    historyProvider.fetchHistory().then((event) async {
-      if (event.data == []) {
+    historyProvider.fetchHistory().then((response) async {
+      if (!response.isOk) {
         final dataEmpty = ModelHistory(
           listBookFinish: listBookFinish,
           listBookNotFinish: listBookNotFinish,
         );
         change(dataEmpty, status: RxStatus.empty());
       }
-
+      final event = modelResponseGetHistoryFromJson(response.bodyString!);
       final bookSelesai = event.data.where((e) => e.isFinished == '1').map((v) {
         return v.book.copyWith(image: v.book.image!.formattedUrl);
       }).toList();

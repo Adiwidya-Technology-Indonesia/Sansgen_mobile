@@ -26,25 +26,10 @@ class HistoryProvider extends GetConnect {
     }
   }
 
-  Future<ModelResponseGetHistory> fetchHistory() async {
-    try {
-      const String urlHistory = KeysApi.history;
-      log(urlHistory, name: "data url History");
-      final response = await get(urlHistory);
-      log(response.statusCode.toString(), name: 'response status code');
-      if (response.status.hasError) {
-        log(response.bodyString.toString(), name: 'response History error');
-        return Future.error(response);
-        // } else if (response.statusCode == 404) {
-        //   return modelDataEmptyFromJson(response.bodyString!);
-      } else {
-        log(response.bodyString!, name: 'data response History');
-        return modelResponseGetHistoryFromJson(response.bodyString!);
-      }
-    } catch (error) {
-      log(error.toString(), name: "catch error History");
-      rethrow;
-    }
+  Future<Response> fetchHistory() async {
+    const String urlHistory = KeysApi.history;
+    log(urlHistory, name: "data url History");
+    return get(urlHistory);
   }
 
   Future postHistory({

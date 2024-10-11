@@ -4,8 +4,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:sansgen/services/prefs.dart';
 import 'package:sansgen/utils/ext_context.dart';
-import '../../../../keys/api.dart';
+import 'package:sansgen/utils/ext_string.dart';
 import '../../../../keys/env.dart';
+import '../../../../model/user/response_get.dart';
 import '../../../../model/user/user.dart';
 import '../../../../provider/user.dart';
 import '../../../routes/app_pages.dart';
@@ -26,13 +27,12 @@ class ProfilController extends GetxController with StateMixin<ModelUser> {
   }
 
   Future<void> fetchDataProfil() async {
-    await userProvider.fetchUserId().then((v) async {
-      if (v.data == null) {
+    await userProvider.fetchUserId().then((response) async {
+      if (!response.isOk) {
         change(null, status: RxStatus.empty());
       } else {
-        final formattedImageUrl = "$baseURL${KeysApi.storage}/${v.data!.image}";
-
-        change(v.data!.copyWith(image: formattedImageUrl),
+        final userData = modelResponseUserFromJson(response.bodyString!);
+        change(userData.data!.copyWith(image: userData.data!.image!.formattedUrl),
             status: RxStatus.success());
       }
     }).onError((e, st) async {

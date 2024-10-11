@@ -6,6 +6,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sansgen/utils/ext_string.dart';
 
 import '../../../../model/book/books.dart';
+import '../../../../model/book/books_all.dart';
+import '../../../../model/category/response_get.dart';
 import '../../../../provider/book.dart';
 import '../../../../provider/category.dart';
 import '../../../routes/app_pages.dart';
@@ -116,13 +118,17 @@ class KategoriController extends GetxController
       final resultBooks = await bookProvider.fetchBooks();
       final resultCategories = await categoryProvider.fetchCategory();
 
-      if (resultBooks.status == true && resultCategories.status == true) {
-        final books = resultBooks.data.map((e) {
+      if (resultBooks.isOk && resultCategories.isOk) {
+        final bookData = booksModelFromJson(resultBooks.bodyString!);
+        final dataCategories =
+            modelResponseGetCategoryFromJson(resultCategories.bodyString!);
+
+        final books = bookData.data.map((e) {
           return e.copyWith(image: e.image!.formattedUrl);
         }).toList();
         bookList = books;
         final categories =
-            resultCategories.categories.map((e) => e.name).toList();
+            dataCategories.categories.map((e) => e.name).toList();
         final kategoriList = ['All', ...categories];
         filterListKategori.value = kategoriList
             .map(
@@ -130,8 +136,6 @@ class KategoriController extends GetxController
             )
             .toList();
         filterListKategori[0].isSelected.value = true;
-        // dataModel =
-        //     ModelCategoryPage(books: books, categories: filterListKategori);
         change(
           bookList,
           status: RxStatus.success(),
