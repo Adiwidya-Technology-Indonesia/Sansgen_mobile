@@ -92,7 +92,7 @@ class ReadingBookController extends GetxController
   void startAutoScroll() {
     final maxScrollExtent = scrollController.position.maxScrollExtent;
     final duration =
-        Duration(milliseconds: (maxScrollExtent / scrollSpeed * 1000).toInt());
+        Duration(milliseconds: (maxScrollExtent / scrollSpeed * 2000).toInt());
     isAutoScrolling.value = true;
     isAppBarVisible.value = false;
     isBottomBarVisible.value = false;
@@ -294,12 +294,12 @@ class ReadingBookController extends GetxController
 
   Future getUserLogin() async {
     await userProvider.fetchUserId().then((response) {
-      if(response.isOk){
+      if(!response.isOk){
         isPremium.value = false;
         return;
       }
       final userData = modelResponseUserFromJson(response.bodyString!);
-      if (userData.data != null && userData.data!.isPremium == '1') {
+      if (userData.data!.isPremium == '1') {
         log('kosong', name: 'data isPremium');
         isPremium.value = true;
       } else {
