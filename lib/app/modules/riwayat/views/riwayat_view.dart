@@ -31,7 +31,7 @@ class RiwayatView extends GetView<RiwayatController> {
               Obx(
                 () => cardTabBar(
                   context: context,
-                  title: 'Belum Selesai di Baca',
+                  title: 'Belum Selesai',
                   color: controller.getSelectedIndex == 0
                       ? context.colorScheme.surface
                       : context.colorScheme.secondaryContainer,
@@ -40,7 +40,7 @@ class RiwayatView extends GetView<RiwayatController> {
               Obx(
                 () => cardTabBar(
                   context: context,
-                  title: 'Sudah Selesai di Baca',
+                  title: 'Sudah Selesai',
                   color: controller.getSelectedIndex == 1
                       ? context.colorScheme.surface
                       : context.colorScheme.secondaryContainer,

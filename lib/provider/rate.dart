@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:sansgen/model/comment/response_post.dart';
 
+import '../model/comment/response_post.dart';
 import '../keys/api.dart';
 import '../keys/env.dart';
 import '../model/error.dart';
@@ -16,9 +16,11 @@ class RatingProvider extends GetConnect {
   final String baseURL = dotenv.get(KeysEnv.baseUrl);
   final PrefService _prefService = PrefService();
 
-  Future<ModelResponseGetRate> fetchRatingByBookId({required String uuidBook}) async {
+  Future<ModelResponseGetRate> fetchRatingByBookId(
+      {required String uuidBook}) async {
     try {
-      final String urlRatingByBookId = '${KeysApi.books}/$uuidBook${KeysApi.rate}';
+      final String urlRatingByBookId =
+          '${KeysApi.books}/$uuidBook${KeysApi.rate}';
       log(urlRatingByBookId, name: "data url RatingByBookId");
       final response = await get(urlRatingByBookId);
       if (response.status.hasError) {
@@ -35,7 +37,10 @@ class RatingProvider extends GetConnect {
     }
   }
 
-  Future postRatingBook({required String uuidBook, required ModelRequestPostRate request,}) async {
+  Future postRatingBook({
+    required String uuidBook,
+    required ModelRequestPostRate request,
+  }) async {
     try {
       final String urlPostRatingBook =
           '${KeysApi.books}/$uuidBook${KeysApi.rate}';

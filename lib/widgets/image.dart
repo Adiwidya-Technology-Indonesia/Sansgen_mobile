@@ -44,19 +44,7 @@ mixin ImageState {
             radius: 100,
           ),
         ),
-        InkWell(
-          onTap: () async => await getImage(),
-          //go to camera
-          child: CircleAvatar(
-            backgroundColor: context.colorScheme.onSecondary,
-            child: SvgPicture.asset(
-              KeysAssetsIcons.camera,
-              width: 20,
-              height: 20,
-            ),
-          ),
-        
-        ),
+
       ],
     );
   }

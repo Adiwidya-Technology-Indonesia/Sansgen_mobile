@@ -80,15 +80,6 @@ class ReadingBookController extends GetxController
     super.onClose();
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.inactive ||
-  //       state == AppLifecycleState.paused) {
-  //     sendDataFocus();
-  //   }
-  //   musicPlayer.dispose();
-  // }
-
   void startAutoScroll() {
     final maxScrollExtent = scrollController.position.maxScrollExtent;
     final duration =

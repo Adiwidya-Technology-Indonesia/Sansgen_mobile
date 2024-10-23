@@ -20,7 +20,11 @@ class ProfilView extends GetView<ProfilController> {
     return controller.obx(
       (state) => Scaffold(
         appBar: appBarCustom(
-            context: context, name: state!.name, image: state.image!),
+          context: context,
+          name: state!.name,
+          image: state.image!,
+          isPremium: state.isPremium,
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: ListView(
@@ -80,6 +84,7 @@ class ProfilView extends GetView<ProfilController> {
     required BuildContext context,
     required String name,
     required String image,
+    required String isPremium,
   }) {
     return AppBar(
       toolbarHeight: 300,
@@ -104,24 +109,69 @@ class ProfilView extends GetView<ProfilController> {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-              onTap: () {
-                Get.dialog(
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
+          Stack(
+            alignment: AlignmentDirectional.bottomEnd,
+            children: [
+              Card(
+                margin: const EdgeInsets.all(8),
+                shape: RoundedRectangleBorder(
+                  side:
+                      BorderSide(color: context.colorScheme.primary, width: 4),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.dialog(
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Center(
+                          child: SizedBox(
+                            height: 300,
+                            width: 300,
+                            child: AvatarWidget(
+                              image: image,
+                              radius: 8,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
                     child: AvatarWidget(
                       image: image,
+                      height: 150,
+                      width: 150,
+                      heightPlus: 0,
                     ),
                   ),
-                );
-              },
-              child: AvatarWidget(
-                image: image,
-                height: 150,
-                width: 150,
-              )),
+                ),
+              ),
+              if(isPremium == '1')
+              Container(
+                height: 30,
+                width: 50,
+                margin: const EdgeInsets.only(
+                  bottom: 28,
+                ),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.primary,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    "Pro",
+                    style: context.textTheme.titleMedium!.copyWith(
+                      color: context.colorScheme.surface,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -129,6 +179,7 @@ class ProfilView extends GetView<ProfilController> {
             name,
             style: context.titleLargeBold.copyWith(
               color: context.colorScheme.primary,
+              fontSize: MediaQuery.of(context).size.width * 0.05,
             ),
           )
         ],
